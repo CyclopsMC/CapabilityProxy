@@ -9,8 +9,6 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -54,8 +52,8 @@ public class BlockCapabilityProxy extends ConfigurableBlockContainer {
 
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing,
-                                            float hitX, float hitY, float hitZ, int meta,
-                                            EntityLivingBase placer, ItemStack stack) {
+                                            float hitX, float hitY, float hitZ,
+                                            int meta, EntityLivingBase placer, EnumHand hand) {
         return this.getDefaultState()
                 .withProperty(FACING, facing.getOpposite())
                 .withProperty(INACTIVE, world.getTileEntity(pos.offset(facing.getOpposite())) == null);
@@ -63,23 +61,24 @@ public class BlockCapabilityProxy extends ConfigurableBlockContainer {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, ItemStack heldItem, EnumFacing side,
-                                    float hitX, float hitY, float hitZ) {
+                                    EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         EnumFacing facing = state.getValue(BlockCapabilityProxy.FACING);
         IBlockState targetBlockState = worldIn.getBlockState(pos.offset(facing));
         return targetBlockState.getBlock().onBlockActivated(worldIn, pos.offset(facing), targetBlockState,
-                playerIn, hand, heldItem, facing, hitX, hitY, hitZ);
+                playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
-        super.neighborChanged(state, world, pos, block);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+        super.neighborChanged(state, world, pos, block, fromPos);
         if (!world.isRemote) {
             EnumFacing facing = state.getValue(BlockCapabilityProxy.FACING);
-            boolean inactive = state.getValue(BlockCapabilityProxy.INACTIVE);
-            if (inactive != (world.getTileEntity(pos.offset(facing)) == null)) {
-                world.setBlockState(pos, world.getBlockState(pos).withProperty(INACTIVE, !inactive));
-                world.notifyNeighborsOfStateExcept(pos, this, facing);
+            if (pos.offset(facing).equals(fromPos)) {
+                boolean inactive = state.getValue(BlockCapabilityProxy.INACTIVE);
+                if (inactive != (world.getTileEntity(pos.offset(facing)) == null)) {
+                    world.setBlockState(pos, world.getBlockState(pos).withProperty(INACTIVE, !inactive));
+                    world.notifyNeighborsOfStateExcept(pos, this, facing);
+                }
             }
         }
     }
