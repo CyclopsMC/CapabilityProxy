@@ -1,7 +1,7 @@
 ## CapabilityProxy
 
 [![Build Status](https://travis-ci.org/CyclopsMC/CapabilityProxy.svg?branch=master-1.10)](https://travis-ci.org/CyclopsMC/CapabilityProxy)
-[![Download](https://api.bintray.com/packages/cyclopsmc/dev/CyclopsMC/CapabilityProxy/images/download.svg) ](https://bintray.com/cyclopsmc/dev/CyclopsMC/CapabilityProxy/_latestVersion)
+[![Download](https://api.bintray.com/packages/cyclopsmc/dev/CapabilityProxy/images/download.svg) ](https://bintray.com/cyclopsmc/dev/CapabilityProxy/_latestVersion)
 [![CurseForge](http://cf.way2muchnoise.eu/full_266479_downloads.svg)](http://minecraft.curseforge.com/projects/266479)
 
 Access block capabilities from multiple sides
