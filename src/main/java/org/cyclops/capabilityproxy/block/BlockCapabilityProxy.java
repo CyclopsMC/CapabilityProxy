@@ -65,8 +65,12 @@ public class BlockCapabilityProxy extends ConfigurableBlockContainer {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
                                     EnumHand hand, ItemStack heldItem, EnumFacing side,
                                     float hitX, float hitY, float hitZ) {
-        if(playerIn != null && heldItem != null && heldItem.getItem() == Items.STICK) {
-            this.rotateBlock(worldIn, pos, side);
+        EnumFacing facing = state.getValue(BlockCapabilityProxy.FACING);
+        boolean inactive = state.getValue(BlockCapabilityProxy.INACTIVE);
+        if (!inactive) {
+            IBlockState targetBlockState = worldIn.getBlockState(pos.offset(facing));
+            return targetBlockState.getBlock().onBlockActivated(worldIn, pos.offset(facing), targetBlockState,
+                    playerIn, hand, heldItem, facing, hitX, hitY, hitZ);
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
