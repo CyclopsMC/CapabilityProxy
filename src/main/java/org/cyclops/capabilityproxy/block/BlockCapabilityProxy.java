@@ -1,6 +1,7 @@
 package org.cyclops.capabilityproxy.block;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -17,6 +18,8 @@ import org.cyclops.capabilityproxy.tileentity.TileCapabilityProxy;
 import org.cyclops.cyclopscore.block.property.BlockProperty;
 import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainer;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
+
+import java.util.Set;
 
 /**
  * This block will forward capabilities from the target side to all sides.
@@ -38,6 +41,8 @@ public class BlockCapabilityProxy extends ConfigurableBlockContainer {
     public static BlockCapabilityProxy getInstance() {
         return _instance;
     }
+
+    private Set<BlockPos> activatingBlockChain = null;
 
     /**
      * Make a new block instance.
@@ -62,10 +67,22 @@ public class BlockCapabilityProxy extends ConfigurableBlockContainer {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
                                     EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        // A check to avoid infinite loops
+        if (activatingBlockChain == null) {
+            activatingBlockChain = Sets.newHashSet(pos);
+        } else {
+            if (activatingBlockChain.contains(pos)) {
+                return false;
+            } else {
+                activatingBlockChain.add(pos);
+            }
+        }
         EnumFacing facing = state.getValue(BlockCapabilityProxy.FACING);
         IBlockState targetBlockState = worldIn.getBlockState(pos.offset(facing));
-        return targetBlockState.getBlock().onBlockActivated(worldIn, pos.offset(facing), targetBlockState,
+        boolean ret = targetBlockState.getBlock().onBlockActivated(worldIn, pos.offset(facing), targetBlockState,
                 playerIn, hand, facing, hitX, hitY, hitZ);
+        activatingBlockChain = null;
+        return ret;
     }
 
     @Override
