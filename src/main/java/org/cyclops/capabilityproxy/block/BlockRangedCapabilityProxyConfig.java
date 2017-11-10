@@ -1,9 +1,14 @@
 package org.cyclops.capabilityproxy.block;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.cyclops.capabilityproxy.CapabilityProxy;
+import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxy;
+import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxy;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.ConfigurableTypeCategory;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockContainerConfig;
+import org.cyclops.cyclopscore.helper.MinecraftHelpers;
 
 /**
  * Config for {@link BlockRangedCapabilityProxy}.
@@ -38,6 +43,19 @@ public class BlockRangedCapabilityProxyConfig extends BlockContainerConfig {
     @Override
     public boolean isDisableable() {
         return true;
+    }
+
+    @Override
+    public void onRegistered() {
+        super.onRegistered();
+        if(MinecraftHelpers.isClientSide()) {
+            registerClientSide();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void registerClientSide() {
+        CapabilityProxy.proxy.registerRenderer(TileRangedCapabilityProxy.class, new RenderTileRangedCapabilityProxy());
     }
 
 }
