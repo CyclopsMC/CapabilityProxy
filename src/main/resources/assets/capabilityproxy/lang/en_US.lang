@@ -3,7 +3,9 @@ itemGroup.capabilityproxy=Capability Proxy
 
 # Blocks
 tile.blocks.capabilityproxy.capability_proxy.name=Capability Proxy
-tile.blocks.capabilityproxy.capability_proxy.info=Access the target block capabilities from this block
+tile.blocks.capabilityproxy.capability_proxy.info=Access the target block capabilities from this block. The target block must be an immediate neighbour
+tile.blocks.capabilityproxy.ranged_capability_proxy.name=Ranged Capability Proxy
+tile.blocks.capabilityproxy.ranged_capability_proxy.info=Access the target block capabilities from this block. The target block is the closest applicable block within 16 blocks.
 
 # Configuration
 config.capabilityproxy=%s configuration

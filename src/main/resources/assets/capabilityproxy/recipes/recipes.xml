@@ -27,4 +27,31 @@
 		</output>
 	</recipe>
 
+	<recipe type="shaped">
+		<condition type="config">ranged_capability_proxy</condition>
+		<condition type="config">capability_proxy</condition>
+		<input>
+			<grid>
+				<gridrow>
+					<item />
+					<item type="oredict">enderpearl</item>
+					<item />
+				</gridrow>
+				<gridrow>
+					<item>capabilityproxy:capability_proxy</item>
+					<item>capabilityproxy:capability_proxy</item>
+					<item>capabilityproxy:capability_proxy</item>
+				</gridrow>
+				<gridrow>
+					<item />
+					<item type="oredict">enderpearl</item>
+					<item />
+				</gridrow>
+			</grid>
+		</input>
+		<output>
+			<item>capabilityproxy:ranged_capability_proxy</item>
+		</output>
+	</recipe>
+
 </recipes>

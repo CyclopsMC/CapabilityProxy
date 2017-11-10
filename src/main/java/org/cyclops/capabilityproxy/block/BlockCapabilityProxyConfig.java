@@ -29,7 +29,7 @@ public class BlockCapabilityProxyConfig extends BlockContainerConfig {
 
     @Override
     public boolean isDisableable() {
-        return false;
+        return true;
     }
 
 }

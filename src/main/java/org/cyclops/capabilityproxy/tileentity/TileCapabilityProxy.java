@@ -1,11 +1,14 @@
 package org.cyclops.capabilityproxy.tileentity;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.capabilities.Capability;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
 import org.cyclops.cyclopscore.helper.TileHelpers;
 import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
+
+import javax.annotation.Nullable;
 
 /**
  * A capability proxy.
@@ -20,8 +23,17 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
         return getWorld().getBlockState(getPos()).getValue(BlockCapabilityProxy.FACING);
     }
 
-    protected TileEntity getTarget() {
-        return TileHelpers.getSafeTile(getWorld(), getPos().offset(getFacing()), TileEntity.class);
+    public static BlockPos getTargetPos(BlockPos source, EnumFacing facing) {
+        return source.offset(facing);
+    }
+
+    protected BlockPos getTargetPos(IBlockAccess world, @Nullable Capability<?> capability, BlockPos source) {
+        return getTargetPos(source, getFacing());
+    }
+
+    @Nullable
+    protected <T> T getTarget(Capability<T> capability, EnumFacing facing) {
+        return TileHelpers.getCapability(getWorld(), getTargetPos(getWorld(), capability, getPos()), getFacing().getOpposite(), capability);
     }
 
     @Override
@@ -29,9 +41,8 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
         if (handling) {
             return false;
         }
-        TileEntity target = getTarget();
         handling = true;
-        boolean ret = target != null && target.hasCapability(capability, getFacing().getOpposite());
+        boolean ret = getTarget(capability, facing) != null;
         handling = false;
         return ret;
     }
@@ -41,9 +52,8 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
         if (handling) {
             return null;
         }
-        TileEntity target = getTarget();
         handling = true;
-        T ret = target != null ? target.getCapability(capability, getFacing().getOpposite()) : null;
+        T ret = getTarget(capability, facing);
         handling = false;
         return ret;
     }

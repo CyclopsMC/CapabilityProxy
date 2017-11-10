@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "particle": "capabilityproxy:blocks/ranged_capability_proxy_down",
+        "down"    : "capabilityproxy:blocks/ranged_capability_proxy_down",
+        "up"      : "capabilityproxy:blocks/ranged_capability_proxy_top",
+        "north"   : "capabilityproxy:blocks/ranged_capability_proxy_side",
+        "east"    : "capabilityproxy:blocks/ranged_capability_proxy_side",
+        "south"   : "capabilityproxy:blocks/ranged_capability_proxy_side",
+        "west"    : "capabilityproxy:blocks/ranged_capability_proxy_side"
+    }
+}

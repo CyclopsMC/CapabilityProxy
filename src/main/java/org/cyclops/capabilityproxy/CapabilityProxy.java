@@ -5,9 +5,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import org.apache.logging.log4j.Level;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.cyclopscore.config.ConfigHandler;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockItemConfigReference;
 import org.cyclops.cyclopscore.init.ItemCreativeTab;
@@ -127,6 +133,7 @@ public class CapabilityProxy extends ModBaseVersionable {
     public void onMainConfigsRegister(ConfigHandler configHandler) {
         super.onMainConfigsRegister(configHandler);
         configHandler.add(new BlockCapabilityProxyConfig());
+        configHandler.add(new BlockRangedCapabilityProxyConfig());
     }
 
     @Override
