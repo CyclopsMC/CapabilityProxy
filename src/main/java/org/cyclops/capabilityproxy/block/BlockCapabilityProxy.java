@@ -79,7 +79,7 @@ public class BlockCapabilityProxy extends ConfigurableBlockContainer {
         }
         EnumFacing facing = state.getValue(BlockCapabilityProxy.FACING);
         IBlockState targetBlockState = worldIn.getBlockState(pos.offset(facing));
-        boolean ret = targetBlockState.getBlock().onBlockActivated(worldIn, TileCapabilityProxy.getTargetPos(pos, facing.getOpposite()), targetBlockState,
+        boolean ret = targetBlockState.getBlock().onBlockActivated(worldIn, TileCapabilityProxy.getTargetPos(pos, facing), targetBlockState,
                 playerIn, hand, facing.getOpposite(), hitX, hitY, hitZ);
         activatingBlockChain = null;
         return ret;
