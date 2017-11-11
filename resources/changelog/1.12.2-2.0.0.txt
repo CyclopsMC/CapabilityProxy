@@ -1,0 +1,5 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 0.10.22 or higher.
+
+Additions:
+* Add Ranged Capability Proxy, which has a (default) range of 16 blocks.
