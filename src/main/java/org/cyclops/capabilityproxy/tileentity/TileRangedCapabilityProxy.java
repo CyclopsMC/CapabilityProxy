@@ -1,8 +1,8 @@
 package org.cyclops.capabilityproxy.tileentity;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.capabilities.Capability;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.cyclopscore.helper.TileHelpers;
@@ -26,5 +26,10 @@ public class TileRangedCapabilityProxy extends TileCapabilityProxy {
             }
         }
         return null;
+    }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return super.getRenderBoundingBox().grow(BlockRangedCapabilityProxyConfig.range);
     }
 }
