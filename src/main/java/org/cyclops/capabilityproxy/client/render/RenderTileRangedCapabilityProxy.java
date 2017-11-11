@@ -37,7 +37,7 @@ public class RenderTileRangedCapabilityProxy extends TileEntitySpecialRenderer<T
 
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            GlStateManager.glLineWidth((float) (10 / (Math.abs(x) + Math.abs(y) + Math.abs(z) + 1)));
+            GlStateManager.glLineWidth((float) (1 / (Math.abs(x) + Math.abs(y) + Math.abs(z) + 1)));
             GlStateManager.disableTexture2D();
             GlStateManager.depthMask(false);
 
