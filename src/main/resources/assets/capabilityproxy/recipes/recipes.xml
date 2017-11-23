@@ -28,6 +28,33 @@
 	</recipe>
 
 	<recipe type="shaped">
+		<condition type="config">entity_capability_proxy</condition>
+		<condition type="config">capability_proxy</condition>
+		<input>
+			<grid>
+				<gridrow>
+					<item>minecraft:ender_eye</item>
+					<item>minecraft:end_rod</item>
+					<item>minecraft:ender_eye</item>
+				</gridrow>
+				<gridrow>
+					<item>capabilityproxy:capability_proxy</item>
+					<item>capabilityproxy:capability_proxy</item>
+					<item>capabilityproxy:capability_proxy</item>
+				</gridrow>
+				<gridrow>
+					<item>minecraft:ender_eye</item>
+					<item>minecraft:end_rod</item>
+					<item>minecraft:ender_eye</item>
+				</gridrow>
+			</grid>
+		</input>
+		<output>
+			<item>capabilityproxy:entity_capability_proxy</item>
+		</output>
+	</recipe>
+
+	<recipe type="shaped">
 		<condition type="config">ranged_capability_proxy</condition>
 		<condition type="config">capability_proxy</condition>
 		<input>

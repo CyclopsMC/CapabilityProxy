@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import org.apache.logging.log4j.Level;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.cyclopscore.config.ConfigHandler;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockItemConfigReference;
@@ -133,6 +134,7 @@ public class CapabilityProxy extends ModBaseVersionable {
     public void onMainConfigsRegister(ConfigHandler configHandler) {
         super.onMainConfigsRegister(configHandler);
         configHandler.add(new BlockCapabilityProxyConfig());
+        configHandler.add(new BlockEntityCapabilityProxyConfig());
         configHandler.add(new BlockRangedCapabilityProxyConfig());
     }
 
