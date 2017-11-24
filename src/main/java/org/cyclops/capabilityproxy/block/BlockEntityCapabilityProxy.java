@@ -22,6 +22,7 @@ import java.util.List;
 import org.cyclops.capabilityproxy.tileentity.TileEntityCapabilityProxy;
 import org.cyclops.cyclopscore.block.property.BlockProperty;
 import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainer;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
 
 /**
@@ -47,7 +48,7 @@ public class BlockEntityCapabilityProxy extends ConfigurableBlockContainer {
      * Make a new block instance.
      * @param eConfig Config for this block.
      */
-    public BlockEntityCapabilityProxy(ExtendedConfig eConfig) {
+    public BlockEntityCapabilityProxy(ExtendedConfig<BlockConfig> eConfig) {
         super(eConfig, Material.GROUND, TileEntityCapabilityProxy.class);
 
         setHardness(2.0F);

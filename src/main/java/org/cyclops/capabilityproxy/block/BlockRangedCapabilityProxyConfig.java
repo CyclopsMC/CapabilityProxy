@@ -54,7 +54,7 @@ public class BlockRangedCapabilityProxyConfig extends BlockContainerConfig {
     }
 
     @SideOnly(Side.CLIENT)
-    private void registerClientSide() {
+    private static void registerClientSide() {
         CapabilityProxy.proxy.registerRenderer(TileRangedCapabilityProxy.class, new RenderTileRangedCapabilityProxy());
     }
 
