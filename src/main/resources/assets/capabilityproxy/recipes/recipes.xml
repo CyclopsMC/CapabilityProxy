@@ -34,7 +34,7 @@
 			<grid>
 				<gridrow>
 					<item>minecraft:ender_eye</item>
-					<item>minecraft:end_rod</item>
+					<item>minecraft:chorus_fruit_popped</item>
 					<item>minecraft:ender_eye</item>
 				</gridrow>
 				<gridrow>
@@ -44,7 +44,7 @@
 				</gridrow>
 				<gridrow>
 					<item>minecraft:ender_eye</item>
-					<item>minecraft:end_rod</item>
+					<item>minecraft:chorus_fruit_popped</item>
 					<item>minecraft:ender_eye</item>
 				</gridrow>
 			</grid>
