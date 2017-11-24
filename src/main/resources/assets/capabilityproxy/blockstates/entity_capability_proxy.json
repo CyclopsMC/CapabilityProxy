@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "facing=south": { "model": "capabilityproxy:entity_capability_proxy", "x": 90 },
+    "facing=west":  { "model": "capabilityproxy:entity_capability_proxy", "x": 90, "y": 90 },
+    "facing=north": { "model": "capabilityproxy:entity_capability_proxy", "x": 90, "y": 180 },
+    "facing=east":  { "model": "capabilityproxy:entity_capability_proxy", "x": 90, "y": 270 },
+    "facing=up":    { "model": "capabilityproxy:entity_capability_proxy", "x": 180 },
+    "facing=down":  { "model": "capabilityproxy:entity_capability_proxy" },
+    "inventory":    { "model": "capabilityproxy:entity_capability_proxy" }
+  }
+}
