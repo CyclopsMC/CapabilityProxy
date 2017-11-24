@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxy;
 import org.cyclops.cyclopscore.block.property.BlockProperty;
 import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainer;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
 
 import java.util.Set;
@@ -44,7 +45,7 @@ public class BlockRangedCapabilityProxy extends ConfigurableBlockContainer {
      * Make a new block instance.
      * @param eConfig Config for this block.
      */
-    public BlockRangedCapabilityProxy(ExtendedConfig eConfig) {
+    public BlockRangedCapabilityProxy(ExtendedConfig<BlockConfig> eConfig) {
         super(eConfig, Material.GROUND, TileRangedCapabilityProxy.class);
 
         setHardness(2.0F);

@@ -27,7 +27,7 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
         return source.offset(facing);
     }
 
-    protected BlockPos getTargetPos(IBlockAccess world, @Nullable Capability<?> capability, BlockPos source) {
+    protected BlockPos getTargetPos(IBlockAccess worldIn, @Nullable Capability<?> capability, BlockPos source) {
         return getTargetPos(source, getFacing());
     }
 
