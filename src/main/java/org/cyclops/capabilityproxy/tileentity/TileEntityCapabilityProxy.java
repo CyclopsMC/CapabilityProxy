@@ -21,7 +21,8 @@ public class TileEntityCapabilityProxy extends CyclopsTileEntity {
 
     protected List<Entity> getEntities(Capability<?> capability) {
         AxisAlignedBB aabb = new AxisAlignedBB(getPos().offset(getFacing()));
-        return getWorld().getEntitiesWithinAABB(Entity.class, aabb, entity -> entity.hasCapability(capability, null));
+        EnumFacing facing = getFacing().getOpposite();
+        return getWorld().getEntitiesWithinAABB(Entity.class, aabb, entity -> entity.hasCapability(capability, facing));
     }
 
     @Override
@@ -32,6 +33,6 @@ public class TileEntityCapabilityProxy extends CyclopsTileEntity {
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         List<Entity> entities = getEntities(capability);
-        return entities.isEmpty() ? null : entities.get(0).getCapability(capability, null);
+        return entities.isEmpty() ? null : entities.get(0).getCapability(capability, getFacing().getOpposite());
     }
 }
