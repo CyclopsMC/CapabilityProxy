@@ -1,12 +1,14 @@
 ## CapabilityProxy
 
 [![Build Status](https://travis-ci.org/CyclopsMC/CapabilityProxy.svg?branch=master-1.11)](https://travis-ci.org/CyclopsMC/CapabilityProxy)
-[![Download](https://api.bintray.com/packages/cyclopsmc/dev/CapabilityProxy/images/download.svg) ](https://bintray.com/cyclopsmc/dev/CapabilityProxy/_latestVersion)
+[![Download](https://img.shields.io/maven-metadata/v/http/cyclopsmc.jfrog.io/cyclopsmc/libs-release/org/cyclops/capabilityproxy/CapabilityProxy/maven-metadata.xml.svg) ](https://cyclopsmc.jfrog.io/cyclopsmc/libs-release/org/cyclops/capabilityproxy/CapabilityProxy/)
 [![CurseForge](http://cf.way2muchnoise.eu/full_266479_downloads.svg)](http://minecraft.curseforge.com/projects/266479)
 
 Access block capabilities from multiple sides
 
 All stable releases (including deobfuscated builds) can be found on [CurseForge](http://minecraft.curseforge.com/mc-mods/266479/files).
+
+[Development builds](https://cyclopsmc.jfrog.io/cyclopsmc/libs-release/org/cyclops/capabilityproxy/CapabilityProxy/) are hosted by [JFrog Artifactory](https://www.jfrog.com/artifactory/).
 
 ### Contributing
 * Before submitting a pull request containing a new feature, please discuss this first with one of the lead developers.
