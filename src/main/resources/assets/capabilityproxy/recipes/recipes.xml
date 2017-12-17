@@ -54,6 +54,19 @@
 		</output>
 	</recipe>
 
+	<recipe type="shapeless">
+		<condition type="config">item_capability_proxy</condition>
+		<condition type="config">capability_proxy</condition>
+		<input>
+			<item>capabilityproxy:capability_proxy</item>
+			<item type="oredict">chestWood</item>
+			<item type="oredict">ingotGold</item>
+		</input>
+		<output>
+			<item>capabilityproxy:item_capability_proxy</item>
+		</output>
+	</recipe>
+
 	<recipe type="shaped">
 		<condition type="config">ranged_capability_proxy</condition>
 		<condition type="config">capability_proxy</condition>

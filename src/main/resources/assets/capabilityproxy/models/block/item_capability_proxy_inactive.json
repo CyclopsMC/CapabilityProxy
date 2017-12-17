@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "particle": "capabilityproxy:blocks/item_capability_proxy_down",
+        "down"    : "capabilityproxy:blocks/item_capability_proxy_down",
+        "up"      : "capabilityproxy:blocks/item_capability_proxy_top",
+        "north"   : "capabilityproxy:blocks/item_capability_proxy_side",
+        "east"    : "capabilityproxy:blocks/item_capability_proxy_side",
+        "south"   : "capabilityproxy:blocks/item_capability_proxy_side",
+        "west"    : "capabilityproxy:blocks/item_capability_proxy_side"
+    }
+}
