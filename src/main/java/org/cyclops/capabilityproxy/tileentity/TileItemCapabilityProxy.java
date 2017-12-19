@@ -5,6 +5,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
 import org.cyclops.cyclopscore.helper.TileHelpers;
@@ -58,12 +59,18 @@ public class TileItemCapabilityProxy extends InventoryTileEntity {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            capability = CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
+        }
         return facing == getFacing()
                 ? super.hasCapability(capability, facing) : getContents().hasCapability(capability, facing);
     }
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            capability = (Capability<T>) CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
+        }
         return facing == getFacing()
                 ? super.getCapability(capability, facing) : getContents().getCapability(capability, facing);
     }
