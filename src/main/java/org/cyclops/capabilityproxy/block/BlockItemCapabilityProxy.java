@@ -60,7 +60,7 @@ public class BlockItemCapabilityProxy extends ConfigurableBlockContainerGui {
                                             int meta, EntityLivingBase placer, EnumHand hand) {
         return this.getDefaultState()
                 .withProperty(FACING, facing.getOpposite())
-                .withProperty(INACTIVE, false);
+                .withProperty(INACTIVE, true);
     }
 
     @Override
