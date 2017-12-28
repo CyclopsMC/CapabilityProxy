@@ -5,6 +5,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
+import org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxy;
+import org.cyclops.cyclopscore.helper.BlockHelpers;
 import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
 
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.List;
 public class TileEntityCapabilityProxy extends CyclopsTileEntity {
 
     public EnumFacing getFacing() {
-        return getWorld().getBlockState(getPos()).getValue(BlockCapabilityProxy.FACING);
+        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockEntityCapabilityProxy.FACING, EnumFacing.UP);
     }
 
     protected List<Entity> getEntities(Capability<?> capability) {

@@ -2,17 +2,12 @@ package org.cyclops.capabilityproxy.tileentity;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
-import org.cyclops.cyclopscore.helper.TileHelpers;
-import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
+import org.cyclops.cyclopscore.helper.BlockHelpers;
 import org.cyclops.cyclopscore.tileentity.InventoryTileEntity;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 
 /**
@@ -29,7 +24,7 @@ public class TileItemCapabilityProxy extends InventoryTileEntity {
     }
 
     public EnumFacing getFacing() {
-        return getWorld().getBlockState(getPos()).getValue(BlockCapabilityProxy.FACING);
+        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockItemCapabilityProxy.FACING, EnumFacing.UP);
     }
 
     @Override

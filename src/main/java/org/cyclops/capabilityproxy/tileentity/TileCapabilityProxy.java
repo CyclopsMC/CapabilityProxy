@@ -5,6 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.capabilities.Capability;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
+import org.cyclops.cyclopscore.helper.BlockHelpers;
 import org.cyclops.cyclopscore.helper.TileHelpers;
 import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
 
@@ -20,7 +21,7 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
     protected boolean handling = false;
 
     public EnumFacing getFacing() {
-        return getWorld().getBlockState(getPos()).getValue(BlockCapabilityProxy.FACING);
+        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockCapabilityProxy.FACING, EnumFacing.UP);
     }
 
     public static BlockPos getTargetPos(BlockPos source, EnumFacing facing) {
