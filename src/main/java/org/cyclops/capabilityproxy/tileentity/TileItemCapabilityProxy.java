@@ -29,13 +29,10 @@ public class TileItemCapabilityProxy extends InventoryTileEntity {
 
     @Override
     public void setInventorySlotContents(int slotId, ItemStack itemstack) {
-        boolean wasEmpty = getStackInSlot(slotId).isEmpty();
         super.setInventorySlotContents(slotId, itemstack);
-        boolean isEmpty = itemstack.isEmpty();
-        if (wasEmpty != isEmpty) {
-            getWorld().setBlockState(getPos(), getWorld().getBlockState(getPos())
-                    .withProperty(BlockItemCapabilityProxy.INACTIVE, isEmpty));
-        }
+        boolean isEmpty = getStackInSlot(slotId).isEmpty();
+        getWorld().setBlockState(getPos(), getWorld().getBlockState(getPos())
+             .withProperty(BlockItemCapabilityProxy.INACTIVE, isEmpty));
     }
 
     protected ItemStack getContents() {
