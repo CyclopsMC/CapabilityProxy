@@ -1,7 +1,10 @@
 package org.cyclops.capabilityproxy.tileentity;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
@@ -29,10 +32,21 @@ public class TileItemCapabilityProxy extends InventoryTileEntity {
 
     @Override
     public void setInventorySlotContents(int slotId, ItemStack itemstack) {
+        boolean wasEmpty = getStackInSlot(slotId).isEmpty();
         super.setInventorySlotContents(slotId, itemstack);
-        boolean isEmpty = getStackInSlot(slotId).isEmpty();
-        getWorld().setBlockState(getPos(), getWorld().getBlockState(getPos())
-             .withProperty(BlockItemCapabilityProxy.INACTIVE, isEmpty));
+        boolean isEmpty = itemstack.isEmpty();
+        
+        World world = getWorld();
+        IBlockState state = world.getBlockState(getPos());
+        if (wasEmpty != isEmpty) {
+            world.setBlockState(getPos(),
+                    state.withProperty(BlockItemCapabilityProxy.INACTIVE, isEmpty));
+        }
+        else
+        {
+            //Trigger a block update anyway, so nearby blocks can recheck capabilities.
+            world.markAndNotifyBlock(getPos(), world.getChunkFromBlockCoords(getPos()), state, state, 3);
+        }
     }
 
     protected ItemStack getContents() {
