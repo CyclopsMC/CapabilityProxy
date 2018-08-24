@@ -45,7 +45,7 @@ public class TileItemCapabilityProxy extends InventoryTileEntity {
         else
         {
             //Trigger a block update anyway, so nearby blocks can recheck capabilities.
-            world.markAndNotifyBlock(getPos(), world.getChunkFromBlockCoords(getPos()), state, state, 3);
+            BlockHelpers.markForUpdate(world, getPos());
         }
     }
 
