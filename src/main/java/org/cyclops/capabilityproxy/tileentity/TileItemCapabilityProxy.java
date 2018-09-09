@@ -35,6 +35,9 @@ public class TileItemCapabilityProxy extends InventoryTileEntity {
         if (wasEmpty != isEmpty) {
             getWorld().setBlockState(getPos(), getWorld().getBlockState(getPos())
                     .withProperty(BlockItemCapabilityProxy.INACTIVE, isEmpty));
+        } else {
+            // Trigger a block update anyway, so nearby blocks can recheck capabilities.
+            BlockHelpers.markForUpdate(world, getPos());
         }
     }
 
