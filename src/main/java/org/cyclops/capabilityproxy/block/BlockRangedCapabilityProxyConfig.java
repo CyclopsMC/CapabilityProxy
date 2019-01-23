@@ -24,7 +24,7 @@ public class BlockRangedCapabilityProxyConfig extends BlockContainerConfig {
     /**
      * The maximum range in number of blocks.
      */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.BLOCK, comment = "The maximum range in number of blocks.", minimalValue = 1)
+    @ConfigurableProperty(category = ConfigurableTypeCategory.BLOCK, comment = "The maximum range in number of blocks. Warning: high values can lag and/or crash your game.", minimalValue = 1)
     public static int range = 16;
 
     /**
