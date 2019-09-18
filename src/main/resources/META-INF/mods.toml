@@ -20,7 +20,7 @@ Access block capabilities from multiple sides.
 [[dependencies.capabilityproxy]]
     modId="forge"
     mandatory=true
-    versionRange="[28,)"
+    versionRange="[28.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.capabilityproxy]]
