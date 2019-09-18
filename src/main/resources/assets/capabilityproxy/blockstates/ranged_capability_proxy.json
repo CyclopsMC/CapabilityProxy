@@ -1,11 +1,10 @@
 {
   "variants": {
-    "facing=south": { "model": "capabilityproxy:ranged_capability_proxy", "x": 90 },
-    "facing=west" : { "model": "capabilityproxy:ranged_capability_proxy", "x": 90, "y": 90 },
-    "facing=north": { "model": "capabilityproxy:ranged_capability_proxy", "x": 90, "y": 180 },
-    "facing=east" : { "model": "capabilityproxy:ranged_capability_proxy", "x": 90, "y": 270 },
-    "facing=up" :   { "model": "capabilityproxy:ranged_capability_proxy", "x": 180 },
-    "facing=down" : { "model": "capabilityproxy:ranged_capability_proxy" },
-    "inventory" :   { "model": "capabilityproxy:ranged_capability_proxy" }
+    "facing=south": { "model": "capabilityproxy:block/ranged_capability_proxy", "x": 90 },
+    "facing=west" : { "model": "capabilityproxy:block/ranged_capability_proxy", "x": 90, "y": 90 },
+    "facing=north": { "model": "capabilityproxy:block/ranged_capability_proxy", "x": 90, "y": 180 },
+    "facing=east" : { "model": "capabilityproxy:block/ranged_capability_proxy", "x": 90, "y": 270 },
+    "facing=up" :   { "model": "capabilityproxy:block/ranged_capability_proxy", "x": 180 },
+    "facing=down" : { "model": "capabilityproxy:block/ranged_capability_proxy" }
   }
 }

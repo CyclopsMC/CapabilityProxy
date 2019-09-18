@@ -1,17 +1,16 @@
 {
   "variants": {
-    "facing=south,inactive=true":  { "model": "capabilityproxy:item_capability_proxy_inactive", "x": 90 },
-    "facing=west,inactive=true" :  { "model": "capabilityproxy:item_capability_proxy_inactive", "x": 90, "y": 90 },
-    "facing=north,inactive=true":  { "model": "capabilityproxy:item_capability_proxy_inactive", "x": 90, "y": 180 },
-    "facing=east,inactive=true" :  { "model": "capabilityproxy:item_capability_proxy_inactive", "x": 90, "y": 270 },
-    "facing=up,inactive=true" :    { "model": "capabilityproxy:item_capability_proxy_inactive", "x": 180 },
-    "facing=down,inactive=true" :  { "model": "capabilityproxy:item_capability_proxy_inactive" },
-    "facing=south,inactive=false": { "model": "capabilityproxy:item_capability_proxy_active", "x": 90 },
-    "facing=west,inactive=false" : { "model": "capabilityproxy:item_capability_proxy_active", "x": 90, "y": 90 },
-    "facing=north,inactive=false": { "model": "capabilityproxy:item_capability_proxy_active", "x": 90, "y": 180 },
-    "facing=east,inactive=false" : { "model": "capabilityproxy:item_capability_proxy_active", "x": 90, "y": 270 },
-    "facing=up,inactive=false" :   { "model": "capabilityproxy:item_capability_proxy_active", "x": 180 },
-    "facing=down,inactive=false" : { "model": "capabilityproxy:item_capability_proxy_active" },
-    "inventory" :                  { "model": "capabilityproxy:item_capability_proxy_inactive" }
+    "facing=south,inactive=true":  { "model": "capabilityproxy:block/item_capability_proxy_inactive", "x": 90 },
+    "facing=west,inactive=true" :  { "model": "capabilityproxy:block/item_capability_proxy_inactive", "x": 90, "y": 90 },
+    "facing=north,inactive=true":  { "model": "capabilityproxy:block/item_capability_proxy_inactive", "x": 90, "y": 180 },
+    "facing=east,inactive=true" :  { "model": "capabilityproxy:block/item_capability_proxy_inactive", "x": 90, "y": 270 },
+    "facing=up,inactive=true" :    { "model": "capabilityproxy:block/item_capability_proxy_inactive", "x": 180 },
+    "facing=down,inactive=true" :  { "model": "capabilityproxy:block/item_capability_proxy_inactive" },
+    "facing=south,inactive=false": { "model": "capabilityproxy:block/item_capability_proxy_active", "x": 90 },
+    "facing=west,inactive=false" : { "model": "capabilityproxy:block/item_capability_proxy_active", "x": 90, "y": 90 },
+    "facing=north,inactive=false": { "model": "capabilityproxy:block/item_capability_proxy_active", "x": 90, "y": 180 },
+    "facing=east,inactive=false" : { "model": "capabilityproxy:block/item_capability_proxy_active", "x": 90, "y": 270 },
+    "facing=up,inactive=false" :   { "model": "capabilityproxy:block/item_capability_proxy_active", "x": 180 },
+    "facing=down,inactive=false" : { "model": "capabilityproxy:block/item_capability_proxy_active" }
   }
 }

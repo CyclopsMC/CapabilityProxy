@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ECE",
+    "PPP",
+    "ECE"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "C": {
+      "item": "minecraft:popped_chorus_fruit"
+    },
+    "P": {
+      "item": "capabilityproxy:capability_proxy"
+    }
+  },
+  "result": {
+    "item": "capabilityproxy:entity_capability_proxy"
+  }
+}

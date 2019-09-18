@@ -1,67 +1,59 @@
 package org.cyclops.capabilityproxy.block;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxy;
-import org.cyclops.cyclopscore.block.property.BlockProperty;
-import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainer;
-import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
-import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
+import org.cyclops.cyclopscore.block.BlockTile;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
  * This block will forward capabilities from the target's (at a range) side to all sides.
  * @author rubensworks
  */
-public class BlockRangedCapabilityProxy extends ConfigurableBlockContainer {
+public class BlockRangedCapabilityProxy extends BlockTile {
 
-    @BlockProperty
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", Lists.newArrayList(EnumFacing.VALUES));
-
-    private static BlockRangedCapabilityProxy _instance = null;
-
-    /**
-     * Get the unique instance.
-     * @return The instance.
-     */
-    public static BlockRangedCapabilityProxy getInstance() {
-        return _instance;
-    }
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     private Set<BlockPos> activatingBlockChain = Sets.newHashSet();
 
-    /**
-     * Make a new block instance.
-     * @param eConfig Config for this block.
-     */
-    public BlockRangedCapabilityProxy(ExtendedConfig<BlockConfig> eConfig) {
-        super(eConfig, Material.GROUND, TileRangedCapabilityProxy.class);
-
-        setHardness(2.0F);
-        setSoundType(SoundType.STONE);
+    public BlockRangedCapabilityProxy(Block.Properties properties) {
+        super(properties, TileRangedCapabilityProxy::new);
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing,
-                                            float hitX, float hitY, float hitZ,
-                                            int meta, EntityLivingBase placer, EnumHand hand) {
-        return this.getDefaultState().withProperty(FACING, facing.getOpposite());
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState()
+                .with(FACING, context.getFace().getOpposite());
+    }
+
+    @Override
+    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
+                                    BlockRayTraceResult hit) {
         // A check to avoid infinite loops
         if (activatingBlockChain == null) {
             activatingBlockChain = Sets.newHashSet(pos);
@@ -73,10 +65,10 @@ public class BlockRangedCapabilityProxy extends ConfigurableBlockContainer {
             }
         }
         for (int offset = 1; offset < BlockRangedCapabilityProxyConfig.range; offset++) {
-            EnumFacing facing = state.getValue(BlockRangedCapabilityProxy.FACING);
-            IBlockState targetBlockState = worldIn.getBlockState(pos.offset(facing, offset));
-            boolean ret = targetBlockState.getBlock().onBlockActivated(worldIn, pos.offset(facing, offset), targetBlockState,
-                    playerIn, hand, facing.getOpposite(), hitX, hitY, hitZ);
+            Direction facing = state.get(BlockRangedCapabilityProxy.FACING);
+            BlockState targetBlockState = worldIn.getBlockState(pos.offset(facing, offset));
+            boolean ret = targetBlockState.getBlock().onBlockActivated(targetBlockState, worldIn, pos.offset(facing, offset),
+                    player, hand, hit.withFace(facing.getOpposite()));
             // TODO: this can produce a stackoverflow when in cycle, that is because we have this offsetloop here. FIXME
             if (ret) {
                 activatingBlockChain = null;

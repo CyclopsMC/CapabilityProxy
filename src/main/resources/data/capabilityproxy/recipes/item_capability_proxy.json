@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "capabilityproxy:capability_proxy"
+    },
+    {
+      "tag": "forge:chests"
+    },
+    {
+      "tag": "forge:ingots/gold"
+    }
+  ],
+  "result": {
+    "item": "capabilityproxy:item_capability_proxy"
+  }
+}

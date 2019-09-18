@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " E ",
+    "PPP",
+    " E "
+  ],
+  "key": {
+    "E": {
+      "tag": "forge:ender_pearls"
+    },
+    "P": {
+      "item": "capabilityproxy:capability_proxy"
+    }
+  },
+  "result": {
+    "item": "capabilityproxy:ranged_capability_proxy"
+  }
+}

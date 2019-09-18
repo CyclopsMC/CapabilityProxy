@@ -1,48 +1,34 @@
 package org.cyclops.capabilityproxy.block;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.config.ModConfig;
 import org.cyclops.capabilityproxy.CapabilityProxy;
 import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxy;
 import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxy;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
-import org.cyclops.cyclopscore.config.ConfigurableTypeCategory;
-import org.cyclops.cyclopscore.config.extendedconfig.BlockContainerConfig;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
 import org.cyclops.cyclopscore.helper.MinecraftHelpers;
 
 /**
  * Config for {@link BlockRangedCapabilityProxy}.
  * @author rubensworks
  */
-public class BlockRangedCapabilityProxyConfig extends BlockContainerConfig {
+public class BlockRangedCapabilityProxyConfig extends BlockConfig {
 
-    /**
-     * The unique instance.
-     */
-    public static BlockRangedCapabilityProxyConfig _instance;
-
-    /**
-     * The maximum range in number of blocks.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.BLOCK, comment = "The maximum range in number of blocks. Warning: high values can lag and/or crash your game.", minimalValue = 1)
+    @ConfigurableProperty(category = "block", comment = "The maximum range in number of blocks. Warning: high values can lag and/or crash your game.", minimalValue = 1, configLocation = ModConfig.Type.SERVER)
     public static int range = 16;
 
-    /**
-     * Make a new instance.
-     */
     public BlockRangedCapabilityProxyConfig() {
         super(
-            CapabilityProxy._instance,
-            true,
-            "ranged_capability_proxy",
-            null,
-            BlockRangedCapabilityProxy.class
+                CapabilityProxy._instance,
+                "ranged_capability_proxy",
+                (eConfig) -> new BlockRangedCapabilityProxy(Block.Properties.create(Material.ROCK)
+                        .hardnessAndResistance(2.0f)),
+                getDefaultItemConstructor(CapabilityProxy._instance)
         );
-    }
-
-    @Override
-    public boolean isDisableable() {
-        return true;
     }
 
     @Override
@@ -53,9 +39,9 @@ public class BlockRangedCapabilityProxyConfig extends BlockContainerConfig {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private static void registerClientSide() {
-        CapabilityProxy.proxy.registerRenderer(TileRangedCapabilityProxy.class, new RenderTileRangedCapabilityProxy());
+        CapabilityProxy._instance.getProxy().registerRenderer(TileRangedCapabilityProxy.class, new RenderTileRangedCapabilityProxy());
     }
 
 }

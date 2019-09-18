@@ -1,73 +1,62 @@
 package org.cyclops.capabilityproxy.block;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 import org.cyclops.capabilityproxy.tileentity.TileCapabilityProxy;
-import org.cyclops.cyclopscore.block.property.BlockProperty;
-import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainer;
-import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
-import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
+import org.cyclops.cyclopscore.block.BlockTile;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
  * This block will forward capabilities from the target side to all sides.
  * @author rubensworks
  */
-public class BlockCapabilityProxy extends ConfigurableBlockContainer {
+public class BlockCapabilityProxy extends BlockTile {
 
-    @BlockProperty
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", Lists.newArrayList(EnumFacing.VALUES));
-    @BlockProperty
-    public static final PropertyBool INACTIVE = PropertyBool.create("inactive");
-
-    private static BlockCapabilityProxy _instance = null;
-
-    /**
-     * Get the unique instance.
-     * @return The instance.
-     */
-    public static BlockCapabilityProxy getInstance() {
-        return _instance;
-    }
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final BooleanProperty INACTIVE = BooleanProperty.create("inactive");
 
     private Set<BlockPos> activatingBlockChain = null;
 
-    /**
-     * Make a new block instance.
-     * @param eConfig Config for this block.
-     */
-    public BlockCapabilityProxy(ExtendedConfig<BlockConfig> eConfig) {
-        super(eConfig, Material.GROUND, TileCapabilityProxy.class);
+    public BlockCapabilityProxy(Block.Properties properties) {
+        super(properties, TileCapabilityProxy::new);
 
-        setHardness(2.0F);
-        setSoundType(SoundType.STONE);
+        this.setDefaultState(this.stateContainer.getBaseState()
+                .with(FACING, Direction.DOWN)
+                .with(INACTIVE, Boolean.valueOf(true)));
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing,
-                                            float hitX, float hitY, float hitZ,
-                                            int meta, EntityLivingBase placer, EnumHand hand) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(FACING)
+                .add(INACTIVE);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
         return this.getDefaultState()
-                .withProperty(FACING, facing.getOpposite())
-                .withProperty(INACTIVE, world.getTileEntity(TileCapabilityProxy.getTargetPos(pos, facing.getOpposite())) == null);
+                .with(FACING, context.getFace().getOpposite())
+                .with(INACTIVE, context.getWorld().getTileEntity(TileCapabilityProxy
+                        .getTargetPos(context.getPos(), context.getFace().getOpposite())) == null);
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
+                                    BlockRayTraceResult hit) {
         // A check to avoid infinite loops
         if (activatingBlockChain == null) {
             activatingBlockChain = Sets.newHashSet(pos);
@@ -78,26 +67,27 @@ public class BlockCapabilityProxy extends ConfigurableBlockContainer {
                 activatingBlockChain.add(pos);
             }
         }
-        EnumFacing facing = state.getValue(BlockCapabilityProxy.FACING);
-        IBlockState targetBlockState = worldIn.getBlockState(pos.offset(facing));
-        boolean ret = targetBlockState.getBlock().onBlockActivated(worldIn, TileCapabilityProxy.getTargetPos(pos, facing), targetBlockState,
-                playerIn, hand, facing.getOpposite(), hitX, hitY, hitZ);
+        Direction facing = state.get(BlockCapabilityProxy.FACING);
+        BlockState targetBlockState = worldIn.getBlockState(pos.offset(facing));
+        boolean ret = targetBlockState.getBlock().onBlockActivated(targetBlockState, worldIn,
+                TileCapabilityProxy.getTargetPos(pos, facing), player, handIn, hit.withFace(facing.getOpposite()));
         activatingBlockChain = null;
         return ret;
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
-        super.neighborChanged(state, world, pos, block, fromPos);
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos, isMoving);
         if (!world.isRemote) {
-            EnumFacing facing = state.getValue(BlockCapabilityProxy.FACING);
+            Direction facing = state.get(BlockCapabilityProxy.FACING);
             if (pos.offset(facing).equals(fromPos)) {
-                boolean inactive = state.getValue(BlockCapabilityProxy.INACTIVE);
+                boolean inactive = state.get(BlockCapabilityProxy.INACTIVE);
                 if (inactive != (world.getTileEntity(pos.offset(facing)) == null)) {
-                    world.setBlockState(pos, world.getBlockState(pos).withProperty(INACTIVE, !inactive));
+                    world.setBlockState(pos, world.getBlockState(pos).with(INACTIVE, !inactive));
                     world.notifyNeighborsOfStateExcept(pos, this, facing);
                 }
             }
         }
     }
+
 }

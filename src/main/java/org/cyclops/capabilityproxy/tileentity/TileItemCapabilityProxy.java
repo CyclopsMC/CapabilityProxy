@@ -1,75 +1,95 @@
 package org.cyclops.capabilityproxy.tileentity;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
+import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
 import org.cyclops.cyclopscore.helper.BlockHelpers;
-import org.cyclops.cyclopscore.tileentity.InventoryTileEntity;
+import org.cyclops.cyclopscore.inventory.SimpleInventory;
+import org.cyclops.cyclopscore.persist.nbt.NBTPersist;
+import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
 
-import java.util.Collections;
+import javax.annotation.Nullable;
 
 /**
  * An item capability proxy.
  * @author rubensworks
  */
-public class TileItemCapabilityProxy extends InventoryTileEntity {
+public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamedContainerProvider {
+
+    private final SimpleInventory inventory;
 
     public TileItemCapabilityProxy() {
-        super(1, "main", 1);
-        for (EnumFacing side : EnumFacing.VALUES) {
-            addSlotsToSide(side, Collections.singleton(0));
-        }
-    }
-
-    public EnumFacing getFacing() {
-        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockItemCapabilityProxy.FACING, EnumFacing.UP);
+        super(RegistryEntries.TILE_ENTITY_ITEM_CAPABILITY_PROXY);
+        this.inventory = new SimpleInventory(1, 1) {
+            @Override
+            public void setInventorySlotContents(int slotId, ItemStack itemstack) {
+                boolean wasEmpty = getStackInSlot(slotId).isEmpty();
+                super.setInventorySlotContents(slotId, itemstack);
+                boolean isEmpty = itemstack.isEmpty();
+                if (wasEmpty != isEmpty) {
+                    getWorld().setBlockState(getPos(), getWorld().getBlockState(getPos())
+                            .with(BlockItemCapabilityProxy.INACTIVE, isEmpty));
+                } else {
+                    // Trigger a block update anyway, so nearby blocks can recheck capabilities.
+                    BlockHelpers.markForUpdate(getWorld(), getPos());
+                }
+            }
+        };
     }
 
     @Override
-    public void setInventorySlotContents(int slotId, ItemStack itemstack) {
-        boolean wasEmpty = getStackInSlot(slotId).isEmpty();
-        super.setInventorySlotContents(slotId, itemstack);
-        boolean isEmpty = itemstack.isEmpty();
-        if (wasEmpty != isEmpty) {
-            getWorld().setBlockState(getPos(), getWorld().getBlockState(getPos())
-                    .withProperty(BlockItemCapabilityProxy.INACTIVE, isEmpty));
-        } else {
-            // Trigger a block update anyway, so nearby blocks can recheck capabilities.
-            BlockHelpers.markForUpdate(world, getPos());
-        }
+    public void read(CompoundNBT tag) {
+        super.read(tag);
+        this.inventory.read(tag);
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT tag) {
+        this.inventory.write(tag);
+        return super.write(tag);
+    }
+
+    public SimpleInventory getInventory() {
+        return inventory;
+    }
+
+    public Direction getFacing() {
+        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockItemCapabilityProxy.FACING, Direction.UP);
     }
 
     protected ItemStack getContents() {
-        return getStackInSlot(0);
+        return this.inventory.getStackInSlot(0);
     }
 
     @Override
-    protected boolean canAccess(int slot, EnumFacing side) {
-        return side == getFacing();
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return getContents().isEmpty();
-    }
-
-    @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            capability = CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
-        }
-        return facing == getFacing()
-                ? super.hasCapability(capability, facing) : getContents().hasCapability(capability, facing);
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             capability = (Capability<T>) CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
         }
         return facing == getFacing()
                 ? super.getCapability(capability, facing) : getContents().getCapability(capability, facing);
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("block.capabilityproxy.item_capability_proxy");
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+        return new ContainerItemCapabilityProxy(id, playerInventory, this.getInventory());
     }
 }

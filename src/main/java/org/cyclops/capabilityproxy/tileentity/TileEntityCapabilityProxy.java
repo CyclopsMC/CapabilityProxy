@@ -1,10 +1,11 @@
 package org.cyclops.capabilityproxy.tileentity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
-import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
+import net.minecraftforge.common.util.LazyOptional;
+import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxy;
 import org.cyclops.cyclopscore.helper.BlockHelpers;
 import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
@@ -17,24 +18,23 @@ import java.util.List;
  */
 public class TileEntityCapabilityProxy extends CyclopsTileEntity {
 
-    public EnumFacing getFacing() {
-        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockEntityCapabilityProxy.FACING, EnumFacing.UP);
+    public TileEntityCapabilityProxy() {
+        super(RegistryEntries.TILE_ENTITY_ENTITY_CAPABILITY_PROXY);
+    }
+
+    public Direction getFacing() {
+        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockEntityCapabilityProxy.FACING, Direction.UP);
     }
 
     protected List<Entity> getEntities(Capability<?> capability) {
         AxisAlignedBB aabb = new AxisAlignedBB(getPos().offset(getFacing()));
-        EnumFacing facing = getFacing().getOpposite();
-        return getWorld().getEntitiesWithinAABB(Entity.class, aabb, entity -> entity.hasCapability(capability, facing));
+        Direction facing = getFacing().getOpposite();
+        return getWorld().getEntitiesWithinAABB(Entity.class, aabb, entity -> entity.getCapability(capability, facing).isPresent());
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return !getEntities(capability).isEmpty();
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
         List<Entity> entities = getEntities(capability);
-        return entities.isEmpty() ? null : entities.get(0).getCapability(capability, getFacing().getOpposite());
+        return entities.isEmpty() ? LazyOptional.empty() : entities.get(0).getCapability(capability, getFacing().getOpposite());
     }
 }

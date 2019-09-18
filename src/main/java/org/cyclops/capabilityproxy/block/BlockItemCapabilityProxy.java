@@ -1,75 +1,44 @@
 package org.cyclops.capabilityproxy.block;
 
-import com.google.common.collect.Lists;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.Container;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import org.cyclops.capabilityproxy.client.gui.GuiItemCapabilityProxy;
-import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import org.cyclops.capabilityproxy.tileentity.TileCapabilityProxy;
 import org.cyclops.capabilityproxy.tileentity.TileItemCapabilityProxy;
-import org.cyclops.cyclopscore.block.property.BlockProperty;
-import org.cyclops.cyclopscore.config.configurable.ConfigurableBlockContainerGui;
-import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
-import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
+import org.cyclops.cyclopscore.block.BlockTileGui;
+
+import javax.annotation.Nullable;
 
 /**
  * This block will forward capabilities from the contained item to all sides except for the target side.
  * @author rubensworks
  */
-public class BlockItemCapabilityProxy extends ConfigurableBlockContainerGui {
+public class BlockItemCapabilityProxy extends BlockTileGui {
 
-    @BlockProperty
-    public static final PropertyDirection FACING = PropertyDirection.create("facing", Lists.newArrayList(EnumFacing.VALUES));
-    @BlockProperty
-    public static final PropertyBool INACTIVE = PropertyBool.create("inactive");
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final BooleanProperty INACTIVE = BooleanProperty.create("inactive");
 
-    private static BlockItemCapabilityProxy _instance = null;
-
-    /**
-     * Get the unique instance.
-     * @return The instance.
-     */
-    public static BlockItemCapabilityProxy getInstance() {
-        return _instance;
-    }
-
-    /**
-     * Make a new block instance.
-     * @param eConfig Config for this block.
-     */
-    public BlockItemCapabilityProxy(ExtendedConfig<BlockConfig> eConfig) {
-        super(eConfig, Material.GROUND, TileItemCapabilityProxy.class);
-
-        setHardness(2.0F);
-        setSoundType(SoundType.STONE);
-        this.hasGui = true;
+    public BlockItemCapabilityProxy(Block.Properties properties) {
+        super(properties, TileItemCapabilityProxy::new);
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing,
-                                            float hitX, float hitY, float hitZ,
-                                            int meta, EntityLivingBase placer, EnumHand hand) {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(FACING)
+                .add(INACTIVE);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
         return this.getDefaultState()
-                .withProperty(FACING, facing.getOpposite())
-                .withProperty(INACTIVE, true);
+                .with(FACING, context.getFace().getOpposite())
+                .with(INACTIVE, context.getWorld().getTileEntity(TileCapabilityProxy
+                        .getTargetPos(context.getPos(), context.getFace().getOpposite())) == null);
     }
 
-    @Override
-    public Class<? extends Container> getContainer() {
-        return ContainerItemCapabilityProxy.class;
-    }
-
-    @Override
-    public Class<? extends GuiScreen> getGui() {
-        return GuiItemCapabilityProxy.class;
-    }
 }

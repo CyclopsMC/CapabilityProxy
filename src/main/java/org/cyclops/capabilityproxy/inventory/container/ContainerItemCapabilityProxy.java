@@ -1,24 +1,26 @@
 package org.cyclops.capabilityproxy.inventory.container;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import org.cyclops.capabilityproxy.tileentity.TileItemCapabilityProxy;
-import org.cyclops.cyclopscore.inventory.container.TileInventoryContainerConfigurable;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Slot;
+import org.cyclops.capabilityproxy.RegistryEntries;
+import org.cyclops.cyclopscore.inventory.SimpleInventory;
+import org.cyclops.cyclopscore.inventory.container.InventoryContainer;
 
 /**
  * Container for the item capability proxy.
  * @author rubensworks
  */
-public class ContainerItemCapabilityProxy extends TileInventoryContainerConfigurable<TileItemCapabilityProxy> {
+public class ContainerItemCapabilityProxy extends InventoryContainer {
 
-    /**
-     * Make a new instance.
-     * @param inventory The player inventory.
-     * @param tile The part.
-     */
-    public ContainerItemCapabilityProxy(InventoryPlayer inventory, TileItemCapabilityProxy tile) {
-        super(inventory, tile);
-        addSlotToContainer(new Slot(tile, 0, 80, 16));
-        addPlayerInventory(inventory, offsetX + 8, offsetY + 46);
+    public ContainerItemCapabilityProxy(int id, PlayerInventory playerInventory) {
+        this(id, playerInventory, new SimpleInventory(1, 1));
     }
+
+    public ContainerItemCapabilityProxy(int id, PlayerInventory playerInventory, IInventory inventory) {
+        super(RegistryEntries.CONTAINER_ITEM_CAPABILITY_PROXY, id, playerInventory, inventory);
+        addSlot(new Slot(inventory, 0, 80, 16));
+        addPlayerInventory(playerInventory, offsetX + 8, offsetY + 46);
+    }
+
 }

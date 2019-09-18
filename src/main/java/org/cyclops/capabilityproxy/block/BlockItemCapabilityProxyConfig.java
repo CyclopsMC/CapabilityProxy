@@ -1,35 +1,24 @@
 package org.cyclops.capabilityproxy.block;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import org.cyclops.capabilityproxy.CapabilityProxy;
-import org.cyclops.cyclopscore.config.extendedconfig.BlockContainerConfig;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
 
 /**
  * Config for {@link BlockCapabilityProxy}.
  * @author rubensworks
  */
-public class BlockItemCapabilityProxyConfig extends BlockContainerConfig {
+public class BlockItemCapabilityProxyConfig extends BlockConfig {
 
-    /**
-     * The unique instance.
-     */
-    public static BlockItemCapabilityProxyConfig _instance;
-
-    /**
-     * Make a new instance.
-     */
     public BlockItemCapabilityProxyConfig() {
         super(
-            CapabilityProxy._instance,
-            true,
-            "item_capability_proxy",
-            null,
-            BlockItemCapabilityProxy.class
+                CapabilityProxy._instance,
+                "item_capability_proxy",
+                (eConfig) -> new BlockItemCapabilityProxy(Block.Properties.create(Material.ROCK)
+                        .hardnessAndResistance(2.0f)),
+                getDefaultItemConstructor(CapabilityProxy._instance)
         );
-    }
-
-    @Override
-    public boolean isDisableable() {
-        return true;
     }
 
 }
