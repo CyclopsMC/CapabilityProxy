@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "capabilityproxy:item_capability_proxy"
+    ]
+  },
+  "criteria": {
+    "has_cap_proxy": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "capabilityproxy:capability_proxy"
+          }
+        ]
+      }
+    },
+    "has_chest": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:chest"
+          }
+        ]
+      }
+    },
+    "has_gold_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:gold_ingot"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "capabilityproxy:item_capability_proxy"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cap_proxy",
+      "has_chest",
+      "has_gold_ingot",
+      "has_the_recipe"
+    ]
+  ]
+}
