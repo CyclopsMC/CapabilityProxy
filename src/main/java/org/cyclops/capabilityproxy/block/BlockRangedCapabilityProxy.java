@@ -1,6 +1,5 @@
 package org.cyclops.capabilityproxy.block;
 
-import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,12 +11,15 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxy;
 import org.cyclops.cyclopscore.block.BlockTile;
 
 import javax.annotation.Nullable;
+
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -27,8 +29,6 @@ import java.util.Set;
 public class BlockRangedCapabilityProxy extends BlockTile {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-
-    private Set<BlockPos> activatingBlockChain = Sets.newHashSet();
 
     public BlockRangedCapabilityProxy(Block.Properties properties) {
         super(properties, TileRangedCapabilityProxy::new);
@@ -54,28 +54,73 @@ public class BlockRangedCapabilityProxy extends BlockTile {
     @Override
     public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
                                     BlockRayTraceResult hit) {
-        // A check to avoid infinite loops
-        if (activatingBlockChain == null) {
-            activatingBlockChain = Sets.newHashSet(pos);
-        } else {
-            if (activatingBlockChain.contains(pos)) {
-                return false;
-            } else {
-                activatingBlockChain.add(pos);
-            }
+        RecursiveHit rhit = hit instanceof RecursiveHit ? (RecursiveHit)hit : new RecursiveHit(hit, new HashSet<>(), hit.getPos(), hit.getFace());
+        if (rhit.chain.contains(pos)) {
+            System.out.println("Recursive Found: " + rhit.chain + " " + pos);
+            rhit.setFailed();
+            return false;
         }
+        rhit.chain.add(pos.toImmutable());
+
         for (int offset = 1; offset < BlockRangedCapabilityProxyConfig.range; offset++) {
             Direction facing = state.get(BlockRangedCapabilityProxy.FACING);
-            BlockState targetBlockState = worldIn.getBlockState(pos.offset(facing, offset));
-            boolean ret = targetBlockState.getBlock().onBlockActivated(targetBlockState, worldIn, pos.offset(facing, offset),
-                    player, hand, hit.withFace(facing.getOpposite()));
-            // TODO: this can produce a stackoverflow when in cycle, that is because we have this offsetloop here. FIXME
-            if (ret) {
-                activatingBlockChain = null;
+            BlockPos targetPos = pos.offset(facing, offset);
+            BlockState target = worldIn.getBlockState(targetPos);
+            boolean ret = target.onBlockActivated(worldIn, player, hand, rhit.move(targetPos, facing.getOpposite()));
+            if (ret || rhit.failed) {
                 return ret;
             }
         }
-        activatingBlockChain = null;
         return false;
+    }
+
+    private static class RecursiveHit extends BlockRayTraceResult {
+        private RecursiveHit rParent;
+        private final BlockRayTraceResult parent;
+        private final Set<BlockPos> chain;
+        private boolean failed = false;
+
+        public RecursiveHit(BlockRayTraceResult parent, Set<BlockPos> chain, BlockPos pos, Direction face) {
+            super(parent.getHitVec(), face, pos, parent.isInside());
+            this.parent = parent;
+            this.chain = chain;
+            this.hitInfo = parent.hitInfo;
+        }
+
+        private RecursiveHit(RecursiveHit parent, Direction face) {
+            this(parent.parent, parent.chain, parent.getPos(), face);
+            rParent = parent;
+        }
+
+        private RecursiveHit move(BlockPos pos, Direction face) {
+            return new RecursiveHit(this.parent, this.chain, pos, face);
+        }
+
+        @Override
+        public BlockRayTraceResult withFace(Direction newFace) {
+            return new RecursiveHit(this, newFace);
+        }
+
+        @Override
+        public Type getType() {
+            return parent.getType();
+        }
+
+        @Override
+        public Vec3d getHitVec() {
+            return parent.getHitVec();
+        }
+
+        @Override
+        public boolean isInside() {
+            return parent.isInside();
+        }
+
+        public void setFailed() {
+            if (rParent != null)
+                rParent.setFailed();
+            else
+                this.failed = true;
+        }
     }
 }
