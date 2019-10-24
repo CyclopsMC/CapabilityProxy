@@ -56,7 +56,6 @@ public class BlockRangedCapabilityProxy extends BlockTile {
                                     BlockRayTraceResult hit) {
         RecursiveHit rhit = hit instanceof RecursiveHit ? (RecursiveHit)hit : new RecursiveHit(hit, new HashSet<>(), hit.getPos(), hit.getFace());
         if (rhit.chain.contains(pos)) {
-            System.out.println("Recursive Found: " + rhit.chain + " " + pos);
             rhit.setFailed();
             return false;
         }
