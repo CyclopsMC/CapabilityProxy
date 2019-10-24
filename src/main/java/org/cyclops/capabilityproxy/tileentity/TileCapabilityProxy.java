@@ -55,6 +55,6 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
         handling = true;
         LazyOptional<T> ret = getTarget(capability, facing);
         handling = false;
-        return ret;
+        return ret == null ? LazyOptional.empty() : ret;
     }
 }
