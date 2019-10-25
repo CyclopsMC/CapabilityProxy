@@ -31,7 +31,7 @@ public class TileRangedCapabilityProxy extends TileCapabilityProxy {
                 return instance;
             }
         }
-        return null;
+        return LazyOptional.empty();
     }
 
     @Override
