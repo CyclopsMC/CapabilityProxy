@@ -12,6 +12,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
@@ -47,6 +49,7 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
                 }
             }
         };
+        addCapabilityInternal(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getInventory().getItemHandler());
     }
 
     @Override
