@@ -49,7 +49,7 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
                 }
             }
         };
-        addCapabilityInternal(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getInventory().getItemHandler());
+        addCapabilityInternal(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, LazyOptional.of(getInventory()::getItemHandler));
     }
 
     @Override
