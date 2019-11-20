@@ -1,0 +1,10 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 1.6.0 or higher.
+
+Additions:
+* Add advancements for unlocking the recipes.
+
+Fixes:
+* Fix not being able to pipe in/out items into target side of item proxy, Closes #22
+* Fix Stack Overflow in ranged proxy
+* Fix blocks not dropping in item form
