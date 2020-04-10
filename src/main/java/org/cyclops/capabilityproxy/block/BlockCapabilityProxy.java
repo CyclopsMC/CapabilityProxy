@@ -9,6 +9,7 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -55,21 +56,21 @@ public class BlockCapabilityProxy extends BlockTile {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
-                                    BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
+                                             BlockRayTraceResult hit) {
         // A check to avoid infinite loops
         if (activatingBlockChain == null) {
             activatingBlockChain = Sets.newHashSet(pos);
         } else {
             if (activatingBlockChain.contains(pos)) {
-                return false;
+                return ActionResultType.FAIL;
             } else {
                 activatingBlockChain.add(pos);
             }
         }
         Direction facing = state.get(BlockCapabilityProxy.FACING);
         BlockState targetBlockState = worldIn.getBlockState(pos.offset(facing));
-        boolean ret = targetBlockState.getBlock().onBlockActivated(targetBlockState, worldIn,
+        ActionResultType ret = targetBlockState.getBlock().onBlockActivated(targetBlockState, worldIn,
                 TileCapabilityProxy.getTargetPos(pos, facing), player, handIn, hit.withFace(facing.getOpposite()));
         activatingBlockChain = null;
         return ret;

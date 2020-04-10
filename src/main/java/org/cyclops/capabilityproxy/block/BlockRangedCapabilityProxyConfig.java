@@ -2,15 +2,10 @@ package org.cyclops.capabilityproxy.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.config.ModConfig;
 import org.cyclops.capabilityproxy.CapabilityProxy;
-import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxy;
-import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxy;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
-import org.cyclops.cyclopscore.helper.MinecraftHelpers;
 
 /**
  * Config for {@link BlockRangedCapabilityProxy}.
@@ -29,19 +24,6 @@ public class BlockRangedCapabilityProxyConfig extends BlockConfig {
                         .hardnessAndResistance(2.0f)),
                 getDefaultItemConstructor(CapabilityProxy._instance)
         );
-    }
-
-    @Override
-    public void onRegistered() {
-        super.onRegistered();
-        if(MinecraftHelpers.isClientSide()) {
-            registerClientSide();
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private static void registerClientSide() {
-        CapabilityProxy._instance.getProxy().registerRenderer(TileRangedCapabilityProxy.class, new RenderTileRangedCapabilityProxy());
     }
 
 }

@@ -47,20 +47,20 @@ public class BlockEntityCapabilityProxy extends BlockTile {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
                                     BlockRayTraceResult hit) {
         Direction facing = state.get(FACING);
-        if(hit.getFace() == facing) return false; // In the future, this will be how you open the filter GUI
+        if(hit.getFace() == facing) return ActionResultType.SUCCESS; // In the future, this will be how you open the filter GUI
         BlockPos targetPos = pos.offset(facing);
         List<Entity> entities = worldIn.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(targetPos));
         for(Entity entity : entities) {
-            ActionResultType result = entity.applyPlayerInteraction(player, new Vec3d(targetPos.getX() + 0.5 - entity.posX, targetPos.getY() + 0.5 - entity.posY, targetPos.getZ() + 0.5 - entity.posZ), hand);
+            ActionResultType result = entity.applyPlayerInteraction(player, new Vec3d(targetPos.getX() + 0.5 - entity.getPosX(), targetPos.getY() + 0.5 - entity.getPosY(), targetPos.getZ() + 0.5 - entity.getPosZ()), hand);
             if(result != ActionResultType.PASS)
-                return true;
+                return result;
             result = player.interactOn(entity, hand);
             if(result != ActionResultType.PASS)
-                return true;
+                return result;
         }
-        return false;
+        return ActionResultType.PASS;
     }
 }

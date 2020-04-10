@@ -7,6 +7,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -52,12 +53,12 @@ public class BlockRangedCapabilityProxy extends BlockTile {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
-                                    BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
+                                             BlockRayTraceResult hit) {
         RecursiveHit rhit = hit instanceof RecursiveHit ? (RecursiveHit)hit : new RecursiveHit(hit, new HashSet<>(), hit.getPos(), hit.getFace());
         if (rhit.chain.contains(pos)) {
             rhit.setFailed();
-            return false;
+            return ActionResultType.FAIL;
         }
         rhit.chain.add(pos.toImmutable());
 
@@ -65,12 +66,12 @@ public class BlockRangedCapabilityProxy extends BlockTile {
             Direction facing = state.get(BlockRangedCapabilityProxy.FACING);
             BlockPos targetPos = pos.offset(facing, offset);
             BlockState target = worldIn.getBlockState(targetPos);
-            boolean ret = target.onBlockActivated(worldIn, player, hand, rhit.move(targetPos, facing.getOpposite()));
-            if (ret || rhit.failed) {
+            ActionResultType ret = target.onBlockActivated(worldIn, player, hand, rhit.move(targetPos, facing.getOpposite()));
+            if (ret.isSuccessOrConsume() || rhit.failed) {
                 return ret;
             }
         }
-        return false;
+        return ActionResultType.PASS;
     }
 
     private static class RecursiveHit extends BlockRayTraceResult {

@@ -152,11 +152,11 @@ public class DataGen {
         private class Blocks extends BlockLootTables {
             private Set<Block> knownBlocks = new HashSet<>();
 
-            private void addTables() {
-                this.func_218492_c(RegistryEntries.BLOCK_CAPABILITY_PROXY);
-                this.func_218492_c(RegistryEntries.BLOCK_ENTITY_CAPABILITY_PROXY);
-                this.func_218492_c(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY);
-                this.func_218492_c(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY);
+            protected void addTables() {
+                this.registerDropSelfLootTable(RegistryEntries.BLOCK_CAPABILITY_PROXY);
+                this.registerDropSelfLootTable(RegistryEntries.BLOCK_ENTITY_CAPABILITY_PROXY);
+                this.registerDropSelfLootTable(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY);
+                this.registerDropSelfLootTable(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY);
             }
 
             @Override
@@ -168,7 +168,7 @@ public class DataGen {
                 for(Block block : knownBlocks) {
                    ResourceLocation tabke_name = block.getLootTable();
                    if (tabke_name != LootTables.EMPTY && visited.add(tabke_name)) {
-                      LootTable.Builder builder = this.field_218581_i.remove(tabke_name);
+                      LootTable.Builder builder = this.lootTables.remove(tabke_name);
                       if (builder == null)
                          throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", tabke_name, block.getRegistryName()));
 
@@ -176,14 +176,14 @@ public class DataGen {
                    }
                 }
 
-                if (!this.field_218581_i.isEmpty())
-                   throw new IllegalStateException("Created block loot tables for non-blocks: " + this.field_218581_i.keySet());
+                if (!this.lootTables.isEmpty())
+                   throw new IllegalStateException("Created block loot tables for non-blocks: " + this.lootTables.keySet());
             }
 
             @Override
-            public void func_218492_c(Block block) {
+            public void registerDropSelfLootTable(Block block) {
                 knownBlocks.add(block);
-                super.func_218492_c(block);
+                super.registerDropSelfLootTable(block);
             }
         }
     }
