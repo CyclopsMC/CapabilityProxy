@@ -3,9 +3,11 @@ package org.cyclops.capabilityproxy.tileentity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.ModList;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
 import org.cyclops.cyclopscore.helper.BlockHelpers;
@@ -43,8 +45,14 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
         return getTargetPos(source, getFacing());
     }
 
-    protected <T> LazyOptional<T> getTarget(Capability<T> capability, Direction facing) {
-        return TileHelpers.getCapability(getWorld(), getTargetPos(getWorld(), capability, getPos()), getFacing().getOpposite(), capability);
+    protected <T> LazyOptional<T> getTarget(Capability<T> capability, IBlockReader world, BlockPos pos, Direction facing) {
+        if (ModList.get().isLoaded("commoncapabilities")) {
+            LazyOptional<T> lazyOptional = BlockCapabilityProvider.getCapability(world.getBlockState(pos), capability, world, pos, facing);
+            if (lazyOptional != null) {
+                return lazyOptional;
+            }
+        }
+        return TileHelpers.getCapability(world, pos, facing, capability);
     }
 
     @Override
@@ -53,7 +61,7 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
             return LazyOptional.empty();
         }
         handling = true;
-        LazyOptional<T> ret = getTarget(capability, facing);
+        LazyOptional<T> ret = getTarget(capability, getWorld(), getTargetPos(getWorld(), capability, getPos()), getFacing().getOpposite());
         handling = false;
         return ret == null ? LazyOptional.empty() : ret;
     }

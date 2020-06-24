@@ -83,6 +83,14 @@ dependencies {
         compile "org.cyclops.cyclopscore:CyclopsCore:${config.minecraft_version}-${config.cyclopscore_version}:deobf"
     }
 
+    if(project.hasProperty("commoncapabilities_version_local")) {
+        compile "org.cyclops.commoncapabilities:CommonCapabilities:${project.commoncapabilities_version_local}:deobf"
+    } else {
+        compile fg.deobf("org.cyclops.commoncapabilities:CommonCapabilities:${config.commoncapabilities_version}") { // https://dl.bintray.com/cyclopsmc/dev/org/cyclops/commoncapabilities/CommonCapabilities/
+            transitive = false
+        }
+    }
+
     // Project lombok
     compileOnly "org.projectlombok:lombok:1.16.4"
 }
