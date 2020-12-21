@@ -1,31 +1,32 @@
 modLoader="javafml"
-loaderVersion="[31.1,)"
+loaderVersion="[34,)"
 issueTrackerURL="https://github.com/CyclopsMC/CapabilityProxy/issues"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/capabilityproxy"
+license="MIT"
+logoFile="logo.png"
+authors="rubensworks (aka kroeser)"
 [[mods]]
 modId="capabilityproxy"
 version="${file.jarVersion}"
 displayName="CapabilityProxy"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/capabilityproxy"
-logoFile="logo.png"
-authors="rubensworks (aka kroeser)"
 description='''
 Access block capabilities from multiple sides.
 '''
 [[dependencies.capabilityproxy]]
     modId="cyclopscore"
     mandatory=true
-    versionRange="[1.6.1,)"
+    versionRange="[1.9.0,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.capabilityproxy]]
     modId="forge"
     mandatory=true
-    versionRange="[31.1,)"
+    versionRange="[34,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.capabilityproxy]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.2,]"
     ordering="NONE"
     side="BOTH"

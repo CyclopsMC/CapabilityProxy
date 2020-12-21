@@ -12,14 +12,12 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IWorld;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxy;
 import org.cyclops.cyclopscore.block.BlockTile;
 
 import javax.annotation.Nullable;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,11 +36,6 @@ public class BlockRangedCapabilityProxy extends BlockTile {
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockState state, Direction facing, BlockState state2, IWorld world, BlockPos pos1, BlockPos pos2, Hand hand) {
-        return null;
     }
 
     @Nullable
@@ -107,7 +100,7 @@ public class BlockRangedCapabilityProxy extends BlockTile {
         }
 
         @Override
-        public Vec3d getHitVec() {
+        public Vector3d getHitVec() {
             return parent.getHitVec();
         }
 

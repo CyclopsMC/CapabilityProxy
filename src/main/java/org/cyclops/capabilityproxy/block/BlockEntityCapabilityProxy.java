@@ -14,7 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import org.cyclops.capabilityproxy.tileentity.TileEntityCapabilityProxy;
 import org.cyclops.cyclopscore.block.BlockTile;
@@ -54,7 +54,7 @@ public class BlockEntityCapabilityProxy extends BlockTile {
         BlockPos targetPos = pos.offset(facing);
         List<Entity> entities = worldIn.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(targetPos));
         for(Entity entity : entities) {
-            ActionResultType result = entity.applyPlayerInteraction(player, new Vec3d(targetPos.getX() + 0.5 - entity.getPosX(), targetPos.getY() + 0.5 - entity.getPosY(), targetPos.getZ() + 0.5 - entity.getPosZ()), hand);
+            ActionResultType result = entity.applyPlayerInteraction(player, new Vector3d(targetPos.getX() + 0.5 - entity.getPosX(), targetPos.getY() + 0.5 - entity.getPosY(), targetPos.getZ() + 0.5 - entity.getPosZ()), hand);
             if(result != ActionResultType.PASS)
                 return result;
             result = player.interactOn(entity, hand);

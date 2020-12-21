@@ -29,7 +29,7 @@ public class RenderTileRangedCapabilityProxy extends TileEntityRenderer<TileRang
     public static final RenderType RENDER_TYPE_LINE = RenderType.makeType(Reference.MOD_ID + "line",
             DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 128, RenderType.State.getBuilder()
                     .line(new RenderState.LineState(OptionalDouble.of(1)))
-                    .layer(RenderState.PROJECTION_LAYERING)
+                    .layer(RenderState.field_239235_M_)
                     .transparency(RenderState.TRANSLUCENT_TRANSPARENCY)
                     .writeMask(new RenderState.WriteMaskState(true, false))
                     .build(false));
