@@ -17,7 +17,6 @@ import javax.annotation.Nullable;
  */
 public class BlockCapabilityProvider {
 
-    @Nullable
     public static <T> LazyOptional<T> getCapability(@Nonnull BlockState blockState, @Nonnull Capability<T> capability, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nullable Direction facing) {
         return BlockCapabilities.getInstance().getCapability(blockState, capability, world, pos, facing);
     }

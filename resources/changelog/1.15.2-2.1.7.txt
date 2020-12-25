@@ -1,0 +1,5 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 1.9.0 or higher.
+
+Fixes:
+* Fix broken proxies when CommonCapabilities is loaded, Closes #26

@@ -48,7 +48,7 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
     protected <T> LazyOptional<T> getTarget(Capability<T> capability, IBlockReader world, BlockPos pos, Direction facing) {
         if (ModList.get().isLoaded("commoncapabilities")) {
             LazyOptional<T> lazyOptional = BlockCapabilityProvider.getCapability(world.getBlockState(pos), capability, world, pos, facing);
-            if (lazyOptional != null) {
+            if (lazyOptional.isPresent()) {
                 return lazyOptional;
             }
         }
