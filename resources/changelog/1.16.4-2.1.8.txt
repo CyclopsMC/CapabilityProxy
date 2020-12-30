@@ -1,0 +1,7 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 1.9.0 or higher.
+
+Fixes:
+* Properly handle capability caching, Closes #27
+* Fix item proxy gui drawing wrong labels
+
