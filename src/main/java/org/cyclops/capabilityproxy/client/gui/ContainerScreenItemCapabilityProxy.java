@@ -1,5 +1,6 @@
 package org.cyclops.capabilityproxy.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -20,5 +21,11 @@ public class ContainerScreenItemCapabilityProxy extends ContainerScreenExtended<
     @Override
     protected ResourceLocation constructGuiTexture() {
         return new ResourceLocation(Reference.MOD_ID, "textures/gui/item_capability_proxy.png");
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+        //super.drawGuiContainerForegroundLayer(matrixStack, x, y);
+        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
     }
 }
