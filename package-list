@@ -1,0 +1,7 @@
+org.cyclops.capabilityproxy
+org.cyclops.capabilityproxy.block
+org.cyclops.capabilityproxy.client.gui
+org.cyclops.capabilityproxy.client.render
+org.cyclops.capabilityproxy.inventory.container
+org.cyclops.capabilityproxy.proxy
+org.cyclops.capabilityproxy.tileentity
