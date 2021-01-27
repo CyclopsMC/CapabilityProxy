@@ -9,6 +9,7 @@ authors="rubensworks (aka kroeser)"
 modId="capabilityproxy"
 version="${file.jarVersion}"
 displayName="CapabilityProxy"
+updateJSONURL="https://raw.githubusercontent.com/CyclopsMC/Versions/master/forge_update/capabilityproxy.json"
 description='''
 Access block capabilities from multiple sides.
 '''
