@@ -8,23 +8,24 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
+import org.cyclops.cyclopscore.fluid.FluidHandlerWrapper;
 import org.cyclops.cyclopscore.helper.BlockHelpers;
 import org.cyclops.cyclopscore.inventory.SimpleInventory;
-import org.cyclops.cyclopscore.persist.nbt.NBTPersist;
 import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
@@ -84,16 +85,29 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+        // Check if we are handling the fluid capability
+        boolean transformFluidCapability = capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+        if (transformFluidCapability) {
             capability = (Capability<T>) CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
         }
+
         if (facing == getFacing()) {
             return super.getCapability(capability, facing);
         }
         ItemStack itemStack = getContents();
         Capability<T> finalCapability = capability;
         return TileCapabilityProxy.getCapabilityCached(cachedCapabilities, capability, "",
-                () -> itemStack.getCapability(finalCapability, facing));
+                () -> {
+                    LazyOptional<T> cap = itemStack.getCapability(finalCapability, facing);
+
+                    // Modify fluid capability instance so that the container is always updated into this tile after modifications
+                    if (transformFluidCapability) {
+                        cap = cap.<IFluidHandlerItem>cast()
+                                .lazyMap(fluidHandler -> new FluidHandlerWrapperItem(fluidHandler, this))
+                                .cast();
+                    }
+                    return cap;
+                });
     }
 
     @Override
@@ -118,5 +132,56 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
             value.invalidate();
         }
         cachedCapabilities.clear();
+    }
+
+    public static class FluidHandlerWrapperItem extends FluidHandlerWrapper implements IFluidHandlerItem {
+
+        private final IFluidHandlerItem fluidHandler;
+        private final TileItemCapabilityProxy tile;
+
+        public FluidHandlerWrapperItem(IFluidHandlerItem fluidHandler, TileItemCapabilityProxy tile) {
+            super(fluidHandler);
+            this.fluidHandler = fluidHandler;
+            this.tile = tile;
+        }
+
+        protected void updateContainerSlot() {
+            tile.inventory.setInventorySlotContents(0, getContainer());
+        }
+
+        @Override
+        public int fill(FluidStack resource, FluidAction action) {
+            int ret = super.fill(resource, action);
+            if (action.execute()) {
+                updateContainerSlot();
+            }
+            return ret;
+        }
+
+        @Nonnull
+        @Override
+        public FluidStack drain(int maxDrain, FluidAction action) {
+            FluidStack ret = super.drain(maxDrain, action);
+            if (action.execute()) {
+                updateContainerSlot();
+            }
+            return ret;
+        }
+
+        @Nonnull
+        @Override
+        public FluidStack drain(FluidStack resource, FluidAction action) {
+            FluidStack ret = super.drain(resource, action);
+            if (action.execute()) {
+                updateContainerSlot();
+            }
+            return ret;
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack getContainer() {
+            return this.fluidHandler.getContainer();
+        }
     }
 }
