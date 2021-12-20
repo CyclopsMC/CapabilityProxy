@@ -1,5 +1,6 @@
 package org.cyclops.capabilityproxy.inventory.container;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
@@ -23,4 +24,8 @@ public class ContainerItemCapabilityProxy extends InventoryContainer {
         addPlayerInventory(playerInventory, offsetX + 8, offsetY + 46);
     }
 
+    @Override
+    public boolean stillValid(PlayerEntity p_75145_1_) {
+        return false; // TODO: rm
+    }
 }

@@ -65,54 +65,54 @@ public class DataGen {
         }
 
         @Override
-        protected void saveRecipeAdvancement(DirectoryCache cache, JsonObject json, Path path) {
+        protected void saveAdvancement(DirectoryCache cache, JsonObject json, Path path) {
             if (path.equals(ADV_ROOT)) return; //We NEVER care about this.
-            super.saveRecipeAdvancement(cache, json, path);
+            super.saveAdvancement(cache, json, path);
         }
 
         @Override
-        protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-            ShapedRecipeBuilder.shapedRecipe(RegistryEntries.ITEM_CAPABILITY_PROXY)
-            .key('I', Tags.Items.INGOTS_IRON)
-            .key('O', Tags.Items.OBSIDIAN)
-            .key('N', Items.NETHER_WART)
-            .patternLine("IOI")
-            .patternLine("ONO")
-            .patternLine("IOI")
-            .addCriterion("has_obsidian", hasItem(Items.OBSIDIAN))
-            .addCriterion("has_iron_ingot", hasItem(Items.IRON_INGOT))
-            .build(consumer);
+        protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+            ShapedRecipeBuilder.shaped(RegistryEntries.ITEM_CAPABILITY_PROXY)
+            .define('I', Tags.Items.INGOTS_IRON)
+            .define('O', Tags.Items.OBSIDIAN)
+            .define('N', Items.NETHER_WART)
+            .pattern("IOI")
+            .pattern("ONO")
+            .pattern("IOI")
+            .unlockedBy("has_obsidian", has(Items.OBSIDIAN))
+            .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
+            .save(consumer);
 
-            ShapedRecipeBuilder.shapedRecipe(RegistryEntries.ITEM_ENTITY_CAPABILITY_PROXY)
-            .key('E', Items.ENDER_EYE)
-            .key('C', Items.POPPED_CHORUS_FRUIT)
-            .key('P', RegistryEntries.ITEM_CAPABILITY_PROXY)
-            .patternLine("ECE")
-            .patternLine("PPP")
-            .patternLine("ECE")
-            .addCriterion("has_ender_eye", hasItem(Items.ENDER_EYE))
-            .addCriterion("has_popped_chorus_fruit", hasItem(Items.POPPED_CHORUS_FRUIT))
-            .addCriterion("has_cap_proxy", hasItem(RegistryEntries.ITEM_CAPABILITY_PROXY))
-            .build(consumer);
+            ShapedRecipeBuilder.shaped(RegistryEntries.ITEM_ENTITY_CAPABILITY_PROXY)
+            .define('E', Items.ENDER_EYE)
+            .define('C', Items.POPPED_CHORUS_FRUIT)
+            .define('P', RegistryEntries.ITEM_CAPABILITY_PROXY)
+            .pattern("ECE")
+            .pattern("PPP")
+            .pattern("ECE")
+            .unlockedBy("has_ender_eye", has(Items.ENDER_EYE))
+            .unlockedBy("has_popped_chorus_fruit", has(Items.POPPED_CHORUS_FRUIT))
+            .unlockedBy("has_cap_proxy", has(RegistryEntries.ITEM_CAPABILITY_PROXY))
+            .save(consumer);
 
-            ShapelessRecipeBuilder.shapelessRecipe(RegistryEntries.ITEM_ITEM_CAPABILITY_PROXY)
-            .addIngredient(RegistryEntries.ITEM_CAPABILITY_PROXY)
-            .addIngredient(Tags.Items.CHESTS)
-            .addIngredient(Tags.Items.INGOTS_GOLD)
-            .addCriterion("has_cap_proxy", hasItem(RegistryEntries.ITEM_CAPABILITY_PROXY))
-            .addCriterion("has_chest", hasItem(Items.CHEST))
-            .addCriterion("has_gold_ingot", hasItem(Items.GOLD_INGOT))
-            .build(consumer);
+            ShapelessRecipeBuilder.shapeless(RegistryEntries.ITEM_ITEM_CAPABILITY_PROXY)
+            .requires(RegistryEntries.ITEM_CAPABILITY_PROXY)
+            .requires(Tags.Items.CHESTS)
+            .requires(Tags.Items.INGOTS_GOLD)
+            .unlockedBy("has_cap_proxy", has(RegistryEntries.ITEM_CAPABILITY_PROXY))
+            .unlockedBy("has_chest", has(Items.CHEST))
+            .unlockedBy("has_gold_ingot", has(Items.GOLD_INGOT))
+            .save(consumer);
 
-            ShapedRecipeBuilder.shapedRecipe(RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY)
-            .key('E', Tags.Items.ENDER_PEARLS)
-            .key('P', RegistryEntries.ITEM_CAPABILITY_PROXY)
-            .patternLine(" E ")
-            .patternLine("PPP")
-            .patternLine(" E ")
-            .addCriterion("has_ender_pearl", hasItem(Items.ENDER_PEARL))
-            .addCriterion("has_cap_proxy", hasItem(RegistryEntries.ITEM_CAPABILITY_PROXY))
-            .build(consumer);
+            ShapedRecipeBuilder.shaped(RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY)
+            .define('E', Tags.Items.ENDER_PEARLS)
+            .define('P', RegistryEntries.ITEM_CAPABILITY_PROXY)
+            .pattern(" E ")
+            .pattern("PPP")
+            .pattern(" E ")
+            .unlockedBy("has_ender_pearl", has(Items.ENDER_PEARL))
+            .unlockedBy("has_cap_proxy", has(RegistryEntries.ITEM_CAPABILITY_PROXY))
+            .save(consumer);
         }
     }
 
@@ -129,10 +129,10 @@ public class DataGen {
         }
 
         @Override
-        public void act(DirectoryCache cache) {
+        public void run(DirectoryCache cache) {
             Map<ResourceLocation, LootTable> map = new HashMap<>();
             ThreeConsumer<LootParameterSet, ResourceLocation, LootTable.Builder> consumer = (set, key, builder) -> {
-                if (map.put(key, builder.setParameterSet(set).build()) != null)
+                if (map.put(key, builder.setParamSet(set).build()) != null)
                     throw new IllegalStateException("Duplicate loot table " + key);
             };
 
@@ -142,7 +142,7 @@ public class DataGen {
                 Path target = this.gen.getOutputFolder().resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
 
                 try {
-                   IDataProvider.save(GSON, cache, LootTableManager.toJson(table), target);
+                   IDataProvider.save(GSON, cache, LootTableManager.serialize(table), target);
                 } catch (IOException ioexception) {
                    LOGGER.error("Couldn't save loot table {}", target, ioexception);
                 }
@@ -153,10 +153,10 @@ public class DataGen {
             private Set<Block> knownBlocks = new HashSet<>();
 
             protected void addTables() {
-                this.registerDropSelfLootTable(RegistryEntries.BLOCK_CAPABILITY_PROXY);
-                this.registerDropSelfLootTable(RegistryEntries.BLOCK_ENTITY_CAPABILITY_PROXY);
-                this.registerDropSelfLootTable(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY);
-                this.registerDropSelfLootTable(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY);
+                this.dropSelf(RegistryEntries.BLOCK_CAPABILITY_PROXY);
+                this.dropSelf(RegistryEntries.BLOCK_ENTITY_CAPABILITY_PROXY);
+                this.dropSelf(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY);
+                this.dropSelf(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY);
             }
 
             @Override
@@ -168,7 +168,7 @@ public class DataGen {
                 for(Block block : knownBlocks) {
                    ResourceLocation tabke_name = block.getLootTable();
                    if (tabke_name != LootTables.EMPTY && visited.add(tabke_name)) {
-                      LootTable.Builder builder = this.lootTables.remove(tabke_name);
+                      LootTable.Builder builder = this.map.remove(tabke_name);
                       if (builder == null)
                          throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", tabke_name, block.getRegistryName()));
 
@@ -176,14 +176,14 @@ public class DataGen {
                    }
                 }
 
-                if (!this.lootTables.isEmpty())
-                   throw new IllegalStateException("Created block loot tables for non-blocks: " + this.lootTables.keySet());
+                if (!this.map.isEmpty())
+                   throw new IllegalStateException("Created block loot tables for non-blocks: " + this.map.keySet());
             }
 
             @Override
-            public void registerDropSelfLootTable(Block block) {
+            public void dropSelf(Block block) {
                 knownBlocks.add(block);
-                super.registerDropSelfLootTable(block);
+                super.dropSelf(block);
             }
         }
     }

@@ -27,7 +27,7 @@ public class BlockItemCapabilityProxy extends BlockTileGui {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING)
                 .add(INACTIVE);
     }
@@ -35,10 +35,10 @@ public class BlockItemCapabilityProxy extends BlockTileGui {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState()
-                .with(FACING, context.getFace().getOpposite())
-                .with(INACTIVE, context.getWorld().getTileEntity(TileCapabilityProxy
-                        .getTargetPos(context.getPos(), context.getFace().getOpposite())) == null);
+        return this.defaultBlockState()
+                .setValue(FACING, context.getClickedFace().getOpposite())
+                .setValue(INACTIVE, context.getLevel().getBlockEntity(TileCapabilityProxy
+                        .getTargetPos(context.getClickedPos(), context.getClickedFace().getOpposite())) == null);
     }
 
 }

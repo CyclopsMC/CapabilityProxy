@@ -20,8 +20,8 @@ public class BlockRangedCapabilityProxyConfig extends BlockConfig {
         super(
                 CapabilityProxy._instance,
                 "ranged_capability_proxy",
-                (eConfig) -> new BlockRangedCapabilityProxy(Block.Properties.create(Material.ROCK)
-                        .hardnessAndResistance(2.0f)),
+                (eConfig) -> new BlockRangedCapabilityProxy(Block.Properties.of(Material.STONE)
+                        .strength(2.0f)),
                 getDefaultItemConstructor(CapabilityProxy._instance)
         );
     }

@@ -22,7 +22,7 @@ public class TileRangedCapabilityProxy extends TileCapabilityProxy {
     @Override
     protected <T> LazyOptional<T> getTarget(Capability<T> capability, IBlockReader world, BlockPos pos, Direction facing) {
         for (int offset = 1; offset < BlockRangedCapabilityProxyConfig.range; offset++) {
-            BlockPos current = getPos().offset(getFacing(), offset);
+            BlockPos current = getBlockPos().relative(getFacing(), offset);
             LazyOptional<T> instance = super.getTarget(capability, world, current, getFacing().getOpposite());
             if (instance.isPresent()) {
                 return instance;
@@ -33,6 +33,6 @@ public class TileRangedCapabilityProxy extends TileCapabilityProxy {
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return super.getRenderBoundingBox().grow(BlockRangedCapabilityProxyConfig.range);
+        return super.getRenderBoundingBox().inflate(BlockRangedCapabilityProxyConfig.range);
     }
 }

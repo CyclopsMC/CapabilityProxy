@@ -15,8 +15,8 @@ public class BlockItemCapabilityProxyConfig extends BlockConfig {
         super(
                 CapabilityProxy._instance,
                 "item_capability_proxy",
-                (eConfig) -> new BlockItemCapabilityProxy(Block.Properties.create(Material.ROCK)
-                        .hardnessAndResistance(2.0f)),
+                (eConfig) -> new BlockItemCapabilityProxy(Block.Properties.of(Material.STONE)
+                        .strength(2.0f)),
                 getDefaultItemConstructor(CapabilityProxy._instance)
         );
     }

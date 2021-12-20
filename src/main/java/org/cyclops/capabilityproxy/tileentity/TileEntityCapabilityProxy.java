@@ -29,13 +29,13 @@ public class TileEntityCapabilityProxy extends CyclopsTileEntity {
     }
 
     public Direction getFacing() {
-        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockEntityCapabilityProxy.FACING, Direction.UP);
+        return BlockHelpers.getSafeBlockStateProperty(getLevel().getBlockState(getBlockPos()), BlockEntityCapabilityProxy.FACING, Direction.UP);
     }
 
     protected List<Entity> getEntities(Capability<?> capability) {
-        AxisAlignedBB aabb = new AxisAlignedBB(getPos().offset(getFacing()));
+        AxisAlignedBB aabb = new AxisAlignedBB(getBlockPos().relative(getFacing()));
         Direction facing = getFacing().getOpposite();
-        return getWorld().getEntitiesWithinAABB(Entity.class, aabb, entity -> entity.getCapability(capability, facing).isPresent());
+        return getLevel().getEntitiesOfClass(Entity.class, aabb, entity -> entity.getCapability(capability, facing).isPresent());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class TileEntityCapabilityProxy extends CyclopsTileEntity {
             return LazyOptional.empty();
         }
         Entity entity = entities.get(0);
-        return TileCapabilityProxy.getCapabilityCached(cachedCapabilities, capability, entity.getEntityId(),
+        return TileCapabilityProxy.getCapabilityCached(cachedCapabilities, capability, entity.getId(),
                 () -> entity.getCapability(capability, getFacing().getOpposite()));
     }
 

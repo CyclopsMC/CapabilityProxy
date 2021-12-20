@@ -35,13 +35,13 @@ public class BlockCapabilityProxy extends BlockTile {
     public BlockCapabilityProxy(Block.Properties properties) {
         super(properties, TileCapabilityProxy::new);
 
-        this.setDefaultState(this.stateContainer.getBaseState()
-                .with(FACING, Direction.DOWN)
-                .with(INACTIVE, Boolean.valueOf(true)));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.DOWN)
+                .setValue(INACTIVE, Boolean.valueOf(true)));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING)
                 .add(INACTIVE);
     }
@@ -49,14 +49,14 @@ public class BlockCapabilityProxy extends BlockTile {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState()
-                .with(FACING, context.getFace().getOpposite())
-                .with(INACTIVE, context.getWorld().getTileEntity(TileCapabilityProxy
-                        .getTargetPos(context.getPos(), context.getFace().getOpposite())) == null);
+        return this.defaultBlockState()
+                .setValue(FACING, context.getClickedFace().getOpposite())
+                .setValue(INACTIVE, context.getLevel().getBlockEntity(TileCapabilityProxy
+                        .getTargetPos(context.getClickedPos(), context.getClickedFace().getOpposite())) == null);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
                                              BlockRayTraceResult hit) {
         // A check to avoid infinite loops
         if (activatingBlockChain == null) {
@@ -68,10 +68,10 @@ public class BlockCapabilityProxy extends BlockTile {
                 activatingBlockChain.add(pos);
             }
         }
-        Direction facing = state.get(BlockCapabilityProxy.FACING);
-        BlockState targetBlockState = worldIn.getBlockState(pos.offset(facing));
-        ActionResultType ret = targetBlockState.getBlock().onBlockActivated(targetBlockState, worldIn,
-                TileCapabilityProxy.getTargetPos(pos, facing), player, handIn, hit.withFace(facing.getOpposite()));
+        Direction facing = state.getValue(BlockCapabilityProxy.FACING);
+        BlockState targetBlockState = worldIn.getBlockState(pos.relative(facing));
+        ActionResultType ret = targetBlockState.getBlock().use(targetBlockState, worldIn,
+                TileCapabilityProxy.getTargetPos(pos, facing), player, handIn, hit.withDirection(facing.getOpposite()));
         activatingBlockChain = null;
         return ret;
     }
@@ -79,13 +79,13 @@ public class BlockCapabilityProxy extends BlockTile {
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, world, pos, blockIn, fromPos, isMoving);
-        if (!world.isRemote) {
-            Direction facing = state.get(BlockCapabilityProxy.FACING);
-            if (pos.offset(facing).equals(fromPos)) {
-                boolean inactive = state.get(BlockCapabilityProxy.INACTIVE);
-                if (inactive != (world.getTileEntity(pos.offset(facing)) == null)) {
-                    world.setBlockState(pos, world.getBlockState(pos).with(INACTIVE, !inactive));
-                    world.notifyNeighborsOfStateExcept(pos, this, facing);
+        if (!world.isClientSide) {
+            Direction facing = state.getValue(BlockCapabilityProxy.FACING);
+            if (pos.relative(facing).equals(fromPos)) {
+                boolean inactive = state.getValue(BlockCapabilityProxy.INACTIVE);
+                if (inactive != (world.getBlockEntity(pos.relative(facing)) == null)) {
+                    world.setBlockAndUpdate(pos, world.getBlockState(pos).setValue(INACTIVE, !inactive));
+                    world.updateNeighborsAtExceptFromFacing(pos, this, facing);
                 }
             }
         }

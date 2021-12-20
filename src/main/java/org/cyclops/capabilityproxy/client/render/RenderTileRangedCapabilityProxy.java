@@ -26,13 +26,13 @@ import java.util.OptionalDouble;
  */
 public class RenderTileRangedCapabilityProxy extends TileEntityRenderer<TileRangedCapabilityProxy> {
 
-    public static final RenderType RENDER_TYPE_LINE = RenderType.makeType(Reference.MOD_ID + "line",
-            DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 128, RenderType.State.getBuilder()
-                    .line(new RenderState.LineState(OptionalDouble.of(1)))
-                    .layer(RenderState.field_239235_M_)
-                    .transparency(RenderState.TRANSLUCENT_TRANSPARENCY)
-                    .writeMask(new RenderState.WriteMaskState(true, false))
-                    .build(false));
+    public static final RenderType RENDER_TYPE_LINE = RenderType.create(Reference.MOD_ID + "line",
+            DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 128, RenderType.State.builder()
+                    .setLineState(new RenderState.LineState(OptionalDouble.of(1)))
+                    .setLayeringState(RenderState.VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(RenderState.TRANSLUCENT_TRANSPARENCY)
+                    .setWriteMaskState(new RenderState.WriteMaskState(true, false))
+                    .createCompositeState(false));
 
     public RenderTileRangedCapabilityProxy(TileEntityRendererDispatcher tileEntityRendererDispatcher) {
         super(tileEntityRendererDispatcher);
@@ -41,8 +41,8 @@ public class RenderTileRangedCapabilityProxy extends TileEntityRenderer<TileRang
     @Override
     public void render(TileRangedCapabilityProxy tile, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
         PlayerEntity player = Minecraft.getInstance().player;
-        if (player.getHeldItem(Hand.MAIN_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY
-                || player.getHeldItem(Hand.OFF_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY) {
+        if (player.getItemInHand(Hand.MAIN_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY
+                || player.getItemInHand(Hand.OFF_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY) {
             float r = 0.28F;
             float g = 0.87F;
             float b = 0.80F;
@@ -52,7 +52,7 @@ public class RenderTileRangedCapabilityProxy extends TileEntityRenderer<TileRang
             float y = 0.5F;
             float z = 0.5F;
 
-            BlockPos target = new BlockPos(0, 0, 0).offset(tile.getFacing(), BlockRangedCapabilityProxyConfig.range);
+            BlockPos target = new BlockPos(0, 0, 0).relative(tile.getFacing(), BlockRangedCapabilityProxyConfig.range);
             float minX = x;
             float minY = y;
             float minZ = z;
@@ -61,13 +61,13 @@ public class RenderTileRangedCapabilityProxy extends TileEntityRenderer<TileRang
             float maxZ = z + target.getZ();
 
             IVertexBuilder vb = buffer.getBuffer(RENDER_TYPE_LINE);
-            vb.pos(matrixStack.getLast().getMatrix(), minX, minY, minZ).color(r, g, b, a).endVertex();
-            vb.pos(matrixStack.getLast().getMatrix(), maxX, maxY, maxZ).color(r, g, b, a).endVertex();
+            vb.vertex(matrixStack.last().pose(), minX, minY, minZ).color(r, g, b, a).endVertex();
+            vb.vertex(matrixStack.last().pose(), maxX, maxY, maxZ).color(r, g, b, a).endVertex();
         }
     }
 
     @Override
-    public boolean isGlobalRenderer(TileRangedCapabilityProxy te) {
+    public boolean shouldRenderOffScreen(TileRangedCapabilityProxy te) {
         return true;
     }
 }

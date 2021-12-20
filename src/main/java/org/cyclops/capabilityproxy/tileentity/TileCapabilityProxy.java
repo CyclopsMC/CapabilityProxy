@@ -40,11 +40,11 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
     }
 
     public Direction getFacing() {
-        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockCapabilityProxy.FACING, Direction.UP);
+        return BlockHelpers.getSafeBlockStateProperty(getLevel().getBlockState(getBlockPos()), BlockCapabilityProxy.FACING, Direction.UP);
     }
 
     public static BlockPos getTargetPos(BlockPos source, Direction facing) {
-        return source.offset(facing);
+        return source.relative(facing);
     }
 
     protected BlockPos getTargetPos(World worldIn, @Nullable Capability<?> capability, BlockPos source) {
@@ -68,7 +68,7 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
             return LazyOptional.empty();
         }
         handling = true;
-        LazyOptional<T> ret = getTarget(capability, getWorld(), getTargetPos(getWorld(), capability, getPos()), getFacing().getOpposite());
+        LazyOptional<T> ret = getTarget(capability, getLevel(), getTargetPos(getLevel(), capability, getBlockPos()), getFacing().getOpposite());
         handling = false;
         return ret == null ? LazyOptional.empty() : ret;
     }

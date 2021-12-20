@@ -29,6 +29,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+
 /**
  * An item capability proxy.
  * @author rubensworks
@@ -42,16 +44,16 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
         super(RegistryEntries.TILE_ENTITY_ITEM_CAPABILITY_PROXY);
         this.inventory = new SimpleInventory(1, 1) {
             @Override
-            public void setInventorySlotContents(int slotId, ItemStack itemstack) {
-                boolean wasEmpty = getStackInSlot(slotId).isEmpty();
-                super.setInventorySlotContents(slotId, itemstack);
+            public void setItem(int slotId, ItemStack itemstack) {
+                boolean wasEmpty = getItem(slotId).isEmpty();
+                // super.setItem(slotId, itemstack); // TODO
                 boolean isEmpty = itemstack.isEmpty();
                 if (wasEmpty != isEmpty) {
-                    getWorld().setBlockState(getPos(), getWorld().getBlockState(getPos())
-                            .with(BlockItemCapabilityProxy.INACTIVE, isEmpty));
+                    getLevel().setBlockAndUpdate(getBlockPos(), getLevel().getBlockState(getBlockPos())
+                            .setValue(BlockItemCapabilityProxy.INACTIVE, isEmpty));
                 } else {
                     // Trigger a block update anyway, so nearby blocks can recheck capabilities.
-                    BlockHelpers.markForUpdate(getWorld(), getPos());
+                    BlockHelpers.markForUpdate(getLevel(), getBlockPos());
                 }
                 invalidateCapsCached();
             }
@@ -66,9 +68,9 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag) {
+    public CompoundNBT save(CompoundNBT tag) {
         this.inventory.write(tag);
-        return super.write(tag);
+        return super.save(tag);
     }
 
     public SimpleInventory getInventory() {
@@ -76,11 +78,11 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
     }
 
     public Direction getFacing() {
-        return BlockHelpers.getSafeBlockStateProperty(getWorld().getBlockState(getPos()), BlockItemCapabilityProxy.FACING, Direction.UP);
+        return BlockHelpers.getSafeBlockStateProperty(getLevel().getBlockState(getBlockPos()), BlockItemCapabilityProxy.FACING, Direction.UP);
     }
 
     protected ItemStack getContents() {
-        return this.inventory.getStackInSlot(0);
+        return this.inventory.getItem(0);
     }
 
     @Override
@@ -146,7 +148,7 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
         }
 
         protected void updateContainerSlot() {
-            tile.inventory.setInventorySlotContents(0, getContainer());
+            tile.inventory.setItem(0, getContainer());
         }
 
         @Override

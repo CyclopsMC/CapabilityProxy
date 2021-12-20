@@ -35,26 +35,26 @@ public class BlockEntityCapabilityProxy extends BlockTile {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState()
-                .with(FACING, context.getFace().getOpposite());
+        return this.defaultBlockState()
+                .setValue(FACING, context.getClickedFace().getOpposite());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
                                     BlockRayTraceResult hit) {
-        Direction facing = state.get(FACING);
-        if(hit.getFace() == facing) return ActionResultType.SUCCESS; // In the future, this will be how you open the filter GUI
-        BlockPos targetPos = pos.offset(facing);
-        List<Entity> entities = worldIn.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(targetPos));
+        Direction facing = state.getValue(FACING);
+        if(hit.getDirection() == facing) return ActionResultType.SUCCESS; // In the future, this will be how you open the filter GUI
+        BlockPos targetPos = pos.relative(facing);
+        List<Entity> entities = worldIn.getEntitiesOfClass(Entity.class, new AxisAlignedBB(targetPos));
         for(Entity entity : entities) {
-            ActionResultType result = entity.applyPlayerInteraction(player, new Vector3d(targetPos.getX() + 0.5 - entity.getPosX(), targetPos.getY() + 0.5 - entity.getPosY(), targetPos.getZ() + 0.5 - entity.getPosZ()), hand);
+            ActionResultType result = entity.interactAt(player, new Vector3d(targetPos.getX() + 0.5 - entity.getX(), targetPos.getY() + 0.5 - entity.getY(), targetPos.getZ() + 0.5 - entity.getZ()), hand);
             if(result != ActionResultType.PASS)
                 return result;
             result = player.interactOn(entity, hand);
