@@ -1,7 +1,7 @@
 package org.cyclops.capabilityproxy.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fml.config.ModConfig;
 import org.cyclops.capabilityproxy.CapabilityProxy;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;

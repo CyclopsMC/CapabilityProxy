@@ -1,17 +1,17 @@
-package org.cyclops.capabilityproxy.tileentity;
+package org.cyclops.capabilityproxy.blockentity;
 
 import com.google.common.collect.Maps;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.capabilityproxy.RegistryEntries;
-import org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxy;
 import org.cyclops.cyclopscore.helper.BlockHelpers;
-import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -20,20 +20,20 @@ import java.util.Map;
  * An entity capability proxy.
  * @author josephcsible
  */
-public class TileEntityCapabilityProxy extends CyclopsTileEntity {
+public class BlockEntityEntityCapabilityProxy extends CyclopsBlockEntity {
 
     private final Map<Pair<Integer, Capability<?>>, LazyOptional<?>> cachedCapabilities = Maps.newHashMap();
 
-    public TileEntityCapabilityProxy() {
-        super(RegistryEntries.TILE_ENTITY_ENTITY_CAPABILITY_PROXY);
+    public BlockEntityEntityCapabilityProxy(BlockPos blockPos, BlockState blockState) {
+        super(RegistryEntries.TILE_ENTITY_ENTITY_CAPABILITY_PROXY, blockPos, blockState);
     }
 
     public Direction getFacing() {
-        return BlockHelpers.getSafeBlockStateProperty(getLevel().getBlockState(getBlockPos()), BlockEntityCapabilityProxy.FACING, Direction.UP);
+        return BlockHelpers.getSafeBlockStateProperty(getLevel().getBlockState(getBlockPos()), org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxy.FACING, Direction.UP);
     }
 
     protected List<Entity> getEntities(Capability<?> capability) {
-        AxisAlignedBB aabb = new AxisAlignedBB(getBlockPos().relative(getFacing()));
+        AABB aabb = new AABB(getBlockPos().relative(getFacing()));
         Direction facing = getFacing().getOpposite();
         return getLevel().getEntitiesOfClass(Entity.class, aabb, entity -> entity.getCapability(capability, facing).isPresent());
     }
@@ -45,12 +45,12 @@ public class TileEntityCapabilityProxy extends CyclopsTileEntity {
             return LazyOptional.empty();
         }
         Entity entity = entities.get(0);
-        return TileCapabilityProxy.getCapabilityCached(cachedCapabilities, capability, entity.getId(),
+        return BlockEntityCapabilityProxy.getCapabilityCached(cachedCapabilities, capability, entity.getId(),
                 () -> entity.getCapability(capability, getFacing().getOpposite()));
     }
 
     @Override
-    protected void invalidateCaps() {
+    public void invalidateCaps() {
         super.invalidateCaps();
         for (LazyOptional<?> value : cachedCapabilities.values()) {
             value.invalidate();

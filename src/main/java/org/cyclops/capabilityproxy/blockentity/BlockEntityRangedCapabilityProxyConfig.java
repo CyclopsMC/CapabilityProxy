@@ -1,27 +1,27 @@
-package org.cyclops.capabilityproxy.tileentity;
+package org.cyclops.capabilityproxy.blockentity;
 
 import com.google.common.collect.Sets;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.cyclops.capabilityproxy.CapabilityProxy;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxy;
-import org.cyclops.cyclopscore.config.extendedconfig.TileEntityConfig;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
 import org.cyclops.cyclopscore.helper.MinecraftHelpers;
 
 /**
- * Config for the {@link TileRangedCapabilityProxy}.
+ * Config for the {@link BlockEntityRangedCapabilityProxy}.
  * @author rubensworks
  *
  */
-public class TileRangedCapabilityProxyConfig extends TileEntityConfig<TileRangedCapabilityProxy> {
+public class BlockEntityRangedCapabilityProxyConfig extends BlockEntityConfig<BlockEntityRangedCapabilityProxy> {
 
-    public TileRangedCapabilityProxyConfig() {
+    public BlockEntityRangedCapabilityProxyConfig() {
         super(
                 CapabilityProxy._instance,
                 "ranged_capability_proxy",
-                (eConfig) -> new TileEntityType<>(TileRangedCapabilityProxy::new,
+                (eConfig) -> new BlockEntityType<>(BlockEntityRangedCapabilityProxy::new,
                         Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY), null)
         );
     }

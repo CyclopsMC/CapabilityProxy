@@ -1,11 +1,12 @@
-package org.cyclops.capabilityproxy.tileentity;
+package org.cyclops.capabilityproxy.blockentity;
 
 import com.google.common.collect.Maps;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.ModList;
@@ -13,8 +14,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
 import org.cyclops.cyclopscore.helper.BlockHelpers;
-import org.cyclops.cyclopscore.helper.TileHelpers;
-import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
+import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -24,19 +25,19 @@ import java.util.function.Supplier;
  * A capability proxy.
  * @author rubensworks
  */
-public class TileCapabilityProxy extends CyclopsTileEntity {
+public class BlockEntityCapabilityProxy extends CyclopsBlockEntity {
 
     private final Map<Pair<BlockPos, Capability<?>>, LazyOptional<?>> cachedCapabilities = Maps.newHashMap();
 
     // A flag that is set when this tile is checking for a target's capability, to avoid infinite loops.
     protected boolean handling = false;
 
-    public TileCapabilityProxy() {
-        super(RegistryEntries.TILE_ENTITY_CAPABILITY_PROXY);
+    public BlockEntityCapabilityProxy(BlockPos blockPos, BlockState blockState) {
+        super(RegistryEntries.TILE_ENTITY_CAPABILITY_PROXY, blockPos, blockState);
     }
 
-    protected TileCapabilityProxy(TileEntityType<?> type) {
-        super(type);
+    protected BlockEntityCapabilityProxy(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState) {
+        super(type, blockPos, blockState);
     }
 
     public Direction getFacing() {
@@ -47,11 +48,11 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
         return source.relative(facing);
     }
 
-    protected BlockPos getTargetPos(World worldIn, @Nullable Capability<?> capability, BlockPos source) {
+    protected BlockPos getTargetPos(Level worldIn, @Nullable Capability<?> capability, BlockPos source) {
         return getTargetPos(source, getFacing());
     }
 
-    protected <T> LazyOptional<T> getTarget(Capability<T> capability, IBlockReader world, BlockPos pos, Direction facing) {
+    protected <T> LazyOptional<T> getTarget(Capability<T> capability, BlockGetter world, BlockPos pos, Direction facing) {
         if (ModList.get().isLoaded("commoncapabilities")) {
             LazyOptional<T> lazyOptional = BlockCapabilityProvider.getCapability(world.getBlockState(pos), capability, world, pos, facing);
             if (lazyOptional.isPresent()) {
@@ -59,7 +60,7 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
             }
         }
         return getCapabilityCached(cachedCapabilities, capability, pos,
-                () -> TileHelpers.getCapability(world, pos, facing, capability));
+                () -> BlockEntityHelpers.getCapability(world, pos, facing, capability));
     }
 
     @Override
@@ -74,7 +75,7 @@ public class TileCapabilityProxy extends CyclopsTileEntity {
     }
 
     @Override
-    protected void invalidateCaps() {
+    public void invalidateCaps() {
         super.invalidateCaps();
         for (LazyOptional<?> value : cachedCapabilities.values()) {
             value.invalidate();

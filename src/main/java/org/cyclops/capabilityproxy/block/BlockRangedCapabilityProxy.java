@@ -1,59 +1,57 @@
 package org.cyclops.capabilityproxy.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxy;
-import org.cyclops.cyclopscore.block.BlockTile;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxy;
+import org.cyclops.cyclopscore.block.BlockWithEntity;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.util.math.RayTraceResult.Type;
-
 /**
  * This block will forward capabilities from the target's (at a range) side to all sides.
  * @author rubensworks
  */
-public class BlockRangedCapabilityProxy extends BlockTile {
+public class BlockRangedCapabilityProxy extends BlockWithEntity {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public BlockRangedCapabilityProxy(Block.Properties properties) {
-        super(properties, TileRangedCapabilityProxy::new);
+        super(properties, BlockEntityRangedCapabilityProxy::new);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState()
                 .setValue(FACING, context.getClickedFace().getOpposite());
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand,
-                                             BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand,
+                                             BlockHitResult hit) {
         RecursiveHit rhit = hit instanceof RecursiveHit ? (RecursiveHit)hit : new RecursiveHit(hit, new HashSet<>(), hit.getBlockPos(), hit.getDirection());
         if (rhit.chain.contains(pos)) {
             rhit.setFailed();
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
         rhit.chain.add(pos.immutable());
 
@@ -61,25 +59,24 @@ public class BlockRangedCapabilityProxy extends BlockTile {
             Direction facing = state.getValue(BlockRangedCapabilityProxy.FACING);
             BlockPos targetPos = pos.relative(facing, offset);
             BlockState target = worldIn.getBlockState(targetPos);
-            ActionResultType ret = target.use(worldIn, player, hand, rhit.move(targetPos, facing.getOpposite()));
+            InteractionResult ret = target.use(worldIn, player, hand, rhit.move(targetPos, facing.getOpposite()));
             if (ret.consumesAction() || rhit.failed) {
                 return ret;
             }
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
-    private static class RecursiveHit extends BlockRayTraceResult {
+    private static class RecursiveHit extends BlockHitResult {
         private RecursiveHit rParent;
-        private final BlockRayTraceResult parent;
+        private final BlockHitResult parent;
         private final Set<BlockPos> chain;
         private boolean failed = false;
 
-        public RecursiveHit(BlockRayTraceResult parent, Set<BlockPos> chain, BlockPos pos, Direction face) {
+        public RecursiveHit(BlockHitResult parent, Set<BlockPos> chain, BlockPos pos, Direction face) {
             super(parent.getLocation(), face, pos, parent.isInside());
             this.parent = parent;
             this.chain = chain;
-            this.hitInfo = parent.hitInfo;
         }
 
         private RecursiveHit(RecursiveHit parent, Direction face) {
@@ -92,7 +89,7 @@ public class BlockRangedCapabilityProxy extends BlockTile {
         }
 
         @Override
-        public BlockRayTraceResult withDirection(Direction newFace) {
+        public BlockHitResult withDirection(Direction newFace) {
             return new RecursiveHit(this, newFace);
         }
 
@@ -102,7 +99,7 @@ public class BlockRangedCapabilityProxy extends BlockTile {
         }
 
         @Override
-        public Vector3d getLocation() {
+        public Vec3 getLocation() {
             return parent.getLocation();
         }
 

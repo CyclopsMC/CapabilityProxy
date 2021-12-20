@@ -1,9 +1,9 @@
-package org.cyclops.capabilityproxy.tileentity;
+package org.cyclops.capabilityproxy.blockentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import org.cyclops.commoncapabilities.api.capability.block.BlockCapabilities;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
  */
 public class BlockCapabilityProvider {
 
-    public static <T> LazyOptional<T> getCapability(@Nonnull BlockState blockState, @Nonnull Capability<T> capability, @Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nullable Direction facing) {
+    public static <T> LazyOptional<T> getCapability(@Nonnull BlockState blockState, @Nonnull Capability<T> capability, @Nonnull BlockGetter world, @Nonnull BlockPos pos, @Nullable Direction facing) {
         return BlockCapabilities.getInstance().getCapability(blockState, capability, world, pos, facing);
     }
 

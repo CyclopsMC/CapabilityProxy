@@ -1,21 +1,23 @@
 package org.cyclops.capabilityproxy.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderState;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
 import org.cyclops.capabilityproxy.Reference;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxy;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxy;
 import org.lwjgl.opengl.GL11;
 
 import java.util.OptionalDouble;
@@ -24,25 +26,26 @@ import java.util.OptionalDouble;
  * Renders an overlay showing the target of ranged proxies when a ranged proxy is held in hand.
  * @author rubensworks
  */
-public class RenderTileRangedCapabilityProxy extends TileEntityRenderer<TileRangedCapabilityProxy> {
+public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<BlockEntityRangedCapabilityProxy> {
 
     public static final RenderType RENDER_TYPE_LINE = RenderType.create(Reference.MOD_ID + "line",
-            DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 128, RenderType.State.builder()
-                    .setLineState(new RenderState.LineState(OptionalDouble.of(1)))
-                    .setLayeringState(RenderState.VIEW_OFFSET_Z_LAYERING)
-                    .setTransparencyState(RenderState.TRANSLUCENT_TRANSPARENCY)
-                    .setWriteMaskState(new RenderState.WriteMaskState(true, false))
+            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.DEBUG_LINES, 128, false, false, RenderType.CompositeState.builder()
+                    .setShaderState(RenderType.RENDERTYPE_LINES_SHADER)
+                    .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(1)))
+                    .setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
                     .createCompositeState(false));
 
-    public RenderTileRangedCapabilityProxy(TileEntityRendererDispatcher tileEntityRendererDispatcher) {
-        super(tileEntityRendererDispatcher);
+    public RenderTileRangedCapabilityProxy(BlockEntityRendererProvider.Context context) {
+
     }
 
     @Override
-    public void render(TileRangedCapabilityProxy tile, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
-        PlayerEntity player = Minecraft.getInstance().player;
-        if (player.getItemInHand(Hand.MAIN_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY
-                || player.getItemInHand(Hand.OFF_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY) {
+    public void render(BlockEntityRangedCapabilityProxy tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+        Player player = Minecraft.getInstance().player;
+        if (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY
+                || player.getItemInHand(InteractionHand.OFF_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY) {
             float r = 0.28F;
             float g = 0.87F;
             float b = 0.80F;
@@ -60,14 +63,14 @@ public class RenderTileRangedCapabilityProxy extends TileEntityRenderer<TileRang
             float maxY = y + target.getY();
             float maxZ = z + target.getZ();
 
-            IVertexBuilder vb = buffer.getBuffer(RENDER_TYPE_LINE);
+            VertexConsumer vb = buffer.getBuffer(RENDER_TYPE_LINE);
             vb.vertex(matrixStack.last().pose(), minX, minY, minZ).color(r, g, b, a).endVertex();
             vb.vertex(matrixStack.last().pose(), maxX, maxY, maxZ).color(r, g, b, a).endVertex();
         }
     }
 
     @Override
-    public boolean shouldRenderOffScreen(TileRangedCapabilityProxy te) {
+    public boolean shouldRenderOffScreen(BlockEntityRangedCapabilityProxy te) {
         return true;
     }
 }

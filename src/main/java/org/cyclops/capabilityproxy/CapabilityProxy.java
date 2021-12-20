@@ -1,21 +1,20 @@
 package org.cyclops.capabilityproxy;
 
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.Level;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxy;
 import org.cyclops.capabilityproxy.proxy.CommonProxy;
-import org.cyclops.capabilityproxy.tileentity.TileCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.tileentity.TileEntityCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.tileentity.TileItemCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.tileentity.TileRangedCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyConfig;
 import org.cyclops.cyclopscore.config.ConfigHandler;
 import org.cyclops.cyclopscore.init.ItemGroupMod;
 import org.cyclops.cyclopscore.init.ModBaseVersionable;
@@ -52,7 +51,7 @@ public class CapabilityProxy extends ModBaseVersionable<CapabilityProxy> {
     }
 
     @Override
-    protected ItemGroup constructDefaultItemGroup() {
+    protected CreativeModeTab constructDefaultCreativeModeTab() {
         return new ItemGroupMod(this, () -> RegistryEntries.ITEM_CAPABILITY_PROXY);
     }
 
@@ -63,14 +62,14 @@ public class CapabilityProxy extends ModBaseVersionable<CapabilityProxy> {
         configHandler.addConfigurable(new GeneralConfig());
 
         configHandler.addConfigurable(new BlockCapabilityProxyConfig());
-        configHandler.addConfigurable(new BlockEntityCapabilityProxyConfig());
+        configHandler.addConfigurable(new org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig());
         configHandler.addConfigurable(new BlockItemCapabilityProxyConfig());
         configHandler.addConfigurable(new BlockRangedCapabilityProxyConfig());
 
-        configHandler.addConfigurable(new TileCapabilityProxyConfig());
-        configHandler.addConfigurable(new TileEntityCapabilityProxyConfig());
-        configHandler.addConfigurable(new TileItemCapabilityProxyConfig());
-        configHandler.addConfigurable(new TileRangedCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockEntityCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockEntityEntityCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockEntityItemCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyConfig());
 
         configHandler.addConfigurable(new ContainerItemCapabilityProxyConfig());
     }

@@ -1,9 +1,9 @@
 package org.cyclops.capabilityproxy.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import org.cyclops.capabilityproxy.Reference;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
 import org.cyclops.cyclopscore.client.gui.container.ContainerScreenExtended;
@@ -14,7 +14,7 @@ import org.cyclops.cyclopscore.client.gui.container.ContainerScreenExtended;
  */
 public class ContainerScreenItemCapabilityProxy extends ContainerScreenExtended<ContainerItemCapabilityProxy> {
 
-    public ContainerScreenItemCapabilityProxy(ContainerItemCapabilityProxy container, PlayerInventory inventory, ITextComponent title) {
+    public ContainerScreenItemCapabilityProxy(ContainerItemCapabilityProxy container, Inventory inventory, Component title) {
         super(container, inventory, title);
     }
 
@@ -24,13 +24,8 @@ public class ContainerScreenItemCapabilityProxy extends ContainerScreenExtended<
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+    protected void renderLabels(PoseStack matrixStack, int x, int y) {
         //super.drawGuiContainerForegroundLayer(matrixStack, x, y);
         this.font.draw(matrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
-    }
-
-    @Override
-    protected void renderBg(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
-        // TODO: rm
     }
 }

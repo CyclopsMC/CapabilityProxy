@@ -1,5 +1,31 @@
 package org.cyclops.capabilityproxy;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -8,36 +34,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
-import net.minecraft.block.Block;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.loot.LootParameterSet;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTableManager;
-import net.minecraft.loot.LootTables;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.fml.util.ThreeConsumer;
 
 @EventBusSubscriber(modid = Reference.MOD_ID, bus = Bus.MOD)
 public class DataGen {
@@ -65,13 +61,13 @@ public class DataGen {
         }
 
         @Override
-        protected void saveAdvancement(DirectoryCache cache, JsonObject json, Path path) {
+        protected void saveAdvancement(HashCache cache, JsonObject json, Path path) {
             if (path.equals(ADV_ROOT)) return; //We NEVER care about this.
             super.saveAdvancement(cache, json, path);
         }
 
         @Override
-        protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+        protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
             ShapedRecipeBuilder.shaped(RegistryEntries.ITEM_CAPABILITY_PROXY)
             .define('I', Tags.Items.INGOTS_IRON)
             .define('O', Tags.Items.OBSIDIAN)
@@ -116,7 +112,7 @@ public class DataGen {
         }
     }
 
-    private static class Loots implements IDataProvider {
+    private static class Loots implements DataProvider {
         private final DataGenerator gen;
 
         public Loots(DataGenerator gen) {
@@ -129,27 +125,25 @@ public class DataGen {
         }
 
         @Override
-        public void run(DirectoryCache cache) {
+        public void run(HashCache cache) {
             Map<ResourceLocation, LootTable> map = new HashMap<>();
-            ThreeConsumer<LootParameterSet, ResourceLocation, LootTable.Builder> consumer = (set, key, builder) -> {
-                if (map.put(key, builder.setParamSet(set).build()) != null)
+            new Blocks().accept((key, builder) -> {
+                if (map.put(key, builder.setParamSet(LootContextParamSets.BLOCK).build()) != null)
                     throw new IllegalStateException("Duplicate loot table " + key);
-            };
-
-            new Blocks().accept((key, builder) -> consumer.accept(LootParameterSets.BLOCK, key, builder));
+            });
 
             map.forEach((key, table) -> {
                 Path target = this.gen.getOutputFolder().resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
 
                 try {
-                   IDataProvider.save(GSON, cache, LootTableManager.serialize(table), target);
+                   DataProvider.save(GSON, cache, LootTables.serialize(table), target);
                 } catch (IOException ioexception) {
                    LOGGER.error("Couldn't save loot table {}", target, ioexception);
                 }
             });
         }
 
-        private class Blocks extends BlockLootTables {
+        private class Blocks extends BlockLoot {
             private Set<Block> knownBlocks = new HashSet<>();
 
             protected void addTables() {
@@ -167,7 +161,7 @@ public class DataGen {
 
                 for(Block block : knownBlocks) {
                    ResourceLocation tabke_name = block.getLootTable();
-                   if (tabke_name != LootTables.EMPTY && visited.add(tabke_name)) {
+                   if (tabke_name != BuiltInLootTables.EMPTY && visited.add(tabke_name)) {
                       LootTable.Builder builder = this.map.remove(tabke_name);
                       if (builder == null)
                          throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", tabke_name, block.getRegistryName()));

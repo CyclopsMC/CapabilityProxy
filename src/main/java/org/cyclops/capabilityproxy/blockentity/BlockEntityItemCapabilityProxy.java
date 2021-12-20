@@ -1,15 +1,17 @@
-package org.cyclops.capabilityproxy.tileentity;
+package org.cyclops.capabilityproxy.blockentity;
 
 import com.google.common.collect.Maps;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -20,33 +22,31 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 import org.cyclops.cyclopscore.fluid.FluidHandlerWrapper;
 import org.cyclops.cyclopscore.helper.BlockHelpers;
 import org.cyclops.cyclopscore.inventory.SimpleInventory;
-import org.cyclops.cyclopscore.tileentity.CyclopsTileEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-
 /**
  * An item capability proxy.
  * @author rubensworks
  */
-public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamedContainerProvider {
+public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implements MenuProvider {
 
     private final SimpleInventory inventory;
     private final Map<Pair<String, Capability<?>>, LazyOptional<?>> cachedCapabilities = Maps.newHashMap();
 
-    public TileItemCapabilityProxy() {
-        super(RegistryEntries.TILE_ENTITY_ITEM_CAPABILITY_PROXY);
+    public BlockEntityItemCapabilityProxy(BlockPos blockPos, BlockState blockState) {
+        super(RegistryEntries.TILE_ENTITY_ITEM_CAPABILITY_PROXY, blockPos, blockState);
         this.inventory = new SimpleInventory(1, 1) {
             @Override
             public void setItem(int slotId, ItemStack itemstack) {
                 boolean wasEmpty = getItem(slotId).isEmpty();
-                // super.setItem(slotId, itemstack); // TODO
+                super.setItem(slotId, itemstack);
                 boolean isEmpty = itemstack.isEmpty();
                 if (wasEmpty != isEmpty) {
                     getLevel().setBlockAndUpdate(getBlockPos(), getLevel().getBlockState(getBlockPos())
@@ -62,13 +62,13 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
     }
 
     @Override
-    public void read(CompoundNBT tag) {
+    public void read(CompoundTag tag) {
         super.read(tag);
         this.inventory.read(tag);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag) {
+    public CompoundTag save(CompoundTag tag) {
         this.inventory.write(tag);
         return super.save(tag);
     }
@@ -98,7 +98,7 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
         }
         ItemStack itemStack = getContents();
         Capability<T> finalCapability = capability;
-        return TileCapabilityProxy.getCapabilityCached(cachedCapabilities, capability, "",
+        return BlockEntityCapabilityProxy.getCapabilityCached(cachedCapabilities, capability, "",
                 () -> {
                     LazyOptional<T> cap = itemStack.getCapability(finalCapability, facing);
 
@@ -113,18 +113,18 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("block.capabilityproxy.item_capability_proxy");
+    public Component getDisplayName() {
+        return new TranslatableComponent("block.capabilityproxy.item_capability_proxy");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player) {
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
         return new ContainerItemCapabilityProxy(id, playerInventory, this.getInventory());
     }
 
     @Override
-    protected void invalidateCaps() {
+    public void invalidateCaps() {
         super.invalidateCaps();
         invalidateCapsCached();
     }
@@ -139,9 +139,9 @@ public class TileItemCapabilityProxy extends CyclopsTileEntity implements INamed
     public static class FluidHandlerWrapperItem extends FluidHandlerWrapper implements IFluidHandlerItem {
 
         private final IFluidHandlerItem fluidHandler;
-        private final TileItemCapabilityProxy tile;
+        private final BlockEntityItemCapabilityProxy tile;
 
-        public FluidHandlerWrapperItem(IFluidHandlerItem fluidHandler, TileItemCapabilityProxy tile) {
+        public FluidHandlerWrapperItem(IFluidHandlerItem fluidHandler, BlockEntityItemCapabilityProxy tile) {
             super(fluidHandler);
             this.fluidHandler = fluidHandler;
             this.tile = tile;
