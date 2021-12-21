@@ -68,9 +68,9 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
         this.inventory.write(tag);
-        return super.save(tag);
     }
 
     public SimpleInventory getInventory() {
