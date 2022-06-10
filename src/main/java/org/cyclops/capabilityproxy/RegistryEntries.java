@@ -17,34 +17,34 @@ import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxy;
  */
 public class RegistryEntries {
 
-    @ObjectHolder("capabilityproxy:capability_proxy")
+    @ObjectHolder(registryName = "item", value = "capabilityproxy:capability_proxy")
     public static final Item ITEM_CAPABILITY_PROXY = null;
-    @ObjectHolder("capabilityproxy:entity_capability_proxy")
+    @ObjectHolder(registryName = "item", value = "capabilityproxy:entity_capability_proxy")
     public static final Item ITEM_ENTITY_CAPABILITY_PROXY = null;
-    @ObjectHolder("capabilityproxy:item_capability_proxy")
+    @ObjectHolder(registryName = "item", value = "capabilityproxy:item_capability_proxy")
     public static final Item ITEM_ITEM_CAPABILITY_PROXY = null;
-    @ObjectHolder("capabilityproxy:ranged_capability_proxy")
+    @ObjectHolder(registryName = "item", value = "capabilityproxy:ranged_capability_proxy")
     public static final Item ITEM_RANGED_CAPABILITY_PROXY = null;
 
-    @ObjectHolder("capabilityproxy:capability_proxy")
+    @ObjectHolder(registryName = "block", value = "capabilityproxy:capability_proxy")
     public static final Block BLOCK_CAPABILITY_PROXY = null;
-    @ObjectHolder("capabilityproxy:entity_capability_proxy")
+    @ObjectHolder(registryName = "block", value = "capabilityproxy:entity_capability_proxy")
     public static final Block BLOCK_ENTITY_CAPABILITY_PROXY = null;
-    @ObjectHolder("capabilityproxy:item_capability_proxy")
+    @ObjectHolder(registryName = "block", value = "capabilityproxy:item_capability_proxy")
     public static final Block BLOCK_ITEM_CAPABILITY_PROXY = null;
-    @ObjectHolder("capabilityproxy:ranged_capability_proxy")
+    @ObjectHolder(registryName = "block", value = "capabilityproxy:ranged_capability_proxy")
     public static final Block BLOCK_RANGED_CAPABILITY_PROXY = null;
 
-    @ObjectHolder("capabilityproxy:capability_proxy")
+    @ObjectHolder(registryName = "block_entity_type", value = "capabilityproxy:capability_proxy")
     public static final BlockEntityType<BlockEntityCapabilityProxy> TILE_ENTITY_CAPABILITY_PROXY = null;
-    @ObjectHolder("capabilityproxy:entity_capability_proxy")
+    @ObjectHolder(registryName = "block_entity_type", value = "capabilityproxy:entity_capability_proxy")
     public static final BlockEntityType<BlockEntityEntityCapabilityProxy> TILE_ENTITY_ENTITY_CAPABILITY_PROXY = null;
-    @ObjectHolder("capabilityproxy:item_capability_proxy")
+    @ObjectHolder(registryName = "block_entity_type", value = "capabilityproxy:item_capability_proxy")
     public static final BlockEntityType<BlockEntityItemCapabilityProxy> TILE_ENTITY_ITEM_CAPABILITY_PROXY = null;
-    @ObjectHolder("capabilityproxy:ranged_capability_proxy")
+    @ObjectHolder(registryName = "block_entity_type", value = "capabilityproxy:ranged_capability_proxy")
     public static final BlockEntityType<BlockEntityRangedCapabilityProxy> TILE_ENTITY_RANGED_CAPABILITY_PROXY = null;
 
-    @ObjectHolder("capabilityproxy:item_capability_proxy")
+    @ObjectHolder(registryName = "menu", value = "capabilityproxy:item_capability_proxy")
     public static final MenuType<ContainerItemCapabilityProxy> CONTAINER_ITEM_CAPABILITY_PROXY = null;
 
 }

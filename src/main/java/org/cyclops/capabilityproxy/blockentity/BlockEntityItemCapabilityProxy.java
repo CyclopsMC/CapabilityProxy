@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -114,7 +113,7 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("block.capabilityproxy.item_capability_proxy");
+        return Component.translatable("block.capabilityproxy.item_capability_proxy");
     }
 
     @Nullable
