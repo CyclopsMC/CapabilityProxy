@@ -1,8 +1,9 @@
 package org.cyclops.capabilityproxy.inventory.container;
 
-import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -20,7 +21,7 @@ public class ContainerItemCapabilityProxyConfig extends GuiConfig<ContainerItemC
     public ContainerItemCapabilityProxyConfig() {
         super(CapabilityProxy._instance,
                 "item_capability_proxy",
-                eConfig -> new MenuType<>(ContainerItemCapabilityProxy::new));
+                eConfig -> new MenuType<>(ContainerItemCapabilityProxy::new, FeatureFlags.VANILLA_SET));
     }
 
     @OnlyIn(Dist.CLIENT)

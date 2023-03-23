@@ -12,11 +12,10 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.items.CapabilityItemHandler;
 import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
@@ -57,7 +56,7 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
                 invalidateCapsCached();
             }
         };
-        addCapabilityInternal(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, LazyOptional.of(getInventory()::getItemHandler));
+        addCapabilityInternal(ForgeCapabilities.ITEM_HANDLER, LazyOptional.of(getInventory()::getItemHandler));
     }
 
     @Override
@@ -87,9 +86,9 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
         // Check if we are handling the fluid capability
-        boolean transformFluidCapability = capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+        boolean transformFluidCapability = capability == ForgeCapabilities.FLUID_HANDLER;
         if (transformFluidCapability) {
-            capability = (Capability<T>) CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
+            capability = (Capability<T>) ForgeCapabilities.FLUID_HANDLER_ITEM;
         }
 
         if (facing == getFacing()) {
