@@ -1,6 +1,6 @@
 package org.cyclops.capabilityproxy.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,8 +24,7 @@ public class ContainerScreenItemCapabilityProxy extends ContainerScreenExtended<
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int x, int y) {
-        //super.drawGuiContainerForegroundLayer(matrixStack, x, y);
-        this.font.draw(matrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
+    protected void renderLabels(GuiGraphics guiGraphics, int x, int y) {
+        guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
     }
 }
