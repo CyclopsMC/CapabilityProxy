@@ -1,6 +1,8 @@
 package org.cyclops.capabilityproxy.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -19,11 +21,18 @@ import javax.annotation.Nullable;
  */
 public class BlockItemCapabilityProxy extends BlockWithEntityGui {
 
+    public static final MapCodec<BlockItemCapabilityProxy> CODEC = simpleCodec(BlockItemCapabilityProxy::new);
+
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty INACTIVE = BooleanProperty.create("inactive");
 
     public BlockItemCapabilityProxy(Block.Properties properties) {
         super(properties, BlockEntityItemCapabilityProxy::new);
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override

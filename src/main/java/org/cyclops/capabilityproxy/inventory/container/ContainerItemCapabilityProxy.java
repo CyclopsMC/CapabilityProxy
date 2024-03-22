@@ -18,7 +18,7 @@ public class ContainerItemCapabilityProxy extends InventoryContainer {
     }
 
     public ContainerItemCapabilityProxy(int id, Inventory playerInventory, Container inventory) {
-        super(RegistryEntries.CONTAINER_ITEM_CAPABILITY_PROXY, id, playerInventory, inventory);
+        super(RegistryEntries.CONTAINER_ITEM_CAPABILITY_PROXY.get(), id, playerInventory, inventory);
         addSlot(new Slot(inventory, 0, 80, 16));
         addPlayerInventory(playerInventory, offsetX + 8, offsetY + 46);
     }

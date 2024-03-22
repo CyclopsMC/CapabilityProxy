@@ -2,8 +2,10 @@ package org.cyclops.capabilityproxy.blockentity;
 
 import com.google.common.collect.Sets;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.cyclops.capabilityproxy.CapabilityProxy;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxy;
@@ -22,8 +24,18 @@ public class BlockEntityRangedCapabilityProxyConfig extends BlockEntityConfig<Bl
                 CapabilityProxy._instance,
                 "ranged_capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityRangedCapabilityProxy::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.get()), null)
         );
+        CapabilityProxy._instance.getModEventBus().addListener(this::registerCapabilities);
+    }
+
+    public void registerCapabilities(RegisterCapabilitiesEvent event) {
+        for (BlockCapability<?, ?> blockCapability : BlockCapability.getAll()) {
+            event.registerBlockEntity(
+                    (BlockCapability) blockCapability, getInstance(),
+                    (blockEntity, context) -> blockEntity.getCapability((BlockCapability) blockCapability, context)
+            );
+        }
     }
 
     @Override

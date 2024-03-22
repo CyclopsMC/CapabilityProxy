@@ -1,5 +1,7 @@
 package org.cyclops.capabilityproxy.block;
 
+import com.mojang.serialization.MapCodec;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
@@ -28,10 +30,17 @@ import java.util.List;
  */
 public class BlockEntityCapabilityProxy extends BlockWithEntity {
 
+    public static final MapCodec<BlockEntityCapabilityProxy> CODEC = simpleCodec(BlockEntityCapabilityProxy::new);
+
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public BlockEntityCapabilityProxy(Block.Properties properties) {
         super(properties, BlockEntityEntityCapabilityProxy::new);
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
     @Override

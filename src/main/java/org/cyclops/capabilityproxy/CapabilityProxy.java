@@ -2,9 +2,10 @@ package org.cyclops.capabilityproxy;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
 import org.apache.logging.log4j.Level;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
@@ -34,8 +35,8 @@ public class CapabilityProxy extends ModBaseVersionable<CapabilityProxy> {
      */
     public static CapabilityProxy _instance;
 
-    public CapabilityProxy() {
-        super(Reference.MOD_ID, (instance) -> _instance = instance);
+    public CapabilityProxy(IEventBus modEventBus) {
+        super(Reference.MOD_ID, (instance) -> _instance = instance, modEventBus);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package org.cyclops.capabilityproxy.blockentity;
 
-import com.google.common.collect.Maps;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -11,12 +10,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import org.apache.commons.lang3.tuple.Pair;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.ItemCapability;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
@@ -35,11 +33,12 @@ import java.util.Map;
  */
 public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implements MenuProvider {
 
+    public static Map<BlockCapability<?, ?>, ItemCapability<?, ?>> BLOCK_TO_ITEM_CAPABILITIES;
+
     private final SimpleInventory inventory;
-    private final Map<Pair<String, Capability<?>>, LazyOptional<?>> cachedCapabilities = Maps.newHashMap();
 
     public BlockEntityItemCapabilityProxy(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntries.TILE_ENTITY_ITEM_CAPABILITY_PROXY, blockPos, blockState);
+        super(RegistryEntries.TILE_ENTITY_ITEM_CAPABILITY_PROXY.get(), blockPos, blockState);
         this.inventory = new SimpleInventory(1, 1) {
             @Override
             public void setItem(int slotId, ItemStack itemstack) {
@@ -53,10 +52,9 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
                     // Trigger a block update anyway, so nearby blocks can recheck capabilities.
                     BlockHelpers.markForUpdate(getLevel(), getBlockPos());
                 }
-                invalidateCapsCached();
+                level.invalidateCapabilities(getBlockPos());
             }
         };
-        addCapabilityInternal(ForgeCapabilities.ITEM_HANDLER, LazyOptional.of(getInventory()::getItemHandler));
     }
 
     @Override
@@ -83,31 +81,23 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
         return this.inventory.getItem(0);
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-        // Check if we are handling the fluid capability
-        boolean transformFluidCapability = capability == ForgeCapabilities.FLUID_HANDLER;
-        if (transformFluidCapability) {
-            capability = (Capability<T>) ForgeCapabilities.FLUID_HANDLER_ITEM;
+    public <T, C1, C2> T getCapability(BlockCapability<T, C1> blockCapability, C1 context) {
+        if (context instanceof Direction && context == getFacing() && blockCapability == Capabilities.ItemHandler.BLOCK) {
+            return (T) getInventory().getItemHandler();
         }
 
-        if (facing == getFacing()) {
-            return super.getCapability(capability, facing);
-        }
         ItemStack itemStack = getContents();
-        Capability<T> finalCapability = capability;
-        return BlockEntityCapabilityProxy.getCapabilityCached(cachedCapabilities, capability, "",
-                () -> {
-                    LazyOptional<T> cap = itemStack.getCapability(finalCapability, facing);
+        ItemCapability<T, C2> itemCapability = blockCapabilityToItemCapability(blockCapability);
+        if (itemCapability == null) {
+            return null;
+        }
+        T cap = itemStack.getCapability(itemCapability, itemCapability.contextClass() == Direction.class ? (C2) getFacing().getOpposite() : null);
 
-                    // Modify fluid capability instance so that the container is always updated into this tile after modifications
-                    if (transformFluidCapability) {
-                        cap = cap.<IFluidHandlerItem>cast()
-                                .lazyMap(fluidHandler -> new FluidHandlerWrapperItem(fluidHandler, this))
-                                .cast();
-                    }
-                    return cap;
-                });
+        // Modify fluid capability instance so that the container is always updated into this tile after modifications
+        if (cap instanceof IFluidHandlerItem fluidHandlerItem) {
+            cap = (T) new FluidHandlerWrapperItem(fluidHandlerItem, this);
+        }
+        return cap;
     }
 
     @Override
@@ -121,17 +111,9 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
         return new ContainerItemCapabilityProxy(id, playerInventory, this.getInventory());
     }
 
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        invalidateCapsCached();
-    }
-
-    protected void invalidateCapsCached() {
-        for (LazyOptional<?> value : cachedCapabilities.values()) {
-            value.invalidate();
-        }
-        cachedCapabilities.clear();
+    @Nullable
+    public static <T, C1, C2> ItemCapability<T, C2> blockCapabilityToItemCapability(BlockCapability<T, C1> capability) {
+        return (ItemCapability<T, C2>) BLOCK_TO_ITEM_CAPABILITIES.get(capability);
     }
 
     public static class FluidHandlerWrapperItem extends FluidHandlerWrapper implements IFluidHandlerItem {

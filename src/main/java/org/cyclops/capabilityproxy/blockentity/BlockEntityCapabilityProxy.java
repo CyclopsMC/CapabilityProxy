@@ -1,24 +1,24 @@
 package org.cyclops.capabilityproxy.blockentity;
 
 import com.google.common.collect.Maps;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.neoforge.capabilities.BaseCapability;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.ICapabilityInvalidationListener;
 import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
-import org.cyclops.cyclopscore.helper.BlockHelpers;
-import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
 import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
+import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
+import org.cyclops.cyclopscore.helper.BlockHelpers;
 
-import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -27,13 +27,13 @@ import java.util.function.Supplier;
  */
 public class BlockEntityCapabilityProxy extends CyclopsBlockEntity {
 
-    private final Map<Pair<BlockPos, Capability<?>>, LazyOptional<?>> cachedCapabilities = Maps.newHashMap();
+    private final Map<Pair<BlockPos, BaseCapability<?, ?>>, Pair<?, ICapabilityInvalidationListener>> cachedCapabilities = Maps.newHashMap();
 
     // A flag that is set when this tile is checking for a target's capability, to avoid infinite loops.
     protected boolean handling = false;
 
     public BlockEntityCapabilityProxy(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntries.TILE_ENTITY_CAPABILITY_PROXY, blockPos, blockState);
+        super(RegistryEntries.TILE_ENTITY_CAPABILITY_PROXY.get(), blockPos, blockState);
     }
 
     protected BlockEntityCapabilityProxy(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState) {
@@ -48,63 +48,64 @@ public class BlockEntityCapabilityProxy extends CyclopsBlockEntity {
         return source.relative(facing);
     }
 
-    protected BlockPos getTargetPos(Level worldIn, @Nullable Capability<?> capability, BlockPos source) {
+    protected BlockPos getTargetPos(Level worldIn, BlockCapability<?, ?> capability, BlockPos source) {
         return getTargetPos(source, getFacing());
     }
 
-    protected <T> LazyOptional<T> getTarget(Capability<T> capability, BlockGetter world, BlockPos pos, Direction facing) {
-        if (ModList.get().isLoaded("commoncapabilities")) {
-            LazyOptional<T> lazyOptional = BlockCapabilityProvider.getCapability(world.getBlockState(pos), capability, world, pos, facing);
-            if (lazyOptional.isPresent()) {
-                return lazyOptional;
-            }
-        }
-        return getCapabilityCached(cachedCapabilities, capability, pos,
-                () -> BlockEntityHelpers.getCapability(world, pos, facing, capability));
+    protected <T, C> T getTarget(BlockCapability<T, C> capability, ServerLevel targetWorld, BlockPos targetPos, C targetContext, ServerLevel originWorld, BlockPos originPos) {
+        return getCapabilityCached(cachedCapabilities, capability, targetPos, targetWorld, targetPos, originWorld, originPos,
+                () -> BlockEntityHelpers.getCapability(targetWorld, targetPos, targetContext, capability));
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
+    public <T, C> T getCapability(BlockCapability<T, C> capability, C context) {
         if (handling) {
-            return LazyOptional.empty();
+            return null;
         }
         handling = true;
-        LazyOptional<T> ret = getTarget(capability, getLevel(), getTargetPos(getLevel(), capability, getBlockPos()), getFacing().getOpposite());
+        T ret = getTarget(
+                capability,
+                (ServerLevel) getLevel(),
+                getTargetPos(getLevel(), capability, getBlockPos()),
+                context instanceof Direction ? (C) getFacing().getOpposite() : context,
+                (ServerLevel) getLevel(),
+                getBlockPos()
+        );
         handling = false;
-        return ret == null ? LazyOptional.empty() : ret;
+        return ret;
     }
 
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        for (LazyOptional<?> value : cachedCapabilities.values()) {
-            value.invalidate();
-        }
-        cachedCapabilities.clear();
-    }
-
-    public static <T, C> LazyOptional<T> getCapabilityCached(Map<Pair<C, Capability<?>>, LazyOptional<?>> cachedCapabilities,
-                                                             Capability<T> capability, C cacheParam, Supplier<LazyOptional<T>> capabilitySupplier) {
+    public static <T, C, CACHE> T getCapabilityCached(
+            Map<Pair<CACHE, BaseCapability<?, ?>>, Pair<?, ICapabilityInvalidationListener>> cachedCapabilities,
+            BaseCapability<T, C> capability,
+            CACHE cacheParam,
+            ServerLevel targetWorld,
+            BlockPos targetPos,
+            ServerLevel originWorld,
+            BlockPos originPos,
+            Supplier<Optional<T>> capabilitySupplier
+    ) {
         // Check if capability is in cache
-        Pair<C, Capability<?>> cacheKey = Pair.of(cacheParam, capability);
-        LazyOptional<?> cachedCapability = cachedCapabilities.get(cacheKey);
-        if (cachedCapability != null) {
-            return (LazyOptional<T>) cachedCapability;
+        Pair<CACHE, BaseCapability<?, ?>> cacheKey = Pair.of(cacheParam, capability);
+        Pair<?, ICapabilityInvalidationListener> cachedCapabilityPair = cachedCapabilities.get(cacheKey);
+        if (cachedCapabilityPair != null) {
+            return (T) cachedCapabilityPair.getLeft();
         }
 
         // Retrieve the actual capability
-        LazyOptional<T> innerCapability = capabilitySupplier.get();
+        Optional<T> innerCapability = capabilitySupplier.get();
         if (!innerCapability.isPresent()) {
-            return LazyOptional.empty();
+            return null;
         }
 
         // Wrap the capability, cache it, and add invalidation listener
-        LazyOptional<T> outerCapability = innerCapability.lazyMap((a) -> a);
-        cachedCapabilities.put(cacheKey, outerCapability);
-        innerCapability.addListener((a) -> {
-            outerCapability.invalidate();
+        T outerCapability = innerCapability.get();
+        ICapabilityInvalidationListener invalidationListener = () -> {
             cachedCapabilities.remove(cacheKey);
-        });
+            originWorld.invalidateCapabilities(originPos);
+            return false;
+        };
+        cachedCapabilities.put(cacheKey, Pair.of(outerCapability, invalidationListener));
+        targetWorld.registerCapabilityListener(targetPos, invalidationListener);
 
         return outerCapability;
     }
