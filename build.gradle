@@ -60,11 +60,14 @@ repositories {
         name "Cyclops Repo"
         url "https://maven.pkg.github.com/CyclopsMC/packages"
         credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("MAVEN_USERNAME")
-            password = project.findProperty("gpr.key") ?: System.getenv("MAVEN_KEY")
+            username = project.findProperty("gpr.user") ?: System.getenv("MAVEN_USERNAME") ?: System.getenv("GITHUB_USER")
+            password = project.findProperty("gpr.key") ?: System.getenv("MAVEN_KEY") ?: System.getenv("GITHUB_TOKEN")
         }
     }
 }
+
+logger.info("A: " + System.getenv("GITHUB_USER"));
+logger.info("B: " + System.getenv("GITHUB_TOKEN"));
 
 dependencies {
     implementation "net.neoforged:neoforge:${project.neoforge_version}"
