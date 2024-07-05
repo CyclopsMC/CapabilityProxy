@@ -2,6 +2,7 @@ package org.cyclops.capabilityproxy.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -58,15 +59,15 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
     }
 
     @Override
-    public void read(CompoundTag tag) {
-        super.read(tag);
-        this.inventory.read(tag);
+    public void read(CompoundTag tag, HolderLookup.Provider provider) {
+        super.read(tag, provider);
+        this.inventory.read(provider, tag);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        this.inventory.write(tag);
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.saveAdditional(tag, provider);
+        this.inventory.write(provider, tag);
     }
 
     public SimpleInventory getInventory() {

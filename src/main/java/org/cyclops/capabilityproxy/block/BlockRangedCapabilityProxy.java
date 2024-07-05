@@ -3,7 +3,6 @@ package org.cyclops.capabilityproxy.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -55,8 +54,7 @@ public class BlockRangedCapabilityProxy extends BlockWithEntity {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand,
-                                             BlockHitResult hit) {
+    public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
         RecursiveHit rhit = hit instanceof RecursiveHit ? (RecursiveHit)hit : new RecursiveHit(hit, new HashSet<>(), hit.getBlockPos(), hit.getDirection());
         if (rhit.chain.contains(pos)) {
             rhit.setFailed();
@@ -68,7 +66,7 @@ public class BlockRangedCapabilityProxy extends BlockWithEntity {
             Direction facing = state.getValue(BlockRangedCapabilityProxy.FACING);
             BlockPos targetPos = pos.relative(facing, offset);
             BlockState target = worldIn.getBlockState(targetPos);
-            InteractionResult ret = target.use(worldIn, player, hand, rhit.move(targetPos, facing.getOpposite()));
+            InteractionResult ret = target.useWithoutItem(worldIn, player, rhit.move(targetPos, facing.getOpposite()));
             if (ret.consumesAction() || rhit.failed) {
                 return ret;
             }

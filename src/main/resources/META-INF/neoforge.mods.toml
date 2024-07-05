@@ -18,18 +18,18 @@ Access block capabilities from multiple sides.
 [[dependencies.capabilityproxy]]
     modId="cyclopscore"
     type="required"
-    versionRange="[1.19.0,)"
+    versionRange="[1.19.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.capabilityproxy]]
     modId="neoforge"
     type="required"
-    versionRange="[20.4,)"
+    versionRange="[21.0.43-beta,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.capabilityproxy]]
     modId="minecraft"
     type="required"
-    versionRange="[1.20.4,]"
+    versionRange="[1.21,]"
     ordering="NONE"
     side="BOTH"

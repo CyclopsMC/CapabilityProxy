@@ -20,7 +20,7 @@ public class ContainerScreenItemCapabilityProxy extends ContainerScreenExtended<
 
     @Override
     protected ResourceLocation constructGuiTexture() {
-        return new ResourceLocation(Reference.MOD_ID, "textures/gui/item_capability_proxy.png");
+        return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/item_capability_proxy.png");
     }
 
     @Override

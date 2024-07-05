@@ -68,8 +68,8 @@ public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<Bloc
             float maxZ = z + target.getZ();
 
             VertexConsumer vb = buffer.getBuffer(RENDER_TYPE_LINE);
-            vb.vertex(matrixStack.last().pose(), minX, minY, minZ).color(r, g, b, a).endVertex();
-            vb.vertex(matrixStack.last().pose(), maxX, maxY, maxZ).color(r, g, b, a).endVertex();
+            vb.addVertex(matrixStack.last().pose(), minX, minY, minZ).setColor(r, g, b, a);
+            vb.addVertex(matrixStack.last().pose(), maxX, maxY, maxZ).setColor(r, g, b, a);
         }
     }
 

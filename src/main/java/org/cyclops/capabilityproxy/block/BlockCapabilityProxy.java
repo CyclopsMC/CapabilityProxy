@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -65,8 +64,7 @@ public class BlockCapabilityProxy extends BlockWithEntity {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
-                                             BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         // A check to avoid infinite loops
         if (activatingBlockChain == null) {
             activatingBlockChain = Sets.newHashSet(pos);
@@ -77,10 +75,11 @@ public class BlockCapabilityProxy extends BlockWithEntity {
                 activatingBlockChain.add(pos);
             }
         }
-        Direction facing = state.getValue(BlockCapabilityProxy.FACING);
-        BlockState targetBlockState = worldIn.getBlockState(pos.relative(facing));
-        InteractionResult ret = targetBlockState.getBlock().use(targetBlockState, worldIn,
-                BlockEntityCapabilityProxy.getTargetPos(pos, facing), player, handIn, hit.withDirection(facing.getOpposite()));
+        Direction facing = blockState.getValue(BlockCapabilityProxy.FACING);
+        BlockState targetBlockState = level.getBlockState(pos.relative(facing));
+        InteractionResult ret = targetBlockState.useWithoutItem(level, player, hit
+                .withDirection(facing.getOpposite())
+                .withPosition(BlockEntityCapabilityProxy.getTargetPos(pos, facing)));
         activatingBlockChain = null;
         return ret;
     }
