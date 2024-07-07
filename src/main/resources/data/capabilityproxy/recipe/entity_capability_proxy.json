@@ -2,19 +2,22 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "pattern": [
-    " E ",
+    "ECE",
     "PPP",
-    " E "
+    "ECE"
   ],
   "key": {
     "E": {
-      "tag": "forge:ender_pearls"
+      "item": "minecraft:ender_eye"
+    },
+    "C": {
+      "item": "minecraft:popped_chorus_fruit"
     },
     "P": {
       "item": "capabilityproxy:capability_proxy"
     }
   },
   "result": {
-    "item": "capabilityproxy:ranged_capability_proxy"
+    "id": "capabilityproxy:entity_capability_proxy"
   }
 }
