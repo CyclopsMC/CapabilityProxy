@@ -6,10 +6,10 @@
       "item": "capabilityproxy:capability_proxy"
     },
     {
-      "tag": "forge:chests"
+      "tag": "c:chests"
     },
     {
-      "tag": "forge:ingots/gold"
+      "tag": "c:ingots/gold"
     }
   ],
   "result": {

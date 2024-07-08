@@ -8,10 +8,10 @@
   ],
   "key": {
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "O": {
-      "tag": "forge:obsidian"
+      "tag": "c:obsidians"
     },
     "N": {
       "item": "minecraft:nether_wart"
