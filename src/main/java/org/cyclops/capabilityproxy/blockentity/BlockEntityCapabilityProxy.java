@@ -58,7 +58,7 @@ public class BlockEntityCapabilityProxy extends CyclopsBlockEntity {
     }
 
     public <T, C> T getCapability(BlockCapability<T, C> capability, C context) {
-        if (handling) {
+        if (handling || getLevel().isClientSide()) {
             return null;
         }
         handling = true;
