@@ -52,22 +52,22 @@ public class BlockEntityCapabilityProxy extends CyclopsBlockEntity {
         return getTargetPos(source, getFacing());
     }
 
-    protected <T, C> T getTarget(BlockCapability<T, C> capability, ServerLevel targetWorld, BlockPos targetPos, C targetContext, ServerLevel originWorld, BlockPos originPos) {
+    protected <T, C> T getTarget(BlockCapability<T, C> capability, Level targetWorld, BlockPos targetPos, C targetContext, Level originWorld, BlockPos originPos) {
         return getCapabilityCached(cachedCapabilities, capability, targetPos, targetWorld, targetPos, originWorld, originPos,
                 () -> BlockEntityHelpers.getCapability(targetWorld, targetPos, targetContext, capability));
     }
 
     public <T, C> T getCapability(BlockCapability<T, C> capability, C context) {
-        if (handling || getLevel().isClientSide()) {
+        if (handling) {
             return null;
         }
         handling = true;
         T ret = getTarget(
                 capability,
-                (ServerLevel) getLevel(),
+                getLevel(),
                 getTargetPos(getLevel(), capability, getBlockPos()),
                 context instanceof Direction ? (C) getFacing().getOpposite() : context,
-                (ServerLevel) getLevel(),
+                getLevel(),
                 getBlockPos()
         );
         handling = false;
@@ -78,9 +78,9 @@ public class BlockEntityCapabilityProxy extends CyclopsBlockEntity {
             Map<Pair<CACHE, BaseCapability<?, ?>>, Pair<?, ICapabilityInvalidationListener>> cachedCapabilities,
             BaseCapability<T, C> capability,
             CACHE cacheParam,
-            ServerLevel targetWorld,
+            Level targetWorld,
             BlockPos targetPos,
-            ServerLevel originWorld,
+            Level originWorld,
             BlockPos originPos,
             Supplier<Optional<T>> capabilitySupplier
     ) {
@@ -97,15 +97,18 @@ public class BlockEntityCapabilityProxy extends CyclopsBlockEntity {
             return null;
         }
 
-        // Wrap the capability, cache it, and add invalidation listener
         T outerCapability = innerCapability.get();
-        ICapabilityInvalidationListener invalidationListener = () -> {
-            cachedCapabilities.remove(cacheKey);
-            originWorld.invalidateCapabilities(originPos);
-            return false;
-        };
-        cachedCapabilities.put(cacheKey, Pair.of(outerCapability, invalidationListener));
-        targetWorld.registerCapabilityListener(targetPos, invalidationListener);
+
+        if (targetWorld instanceof ServerLevel targetWorldServer) {
+            // Wrap the capability, cache it, and add invalidation listener
+            ICapabilityInvalidationListener invalidationListener = () -> {
+                cachedCapabilities.remove(cacheKey);
+                originWorld.invalidateCapabilities(originPos);
+                return false;
+            };
+            cachedCapabilities.put(cacheKey, Pair.of(outerCapability, invalidationListener));
+            targetWorldServer.registerCapabilityListener(targetPos, invalidationListener);
+        }
 
         return outerCapability;
     }

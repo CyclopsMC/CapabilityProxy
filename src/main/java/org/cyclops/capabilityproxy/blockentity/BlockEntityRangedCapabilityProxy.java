@@ -1,7 +1,7 @@
 package org.cyclops.capabilityproxy.blockentity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.cyclops.capabilityproxy.RegistryEntries;
@@ -18,7 +18,7 @@ public class BlockEntityRangedCapabilityProxy extends BlockEntityCapabilityProxy
     }
 
     @Override
-    protected <T, C> T getTarget(BlockCapability<T, C> capability, ServerLevel targetWorld, BlockPos targetPos, C targetContext, ServerLevel originWorld, BlockPos originPos) {
+    protected <T, C> T getTarget(BlockCapability<T, C> capability, Level targetWorld, BlockPos targetPos, C targetContext, Level originWorld, BlockPos originPos) {
         for (int offset = 1; offset < BlockRangedCapabilityProxyConfig.range; offset++) {
             BlockPos current = getBlockPos().relative(getFacing(), offset);
             T instance = super.getTarget(
