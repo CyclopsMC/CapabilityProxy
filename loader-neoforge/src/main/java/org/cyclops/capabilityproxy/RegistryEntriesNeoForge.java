@@ -3,8 +3,6 @@ package org.cyclops.capabilityproxy;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxy;
@@ -17,17 +15,8 @@ import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityPr
  * Referenced registry entries.
  * @author rubensworks
  */
-public class RegistryEntries {
-
-    public static final DeferredHolder<Item, Item> ITEM_CAPABILITY_PROXY = DeferredHolder.create(Registries.ITEM, ResourceLocation.parse("capabilityproxy:capability_proxy"));
-    public static final DeferredHolder<Item, Item> ITEM_ENTITY_CAPABILITY_PROXY = DeferredHolder.create(Registries.ITEM, ResourceLocation.parse("capabilityproxy:entity_capability_proxy"));
-    public static final DeferredHolder<Item, Item> ITEM_ITEM_CAPABILITY_PROXY = DeferredHolder.create(Registries.ITEM, ResourceLocation.parse("capabilityproxy:item_capability_proxy"));
-    public static final DeferredHolder<Item, Item> ITEM_RANGED_CAPABILITY_PROXY = DeferredHolder.create(Registries.ITEM, ResourceLocation.parse("capabilityproxy:ranged_capability_proxy"));
-
-    public static final DeferredHolder<Block, Block> BLOCK_CAPABILITY_PROXY = DeferredHolder.create(Registries.BLOCK, ResourceLocation.parse("capabilityproxy:capability_proxy"));
-    public static final DeferredHolder<Block, Block> BLOCK_ENTITY_CAPABILITY_PROXY = DeferredHolder.create(Registries.BLOCK, ResourceLocation.parse("capabilityproxy:entity_capability_proxy"));
-    public static final DeferredHolder<Block, Block> BLOCK_ITEM_CAPABILITY_PROXY = DeferredHolder.create(Registries.BLOCK, ResourceLocation.parse("capabilityproxy:item_capability_proxy"));
-    public static final DeferredHolder<Block, Block> BLOCK_RANGED_CAPABILITY_PROXY = DeferredHolder.create(Registries.BLOCK, ResourceLocation.parse("capabilityproxy:ranged_capability_proxy"));
+@Deprecated
+public class RegistryEntriesNeoForge { // TODO: rm
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityCapabilityProxy>> TILE_ENTITY_CAPABILITY_PROXY = DeferredHolder.create(Registries.BLOCK_ENTITY_TYPE, ResourceLocation.parse("capabilityproxy:capability_proxy"));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityEntityCapabilityProxy>> TILE_ENTITY_ENTITY_CAPABILITY_PROXY = DeferredHolder.create(Registries.BLOCK_ENTITY_TYPE, ResourceLocation.parse("capabilityproxy:entity_capability_proxy"));

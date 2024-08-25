@@ -28,14 +28,14 @@ import org.cyclops.cyclopscore.proxy.ICommonProxy;
  *
  */
 @Mod(Reference.MOD_ID)
-public class CapabilityProxy extends ModBaseVersionable<CapabilityProxy> {
+public class CapabilityProxyNeoForge extends ModBaseVersionable<CapabilityProxyNeoForge> {
 
     /**
      * The unique instance of this mod.
      */
-    public static CapabilityProxy _instance;
+    public static CapabilityProxyNeoForge _instance;
 
-    public CapabilityProxy(IEventBus modEventBus) {
+    public CapabilityProxyNeoForge(IEventBus modEventBus) {
         super(Reference.MOD_ID, (instance) -> _instance = instance, modEventBus);
     }
 
@@ -61,7 +61,7 @@ public class CapabilityProxy extends ModBaseVersionable<CapabilityProxy> {
     protected void onConfigsRegister(ConfigHandlerCommon configHandler) {
         super.onConfigsRegister(configHandler);
 
-        configHandler.addConfigurable(new GeneralConfig());
+        configHandler.addConfigurable(new GeneralConfig(this));
 
         configHandler.addConfigurable(new BlockCapabilityProxyConfig());
         configHandler.addConfigurable(new org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig());
@@ -90,7 +90,7 @@ public class CapabilityProxy extends ModBaseVersionable<CapabilityProxy> {
      * @param message The message to show.
      */
     public static void clog(Level level, String message) {
-        CapabilityProxy._instance.getLoggerHelper().log(level, message);
+        CapabilityProxyNeoForge._instance.getLoggerHelper().log(level, message);
     }
 
 }

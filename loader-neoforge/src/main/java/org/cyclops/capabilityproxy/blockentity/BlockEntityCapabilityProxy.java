@@ -11,7 +11,7 @@ import net.neoforged.neoforge.capabilities.BaseCapability;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.ICapabilityInvalidationListener;
 import org.apache.commons.lang3.tuple.Pair;
-import org.cyclops.capabilityproxy.RegistryEntries;
+import org.cyclops.capabilityproxy.RegistryEntriesNeoForge;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
 import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
@@ -33,7 +33,7 @@ public class BlockEntityCapabilityProxy extends CyclopsBlockEntity {
     protected boolean handling = false;
 
     public BlockEntityCapabilityProxy(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntries.TILE_ENTITY_CAPABILITY_PROXY.get(), blockPos, blockState);
+        super(RegistryEntriesNeoForge.TILE_ENTITY_CAPABILITY_PROXY.get(), blockPos, blockState);
     }
 
     protected BlockEntityCapabilityProxy(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState) {

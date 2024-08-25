@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import org.cyclops.capabilityproxy.CapabilityProxy;
+import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
 
@@ -21,12 +21,12 @@ public class BlockEntityItemCapabilityProxyConfig extends BlockEntityConfig<Bloc
 
     public BlockEntityItemCapabilityProxyConfig() {
         super(
-                CapabilityProxy._instance,
+                CapabilityProxyNeoForge._instance,
                 "item_capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityItemCapabilityProxy::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY.get()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY.value()), null)
         );
-        CapabilityProxy._instance.getModEventBus().addListener(this::registerCapabilities);
+        CapabilityProxyNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {

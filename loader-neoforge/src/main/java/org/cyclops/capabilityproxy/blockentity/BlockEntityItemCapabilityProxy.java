@@ -16,7 +16,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import org.cyclops.capabilityproxy.RegistryEntries;
+import org.cyclops.capabilityproxy.RegistryEntriesNeoForge;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
 import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
@@ -39,7 +39,7 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
     private final SimpleInventory inventory;
 
     public BlockEntityItemCapabilityProxy(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntries.TILE_ENTITY_ITEM_CAPABILITY_PROXY.get(), blockPos, blockState);
+        super(RegistryEntriesNeoForge.TILE_ENTITY_ITEM_CAPABILITY_PROXY.get(), blockPos, blockState);
         this.inventory = new SimpleInventory(1, 1) {
             @Override
             public void setItem(int slotId, ItemStack itemstack) {

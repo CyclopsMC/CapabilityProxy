@@ -3,7 +3,7 @@ package org.cyclops.capabilityproxy.block;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.neoforged.fml.config.ModConfig;
-import org.cyclops.capabilityproxy.CapabilityProxy;
+import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
 
@@ -18,12 +18,12 @@ public class BlockRangedCapabilityProxyConfig extends BlockConfig {
 
     public BlockRangedCapabilityProxyConfig() {
         super(
-                CapabilityProxy._instance,
+                CapabilityProxyNeoForge._instance,
                 "ranged_capability_proxy",
                 (eConfig) -> new BlockRangedCapabilityProxy(Block.Properties.of()
                         .sound(SoundType.STONE)
                         .strength(2.0f)),
-                getDefaultItemConstructor(CapabilityProxy._instance)
+                getDefaultItemConstructor(CapabilityProxyNeoForge._instance)
         );
     }
 

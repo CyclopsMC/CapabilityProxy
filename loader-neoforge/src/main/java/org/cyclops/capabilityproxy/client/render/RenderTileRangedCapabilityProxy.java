@@ -48,8 +48,8 @@ public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<Bloc
     @Override
     public void render(BlockEntityRangedCapabilityProxy tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
         Player player = Minecraft.getInstance().player;
-        if (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY.get()
-                || player.getItemInHand(InteractionHand.OFF_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY.get()) {
+        if (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY.value()
+                || player.getItemInHand(InteractionHand.OFF_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY.value()) {
             float r = 0.28F;
             float g = 0.87F;
             float b = 0.80F;

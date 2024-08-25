@@ -6,7 +6,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import org.cyclops.capabilityproxy.CapabilityProxy;
+import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxy;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
@@ -21,12 +21,12 @@ public class BlockEntityRangedCapabilityProxyConfig extends BlockEntityConfig<Bl
 
     public BlockEntityRangedCapabilityProxyConfig() {
         super(
-                CapabilityProxy._instance,
+                CapabilityProxyNeoForge._instance,
                 "ranged_capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityRangedCapabilityProxy::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.get()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value()), null)
         );
-        CapabilityProxy._instance.getModEventBus().addListener(this::registerCapabilities);
+        CapabilityProxyNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -48,7 +48,7 @@ public class BlockEntityRangedCapabilityProxyConfig extends BlockEntityConfig<Bl
 
     @OnlyIn(Dist.CLIENT)
     private void registerClientSide() {
-        CapabilityProxy._instance.getProxy().registerRenderer(getInstance(), RenderTileRangedCapabilityProxy::new);
+        CapabilityProxyNeoForge._instance.getProxy().registerRenderer(getInstance(), RenderTileRangedCapabilityProxy::new);
     }
 
 }

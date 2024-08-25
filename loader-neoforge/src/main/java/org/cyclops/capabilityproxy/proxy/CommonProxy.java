@@ -2,7 +2,7 @@ package org.cyclops.capabilityproxy.proxy;
 
 import org.cyclops.cyclopscore.init.ModBase;
 import org.cyclops.cyclopscore.proxy.CommonProxyComponent;
-import org.cyclops.capabilityproxy.CapabilityProxy;
+import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 
 /**
  * Proxy for server and client side.
@@ -13,7 +13,7 @@ public class CommonProxy extends CommonProxyComponent {
 
     @Override
     public ModBase getMod() {
-        return CapabilityProxy._instance;
+        return CapabilityProxyNeoForge._instance;
     }
 
 }

@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.EntityCapability;
-import org.cyclops.capabilityproxy.RegistryEntries;
+import org.cyclops.capabilityproxy.RegistryEntriesNeoForge;
 import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 import org.cyclops.cyclopscore.helper.BlockHelpers;
 
@@ -24,7 +24,7 @@ public class BlockEntityEntityCapabilityProxy extends CyclopsBlockEntity {
     public static Map<BlockCapability<?, ?>, EntityCapability<?, ?>> BLOCK_TO_ENTITY_CAPABILITIES;
 
     public BlockEntityEntityCapabilityProxy(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntries.TILE_ENTITY_ENTITY_CAPABILITY_PROXY.get(), blockPos, blockState);
+        super(RegistryEntriesNeoForge.TILE_ENTITY_ENTITY_CAPABILITY_PROXY.get(), blockPos, blockState);
     }
 
     public Direction getFacing() {

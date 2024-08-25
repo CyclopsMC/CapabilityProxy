@@ -7,7 +7,7 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import org.cyclops.capabilityproxy.CapabilityProxy;
+import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.client.gui.ContainerScreenItemCapabilityProxy;
 import org.cyclops.cyclopscore.client.gui.ScreenFactorySafe;
 import org.cyclops.cyclopscore.config.extendedconfig.GuiConfig;
@@ -19,7 +19,7 @@ import org.cyclops.cyclopscore.config.extendedconfig.GuiConfig;
 public class ContainerItemCapabilityProxyConfig extends GuiConfig<ContainerItemCapabilityProxy> {
 
     public ContainerItemCapabilityProxyConfig() {
-        super(CapabilityProxy._instance,
+        super(CapabilityProxyNeoForge._instance,
                 "item_capability_proxy",
                 eConfig -> new MenuType<>(ContainerItemCapabilityProxy::new, FeatureFlags.VANILLA_SET));
     }
