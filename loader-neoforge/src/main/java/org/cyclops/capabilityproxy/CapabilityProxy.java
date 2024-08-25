@@ -17,7 +17,7 @@ import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyC
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxy;
 import org.cyclops.capabilityproxy.proxy.CommonProxy;
-import org.cyclops.cyclopscore.config.ConfigHandler;
+import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
 import org.cyclops.cyclopscore.init.ModBaseVersionable;
 import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
@@ -58,7 +58,7 @@ public class CapabilityProxy extends ModBaseVersionable<CapabilityProxy> {
     }
 
     @Override
-    protected void onConfigsRegister(ConfigHandler configHandler) {
+    protected void onConfigsRegister(ConfigHandlerCommon configHandler) {
         super.onConfigsRegister(configHandler);
 
         configHandler.addConfigurable(new GeneralConfig());
