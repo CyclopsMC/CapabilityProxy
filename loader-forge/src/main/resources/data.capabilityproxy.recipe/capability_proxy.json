@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "IOI",
+    "ONO",
+    "IOI"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    },
+    "N": {
+      "item": "minecraft:nether_wart"
+    }
+  },
+  "result": {
+    "id": "capabilityproxy:capability_proxy"
+  }
+}

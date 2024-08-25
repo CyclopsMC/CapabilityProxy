@@ -3,9 +3,11 @@ package org.cyclops.capabilityproxy;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
+import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyForge;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyForgeConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxyForge;
 import org.cyclops.capabilityproxy.proxy.CommonProxyForge;
-import org.cyclops.cyclopscore.Reference;
 import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
 import org.cyclops.cyclopscore.init.ModBaseForge;
 import org.cyclops.cyclopscore.proxy.IClientProxyCommon;
@@ -55,6 +57,8 @@ public class CapabilityProxyForge extends ModBaseForge<CapabilityProxyForge> {
 
         configHandler.addConfigurable(new GeneralConfig(this));
 
-        // TODO
+        configHandler.addConfigurable(new BlockCapabilityProxyConfig<>(this, BlockEntityCapabilityProxyForge::new));
+
+        configHandler.addConfigurable(new BlockEntityCapabilityProxyForgeConfig());
     }
 }

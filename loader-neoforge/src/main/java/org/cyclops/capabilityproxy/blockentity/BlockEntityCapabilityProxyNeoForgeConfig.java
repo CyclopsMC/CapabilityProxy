@@ -9,17 +9,17 @@ import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
 
 /**
- * Config for the {@link BlockEntityCapabilityProxy}.
+ * Config for the {@link BlockEntityCapabilityProxyNeoForge}.
  * @author rubensworks
  *
  */
-public class BlockEntityCapabilityProxyConfig extends BlockEntityConfig<BlockEntityCapabilityProxy> {
+public class BlockEntityCapabilityProxyNeoForgeConfig extends BlockEntityConfig<BlockEntityCapabilityProxyNeoForge> {
 
-    public BlockEntityCapabilityProxyConfig() {
+    public BlockEntityCapabilityProxyNeoForgeConfig() {
         super(
                 CapabilityProxyNeoForge._instance,
                 "capability_proxy",
-                (eConfig) -> new BlockEntityType<>(BlockEntityCapabilityProxy::new,
+                (eConfig) -> new BlockEntityType<>(BlockEntityCapabilityProxyNeoForge::new,
                         Sets.newHashSet(RegistryEntries.BLOCK_CAPABILITY_PROXY.value()), null)
         );
         CapabilityProxyNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);

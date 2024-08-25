@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxy;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxy;
 import org.cyclops.cyclopscore.block.BlockWithEntityGui;
 
@@ -46,7 +46,7 @@ public class BlockItemCapabilityProxy extends BlockWithEntityGui {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState()
                 .setValue(FACING, context.getClickedFace().getOpposite())
-                .setValue(INACTIVE, context.getLevel().getBlockEntity(BlockEntityCapabilityProxy
+                .setValue(INACTIVE, context.getLevel().getBlockEntity(BlockEntityCapabilityProxyNeoForge
                         .getTargetPos(context.getClickedPos(), context.getClickedFace().getOpposite())) == null);
     }
 

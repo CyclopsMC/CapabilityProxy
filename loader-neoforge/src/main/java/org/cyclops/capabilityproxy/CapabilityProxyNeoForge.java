@@ -10,7 +10,8 @@ import org.apache.logging.log4j.Level;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForge;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForgeConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyConfig;
@@ -63,12 +64,12 @@ public class CapabilityProxyNeoForge extends ModBaseVersionable<CapabilityProxyN
 
         configHandler.addConfigurable(new GeneralConfig(this));
 
-        configHandler.addConfigurable(new BlockCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockCapabilityProxyConfig<>(this, BlockEntityCapabilityProxyNeoForge::new));
         configHandler.addConfigurable(new org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig());
         configHandler.addConfigurable(new BlockItemCapabilityProxyConfig());
         configHandler.addConfigurable(new BlockRangedCapabilityProxyConfig());
 
-        configHandler.addConfigurable(new BlockEntityCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockEntityCapabilityProxyNeoForgeConfig());
         configHandler.addConfigurable(new BlockEntityEntityCapabilityProxyConfig());
         configHandler.addConfigurable(new BlockEntityItemCapabilityProxyConfig());
         configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyConfig());

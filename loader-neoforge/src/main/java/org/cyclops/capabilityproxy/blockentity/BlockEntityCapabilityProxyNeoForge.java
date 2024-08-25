@@ -11,11 +11,8 @@ import net.neoforged.neoforge.capabilities.BaseCapability;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.ICapabilityInvalidationListener;
 import org.apache.commons.lang3.tuple.Pair;
-import org.cyclops.capabilityproxy.RegistryEntriesNeoForge;
-import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
-import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
+import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
-import org.cyclops.cyclopscore.helper.BlockHelpers;
 
 import java.util.Map;
 import java.util.Optional;
@@ -25,27 +22,16 @@ import java.util.function.Supplier;
  * A capability proxy.
  * @author rubensworks
  */
-public class BlockEntityCapabilityProxy extends CyclopsBlockEntity {
+public class BlockEntityCapabilityProxyNeoForge extends BlockEntityCapabilityProxyCommon {
 
     private final Map<Pair<BlockPos, BaseCapability<?, ?>>, Pair<?, ICapabilityInvalidationListener>> cachedCapabilities = Maps.newHashMap();
 
-    // A flag that is set when this tile is checking for a target's capability, to avoid infinite loops.
-    protected boolean handling = false;
-
-    public BlockEntityCapabilityProxy(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntriesNeoForge.TILE_ENTITY_CAPABILITY_PROXY.get(), blockPos, blockState);
+    public BlockEntityCapabilityProxyNeoForge(BlockPos blockPos, BlockState blockState) {
+        super(RegistryEntries.TILE_ENTITY_CAPABILITY_PROXY.value(), blockPos, blockState);
     }
 
-    protected BlockEntityCapabilityProxy(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState) {
+    protected BlockEntityCapabilityProxyNeoForge(BlockEntityType<?> type, BlockPos blockPos, BlockState blockState) {
         super(type, blockPos, blockState);
-    }
-
-    public Direction getFacing() {
-        return BlockHelpers.getSafeBlockStateProperty(getLevel().getBlockState(getBlockPos()), BlockCapabilityProxy.FACING, Direction.UP);
-    }
-
-    public static BlockPos getTargetPos(BlockPos source, Direction facing) {
-        return source.relative(facing);
     }
 
     protected BlockPos getTargetPos(Level worldIn, BlockCapability<?, ?> capability, BlockPos source) {

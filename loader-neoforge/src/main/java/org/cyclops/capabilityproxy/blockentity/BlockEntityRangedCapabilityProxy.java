@@ -11,7 +11,7 @@ import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
  * A ranged capability proxy.
  * @author rubensworks
  */
-public class BlockEntityRangedCapabilityProxy extends BlockEntityCapabilityProxy {
+public class BlockEntityRangedCapabilityProxy extends BlockEntityCapabilityProxyNeoForge {
 
     public BlockEntityRangedCapabilityProxy(BlockPos blockPos, BlockState blockState) {
         super(RegistryEntriesNeoForge.TILE_ENTITY_RANGED_CAPABILITY_PROXY.get(), blockPos, blockState);
