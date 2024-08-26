@@ -13,11 +13,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
 import org.cyclops.capabilityproxy.Reference;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxy;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyCommon;
 
 import java.util.OptionalDouble;
 
@@ -25,7 +24,7 @@ import java.util.OptionalDouble;
  * Renders an overlay showing the target of ranged proxies when a ranged proxy is held in hand.
  * @author rubensworks
  */
-public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<BlockEntityRangedCapabilityProxy> {
+public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<BlockEntityCapabilityProxyCommon> {
 
     public static final RenderType RENDER_TYPE_LINE = RenderType.create(Reference.MOD_ID + "line",
             DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.DEBUG_LINES, 128, false, false, RenderType.CompositeState.builder()
@@ -41,12 +40,7 @@ public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<Bloc
     }
 
     @Override
-    public AABB getRenderBoundingBox(BlockEntityRangedCapabilityProxy blockEntity) {
-        return new AABB(blockEntity.getBlockPos()).inflate(BlockRangedCapabilityProxyConfig.range);
-    }
-
-    @Override
-    public void render(BlockEntityRangedCapabilityProxy tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+    public void render(BlockEntityCapabilityProxyCommon tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
         Player player = Minecraft.getInstance().player;
         if (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY.value()
                 || player.getItemInHand(InteractionHand.OFF_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY.value()) {
@@ -74,7 +68,7 @@ public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<Bloc
     }
 
     @Override
-    public boolean shouldRenderOffScreen(BlockEntityRangedCapabilityProxy te) {
+    public boolean shouldRenderOffScreen(BlockEntityCapabilityProxyCommon te) {
         return true;
     }
 }

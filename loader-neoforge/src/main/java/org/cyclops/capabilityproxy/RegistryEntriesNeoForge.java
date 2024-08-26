@@ -6,7 +6,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxy;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxy;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
 
 /**
@@ -17,7 +16,6 @@ import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityPr
 public class RegistryEntriesNeoForge { // TODO: rm
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityItemCapabilityProxy>> TILE_ENTITY_ITEM_CAPABILITY_PROXY = DeferredHolder.create(Registries.BLOCK_ENTITY_TYPE, ResourceLocation.parse("capabilityproxy:item_capability_proxy"));
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityRangedCapabilityProxy>> TILE_ENTITY_RANGED_CAPABILITY_PROXY = DeferredHolder.create(Registries.BLOCK_ENTITY_TYPE, ResourceLocation.parse("capabilityproxy:ranged_capability_proxy"));
 
     public static final DeferredHolder<MenuType<?>, MenuType<ContainerItemCapabilityProxy>> CONTAINER_ITEM_CAPABILITY_PROXY = DeferredHolder.create(Registries.MENU, ResourceLocation.parse("capabilityproxy:item_capability_proxy"));
 

@@ -4,17 +4,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapability;
-import org.cyclops.capabilityproxy.RegistryEntriesNeoForge;
+import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 
 /**
  * A ranged capability proxy.
  * @author rubensworks
  */
-public class BlockEntityRangedCapabilityProxy extends BlockEntityCapabilityProxyNeoForge {
+public class BlockEntityRangedCapabilityProxyNeoForge extends BlockEntityCapabilityProxyNeoForge {
 
-    public BlockEntityRangedCapabilityProxy(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntriesNeoForge.TILE_ENTITY_RANGED_CAPABILITY_PROXY.get(), blockPos, blockState);
+    public BlockEntityRangedCapabilityProxyNeoForge(BlockPos blockPos, BlockState blockState) {
+        super(RegistryEntries.TILE_ENTITY_RANGED_CAPABILITY_PROXY.value(), blockPos, blockState);
     }
 
     @Override

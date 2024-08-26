@@ -8,22 +8,22 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.RegistryEntries;
-import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxy;
+import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxyNeoForge;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
 import org.cyclops.cyclopscore.helper.MinecraftHelpers;
 
 /**
- * Config for the {@link BlockEntityRangedCapabilityProxy}.
+ * Config for the {@link BlockEntityRangedCapabilityProxyNeoForge}.
  * @author rubensworks
  *
  */
-public class BlockEntityRangedCapabilityProxyConfig extends BlockEntityConfig<BlockEntityRangedCapabilityProxy> {
+public class BlockEntityRangedCapabilityProxyNeoForgeConfig extends BlockEntityConfig<BlockEntityRangedCapabilityProxyNeoForge> {
 
-    public BlockEntityRangedCapabilityProxyConfig() {
+    public BlockEntityRangedCapabilityProxyNeoForgeConfig() {
         super(
                 CapabilityProxyNeoForge._instance,
                 "ranged_capability_proxy",
-                (eConfig) -> new BlockEntityType<>(BlockEntityRangedCapabilityProxy::new,
+                (eConfig) -> new BlockEntityType<>(BlockEntityRangedCapabilityProxyNeoForge::new,
                         Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value()), null)
         );
         CapabilityProxyNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
@@ -48,7 +48,7 @@ public class BlockEntityRangedCapabilityProxyConfig extends BlockEntityConfig<Bl
 
     @OnlyIn(Dist.CLIENT)
     private void registerClientSide() {
-        CapabilityProxyNeoForge._instance.getProxy().registerRenderer(getInstance(), RenderTileRangedCapabilityProxy::new);
+        CapabilityProxyNeoForge._instance.getProxy().registerRenderer(getInstance(), RenderTileRangedCapabilityProxyNeoForge::new);
     }
 
 }

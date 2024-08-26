@@ -15,7 +15,8 @@ import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForg
 import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyNeoForgeConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyNeoForge;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyNeoForgeConfig;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxy;
 import org.cyclops.capabilityproxy.proxy.CommonProxy;
@@ -68,12 +69,12 @@ public class CapabilityProxyNeoForge extends ModBaseVersionable<CapabilityProxyN
         configHandler.addConfigurable(new BlockCapabilityProxyConfig<>(this, BlockEntityCapabilityProxyNeoForge::new));
         configHandler.addConfigurable(new org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig<>(this, BlockEntityEntityCapabilityProxyNeoForge::new));
         configHandler.addConfigurable(new BlockItemCapabilityProxyConfig());
-        configHandler.addConfigurable(new BlockRangedCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockRangedCapabilityProxyConfig<>(this, BlockEntityRangedCapabilityProxyNeoForge::new));
 
         configHandler.addConfigurable(new BlockEntityCapabilityProxyNeoForgeConfig());
         configHandler.addConfigurable(new BlockEntityEntityCapabilityProxyNeoForgeConfig());
         configHandler.addConfigurable(new BlockEntityItemCapabilityProxyConfig());
-        configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyNeoForgeConfig());
 
         configHandler.addConfigurable(new ContainerItemCapabilityProxyConfig());
     }
