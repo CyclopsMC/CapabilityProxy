@@ -13,17 +13,17 @@ import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
 import java.util.Map;
 
 /**
- * Config for the {@link BlockEntityItemCapabilityProxy}.
+ * Config for the {@link BlockEntityItemCapabilityProxyNeoForge}.
  * @author rubensworks
  *
  */
-public class BlockEntityItemCapabilityProxyConfig extends BlockEntityConfig<BlockEntityItemCapabilityProxy> {
+public class BlockEntityItemCapabilityProxyNeoForgeConfig extends BlockEntityConfig<BlockEntityItemCapabilityProxyNeoForge> {
 
-    public BlockEntityItemCapabilityProxyConfig() {
+    public BlockEntityItemCapabilityProxyNeoForgeConfig() {
         super(
                 CapabilityProxyNeoForge._instance,
                 "item_capability_proxy",
-                (eConfig) -> new BlockEntityType<>(BlockEntityItemCapabilityProxy::new,
+                (eConfig) -> new BlockEntityType<>(BlockEntityItemCapabilityProxyNeoForge::new,
                         Sets.newHashSet(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY.value()), null)
         );
         CapabilityProxyNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
@@ -31,7 +31,7 @@ public class BlockEntityItemCapabilityProxyConfig extends BlockEntityConfig<Bloc
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         // Reset block to entity cap mapping
-        BlockEntityItemCapabilityProxy.BLOCK_TO_ITEM_CAPABILITIES = Maps.newIdentityHashMap();
+        BlockEntityItemCapabilityProxyNeoForge.BLOCK_TO_ITEM_CAPABILITIES = Maps.newIdentityHashMap();
 
         // A temporary map for quickly getting item caps by name
         Map<String, ItemCapability> namedItemCapabilities = Maps.newHashMap();
@@ -48,7 +48,7 @@ public class BlockEntityItemCapabilityProxyConfig extends BlockEntityConfig<Bloc
             // Heuristically try to match block caps with item caps
             ItemCapability itemCapability = namedItemCapabilities.get(blockCapability.name().toString());
             if (itemCapability != null) {
-                BlockEntityItemCapabilityProxy.BLOCK_TO_ITEM_CAPABILITIES.put(blockCapability, itemCapability);
+                BlockEntityItemCapabilityProxyNeoForge.BLOCK_TO_ITEM_CAPABILITIES.put(blockCapability, itemCapability);
             }
         }
     }

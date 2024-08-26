@@ -4,13 +4,17 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyForge;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyForgeConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyForge;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyForgeConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyForge;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyForgeConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyForge;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyForgeConfig;
+import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxyForge;
 import org.cyclops.capabilityproxy.proxy.CommonProxyForge;
 import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
@@ -64,10 +68,14 @@ public class CapabilityProxyForge extends ModBaseForge<CapabilityProxyForge> {
 
         configHandler.addConfigurable(new BlockCapabilityProxyConfig<>(this, BlockEntityCapabilityProxyForge::new));
         configHandler.addConfigurable(new org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig<>(this, BlockEntityEntityCapabilityProxyForge::new));
+        configHandler.addConfigurable(new BlockItemCapabilityProxyConfig<>(this, BlockEntityItemCapabilityProxyForge::new));
         configHandler.addConfigurable(new BlockRangedCapabilityProxyConfig<>(this, BlockEntityRangedCapabilityProxyForge::new));
 
         configHandler.addConfigurable(new BlockEntityCapabilityProxyForgeConfig());
         configHandler.addConfigurable(new BlockEntityEntityCapabilityProxyForgeConfig());
+        configHandler.addConfigurable(new BlockEntityItemCapabilityProxyForgeConfig());
         configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyForgeConfig());
+
+        configHandler.addConfigurable(new ContainerItemCapabilityProxyConfig<>(this));
     }
 }

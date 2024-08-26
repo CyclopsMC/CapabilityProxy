@@ -14,7 +14,8 @@ import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForg
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForgeConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyNeoForgeConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyNeoForge;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyNeoForgeConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyNeoForgeConfig;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
@@ -68,15 +69,15 @@ public class CapabilityProxyNeoForge extends ModBaseVersionable<CapabilityProxyN
 
         configHandler.addConfigurable(new BlockCapabilityProxyConfig<>(this, BlockEntityCapabilityProxyNeoForge::new));
         configHandler.addConfigurable(new org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig<>(this, BlockEntityEntityCapabilityProxyNeoForge::new));
-        configHandler.addConfigurable(new BlockItemCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockItemCapabilityProxyConfig<>(this, BlockEntityItemCapabilityProxyNeoForge::new));
         configHandler.addConfigurable(new BlockRangedCapabilityProxyConfig<>(this, BlockEntityRangedCapabilityProxyNeoForge::new));
 
         configHandler.addConfigurable(new BlockEntityCapabilityProxyNeoForgeConfig());
         configHandler.addConfigurable(new BlockEntityEntityCapabilityProxyNeoForgeConfig());
-        configHandler.addConfigurable(new BlockEntityItemCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockEntityItemCapabilityProxyNeoForgeConfig());
         configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyNeoForgeConfig());
 
-        configHandler.addConfigurable(new ContainerItemCapabilityProxyConfig());
+        configHandler.addConfigurable(new ContainerItemCapabilityProxyConfig<>(this));
     }
 
     /**

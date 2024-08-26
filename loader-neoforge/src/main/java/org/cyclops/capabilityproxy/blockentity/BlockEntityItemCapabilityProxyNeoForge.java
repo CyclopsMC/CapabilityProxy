@@ -2,13 +2,6 @@ package org.cyclops.capabilityproxy.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapability;
@@ -16,13 +9,8 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import org.cyclops.capabilityproxy.RegistryEntriesNeoForge;
-import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
-import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
-import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import org.cyclops.cyclopscore.fluid.FluidHandlerWrapper;
-import org.cyclops.cyclopscore.helper.BlockHelpers;
-import org.cyclops.cyclopscore.inventory.SimpleInventory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,59 +20,23 @@ import java.util.Map;
  * An item capability proxy.
  * @author rubensworks
  */
-public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implements MenuProvider {
+public class BlockEntityItemCapabilityProxyNeoForge extends BlockEntityItemCapabilityProxyCommon {
 
     public static Map<BlockCapability<?, ?>, ItemCapability<?, ?>> BLOCK_TO_ITEM_CAPABILITIES;
 
-    private final SimpleInventory inventory;
-
-    public BlockEntityItemCapabilityProxy(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntriesNeoForge.TILE_ENTITY_ITEM_CAPABILITY_PROXY.get(), blockPos, blockState);
-        this.inventory = new SimpleInventory(1, 1) {
-            @Override
-            public void setItem(int slotId, ItemStack itemstack) {
-                boolean wasEmpty = getItem(slotId).isEmpty();
-                super.setItem(slotId, itemstack);
-                boolean isEmpty = itemstack.isEmpty();
-                if (wasEmpty != isEmpty) {
-                    getLevel().setBlockAndUpdate(getBlockPos(), getLevel().getBlockState(getBlockPos())
-                            .setValue(BlockItemCapabilityProxy.INACTIVE, isEmpty));
-                } else {
-                    // Trigger a block update anyway, so nearby blocks can recheck capabilities.
-                    BlockHelpers.markForUpdate(getLevel(), getBlockPos());
-                }
-                level.invalidateCapabilities(getBlockPos());
-            }
-        };
+    public BlockEntityItemCapabilityProxyNeoForge(BlockPos blockPos, BlockState blockState) {
+        super(blockPos, blockState);
     }
 
     @Override
-    public void read(CompoundTag tag, HolderLookup.Provider provider) {
-        super.read(tag, provider);
-        this.inventory.read(provider, tag);
-    }
-
-    @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
-        this.inventory.write(provider, tag);
-    }
-
-    public SimpleInventory getInventory() {
-        return inventory;
-    }
-
-    public Direction getFacing() {
-        return BlockHelpers.getSafeBlockStateProperty(getLevel().getBlockState(getBlockPos()), BlockItemCapabilityProxy.FACING, Direction.UP);
-    }
-
-    protected ItemStack getContents() {
-        return this.inventory.getItem(0);
+    protected void onInventoryChanged() {
+        super.onInventoryChanged();
+        level.invalidateCapabilities(getBlockPos());
     }
 
     public <T, C1, C2> T getCapability(BlockCapability<T, C1> blockCapability, C1 context) {
         if (context instanceof Direction && context == getFacing() && blockCapability == Capabilities.ItemHandler.BLOCK) {
-            return (T) getInventory().getItemHandler();
+            return (T) new InvWrapper(getInventory());
         }
 
         ItemStack itemStack = getContents();
@@ -101,17 +53,6 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
         return cap;
     }
 
-    @Override
-    public Component getDisplayName() {
-        return Component.translatable("block.capabilityproxy.item_capability_proxy");
-    }
-
-    @Nullable
-    @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        return new ContainerItemCapabilityProxy(id, playerInventory, this.getInventory());
-    }
-
     @Nullable
     public static <T, C1, C2> ItemCapability<T, C2> blockCapabilityToItemCapability(BlockCapability<T, C1> capability) {
         return (ItemCapability<T, C2>) BLOCK_TO_ITEM_CAPABILITIES.get(capability);
@@ -120,16 +61,16 @@ public class BlockEntityItemCapabilityProxy extends CyclopsBlockEntity implement
     public static class FluidHandlerWrapperItem extends FluidHandlerWrapper implements IFluidHandlerItem {
 
         private final IFluidHandlerItem fluidHandler;
-        private final BlockEntityItemCapabilityProxy tile;
+        private final BlockEntityItemCapabilityProxyNeoForge tile;
 
-        public FluidHandlerWrapperItem(IFluidHandlerItem fluidHandler, BlockEntityItemCapabilityProxy tile) {
+        public FluidHandlerWrapperItem(IFluidHandlerItem fluidHandler, BlockEntityItemCapabilityProxyNeoForge tile) {
             super(fluidHandler);
             this.fluidHandler = fluidHandler;
             this.tile = tile;
         }
 
         protected void updateContainerSlot() {
-            tile.inventory.setItem(0, getContainer());
+            tile.getInventory().setItem(0, getContainer());
         }
 
         @Override

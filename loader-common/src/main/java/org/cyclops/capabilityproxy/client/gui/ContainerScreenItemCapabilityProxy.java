@@ -6,13 +6,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.cyclops.capabilityproxy.Reference;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
-import org.cyclops.cyclopscore.client.gui.container.ContainerScreenExtended;
+import org.cyclops.cyclopscore.client.gui.container.ContainerScreenExtendedCommon;
 
 /**
  * Gui for the item capability proxy.
  * @author rubensworks
  */
-public class ContainerScreenItemCapabilityProxy extends ContainerScreenExtended<ContainerItemCapabilityProxy> {
+public class ContainerScreenItemCapabilityProxy extends ContainerScreenExtendedCommon<ContainerItemCapabilityProxy> {
 
     public ContainerScreenItemCapabilityProxy(ContainerItemCapabilityProxy container, Inventory inventory, Component title) {
         super(container, inventory, title);
