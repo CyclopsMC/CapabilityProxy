@@ -10,6 +10,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -17,29 +18,31 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxy;
-import org.cyclops.cyclopscore.block.BlockWithEntity;
+import org.cyclops.cyclopscore.block.BlockWithEntityCommon;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntityCommon;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * This block will forward capabilities from an entity at the target side to all sides.
  * @author josephcsible
  */
-public class BlockEntityCapabilityProxy extends BlockWithEntity {
+public class BlockEntityCapabilityProxy extends BlockWithEntityCommon {
 
-    public static final MapCodec<BlockEntityCapabilityProxy> CODEC = simpleCodec(BlockEntityCapabilityProxy::new);
+    public final MapCodec<BlockEntityCapabilityProxy> codec;
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    public BlockEntityCapabilityProxy(Block.Properties properties) {
-        super(properties, BlockEntityEntityCapabilityProxy::new);
+    public BlockEntityCapabilityProxy(Block.Properties properties, BiFunction<BlockPos, BlockState, ? extends CyclopsBlockEntityCommon> blockEntitySupplier) {
+        super(properties, blockEntitySupplier);
+        this.codec = BlockBehaviour.simpleCodec(p -> new BlockEntityCapabilityProxy(p, blockEntitySupplier));
     }
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
+        return codec;
     }
 
     @Override

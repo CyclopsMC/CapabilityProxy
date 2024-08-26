@@ -12,7 +12,8 @@ import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForgeConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyNeoForge;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyNeoForgeConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
@@ -65,12 +66,12 @@ public class CapabilityProxyNeoForge extends ModBaseVersionable<CapabilityProxyN
         configHandler.addConfigurable(new GeneralConfig(this));
 
         configHandler.addConfigurable(new BlockCapabilityProxyConfig<>(this, BlockEntityCapabilityProxyNeoForge::new));
-        configHandler.addConfigurable(new org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig());
+        configHandler.addConfigurable(new org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig<>(this, BlockEntityEntityCapabilityProxyNeoForge::new));
         configHandler.addConfigurable(new BlockItemCapabilityProxyConfig());
         configHandler.addConfigurable(new BlockRangedCapabilityProxyConfig());
 
         configHandler.addConfigurable(new BlockEntityCapabilityProxyNeoForgeConfig());
-        configHandler.addConfigurable(new BlockEntityEntityCapabilityProxyConfig());
+        configHandler.addConfigurable(new BlockEntityEntityCapabilityProxyNeoForgeConfig());
         configHandler.addConfigurable(new BlockEntityItemCapabilityProxyConfig());
         configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyConfig());
 

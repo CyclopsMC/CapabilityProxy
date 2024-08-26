@@ -7,9 +7,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.EntityCapability;
-import org.cyclops.capabilityproxy.RegistryEntriesNeoForge;
-import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
-import org.cyclops.cyclopscore.helper.BlockHelpers;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -19,16 +16,12 @@ import java.util.Map;
  * An entity capability proxy.
  * @author josephcsible
  */
-public class BlockEntityEntityCapabilityProxy extends CyclopsBlockEntity {
+public class BlockEntityEntityCapabilityProxyNeoForge extends BlockEntityEntityCapabilityProxyCommon {
 
     public static Map<BlockCapability<?, ?>, EntityCapability<?, ?>> BLOCK_TO_ENTITY_CAPABILITIES;
 
-    public BlockEntityEntityCapabilityProxy(BlockPos blockPos, BlockState blockState) {
-        super(RegistryEntriesNeoForge.TILE_ENTITY_ENTITY_CAPABILITY_PROXY.get(), blockPos, blockState);
-    }
-
-    public Direction getFacing() {
-        return BlockHelpers.getSafeBlockStateProperty(getLevel().getBlockState(getBlockPos()), org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxy.FACING, Direction.UP);
+    public BlockEntityEntityCapabilityProxyNeoForge(BlockPos blockPos, BlockState blockState) {
+        super(blockPos, blockState);
     }
 
     protected <T, C> List<Entity> getEntities(EntityCapability<T, C> capability) {
