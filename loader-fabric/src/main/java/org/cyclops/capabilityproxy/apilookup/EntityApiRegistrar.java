@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyFabricConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyFabric;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,13 +26,6 @@ import java.util.Map;
  */
 public class EntityApiRegistrar {
 
-    public static final EntityApiLookup<Storage<ItemVariant>, @Nullable Direction> SIDED =
-            EntityApiLookup.get(ResourceLocation.fromNamespaceAndPath("fabric", "sided_item_storage"), Storage.asClass(), Direction.class);
-    static {
-        // TODO: this is just for testing.
-        SIDED.registerForType((entity, context) -> InventoryStorage.of(entity.getInventory(), context), EntityType.PLAYER);
-    }
-
     private boolean initialized = false;
 
     public void initializeCapabilityRegistrationsIfNeeded(BlockEntityType<? extends BlockEntityEntityCapabilityProxyFabric> blockEntityType) {
@@ -41,6 +35,13 @@ public class EntityApiRegistrar {
             // The following force-loads the default Fabric capabilities
             FluidStorage.SIDED.apiClass();
             ItemStorage.SIDED.apiClass();
+
+            // Register storage for players if enabled
+            if (BlockEntityCapabilityProxyFabricConfig.registerPlayerItemStorage) {
+                EntityApiLookup<Storage<ItemVariant>, @Nullable Direction> SIDED =
+                        EntityApiLookup.get(ResourceLocation.fromNamespaceAndPath("fabric", "sided_item_storage"), Storage.asClass(), Direction.class);
+                SIDED.registerForType((entity, context) -> InventoryStorage.of(entity.getInventory(), context), EntityType.PLAYER);
+            }
 
             Map<ResourceLocation, EntityApiLookup<?, ?>> entityCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<EntityApiLookup<?, ?>>) (Class) EntityApiLookupImpl.class);
             Map<ResourceLocation, BlockApiLookup<?, ?>> blockCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<BlockApiLookup<?, ?>>) (Class) BlockApiLookupImpl.class);

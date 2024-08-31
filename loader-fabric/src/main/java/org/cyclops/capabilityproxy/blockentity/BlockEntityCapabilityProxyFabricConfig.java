@@ -5,6 +5,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.cyclops.capabilityproxy.CapabilityProxyFabric;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.apilookup.BlockApiRegistrar;
+import org.cyclops.cyclopscore.config.ConfigurablePropertyCommon;
+import org.cyclops.cyclopscore.config.ModConfigLocation;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfigCommon;
 
 /**
@@ -13,6 +15,9 @@ import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfigCommon;
  *
  */
 public class BlockEntityCapabilityProxyFabricConfig extends BlockEntityConfigCommon<BlockEntityCapabilityProxyFabric, CapabilityProxyFabric> {
+
+    @ConfigurablePropertyCommon(category = "machine", comment = "If the item storage capability should be exposed for player inventories.", configLocation = ModConfigLocation.COMMON)
+    public static boolean registerPlayerItemStorage = true;
 
     public static BlockApiRegistrar blockApiRegistrar;
 
