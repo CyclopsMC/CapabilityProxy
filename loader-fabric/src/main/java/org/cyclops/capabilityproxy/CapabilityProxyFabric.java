@@ -4,8 +4,11 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
+import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyFabric;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyFabricConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyFabric;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyFabricConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxyFabric;
 import org.cyclops.capabilityproxy.proxy.CommonProxyFabric;
 import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
@@ -56,7 +59,9 @@ public class CapabilityProxyFabric extends ModBaseFabric<CapabilityProxyFabric> 
         configHandler.addConfigurable(new GeneralConfig(this));
 
         configHandler.addConfigurable(new BlockCapabilityProxyConfig<>(this, BlockEntityCapabilityProxyFabric::new));
+        configHandler.addConfigurable(new BlockRangedCapabilityProxyConfig<>(this, BlockEntityRangedCapabilityProxyFabric::new));
 
         configHandler.addConfigurable(new BlockEntityCapabilityProxyFabricConfig());
+        configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyFabricConfig());
     }
 }

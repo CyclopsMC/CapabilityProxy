@@ -23,7 +23,7 @@ public class BlockApiRegistrar {
 
     private boolean initialized = false;
 
-    public void initializeCapabilityRegistrationsIfNeeded(BlockEntityType<BlockEntityCapabilityProxyFabric> blockEntityType) {
+    public void initializeCapabilityRegistrationsIfNeeded(BlockEntityType<? extends BlockEntityCapabilityProxyFabric> blockEntityType) {
         if (!initialized) {
             initialized = true;
         }
@@ -37,7 +37,7 @@ public class BlockApiRegistrar {
         }
     }
 
-    public <T, C> void registerCapability(BlockEntityType<BlockEntityCapabilityProxyFabric> blockEntityType, BlockApiLookup<T, C> blockApiLookup) {
+    public <T, C> void registerCapability(BlockEntityType<? extends BlockEntityCapabilityProxyFabric> blockEntityType, BlockApiLookup<T, C> blockApiLookup) {
         blockApiLookup.registerForBlockEntity((blockEntity, context) -> blockEntity.getCapability(blockApiLookup, context), blockEntityType);
     }
 
