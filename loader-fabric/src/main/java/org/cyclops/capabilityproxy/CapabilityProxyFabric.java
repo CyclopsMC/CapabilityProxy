@@ -7,6 +7,8 @@ import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyFabric;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyFabricConfig;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyFabric;
+import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyFabricConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyFabric;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyFabricConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxyFabric;
@@ -59,9 +61,11 @@ public class CapabilityProxyFabric extends ModBaseFabric<CapabilityProxyFabric> 
         configHandler.addConfigurable(new GeneralConfig(this));
 
         configHandler.addConfigurable(new BlockCapabilityProxyConfig<>(this, BlockEntityCapabilityProxyFabric::new));
+        configHandler.addConfigurable(new org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxyConfig<>(this, BlockEntityEntityCapabilityProxyFabric::new));
         configHandler.addConfigurable(new BlockRangedCapabilityProxyConfig<>(this, BlockEntityRangedCapabilityProxyFabric::new));
 
         configHandler.addConfigurable(new BlockEntityCapabilityProxyFabricConfig());
+        configHandler.addConfigurable(new BlockEntityEntityCapabilityProxyFabricConfig());
         configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyFabricConfig());
     }
 }
