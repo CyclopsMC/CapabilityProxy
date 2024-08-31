@@ -3,7 +3,9 @@ package org.cyclops.capabilityproxy.apilookup;
 import com.google.common.collect.Maps;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.lookup.v1.entity.EntityApiLookup;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.impl.lookup.block.BlockApiLookupImpl;
@@ -35,19 +37,23 @@ public class EntityApiRegistrar {
     public void initializeCapabilityRegistrationsIfNeeded(BlockEntityType<? extends BlockEntityEntityCapabilityProxyFabric> blockEntityType) {
         if (!initialized) {
             initialized = true;
-        }
 
-        Map<ResourceLocation, EntityApiLookup<?, ?>> entityCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<EntityApiLookup<?, ?>>) (Class) EntityApiLookupImpl.class);
-        Map<ResourceLocation, BlockApiLookup<?, ?>> blockCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<BlockApiLookup<?, ?>>) (Class) BlockApiLookupImpl.class);
+            // The following force-loads the default Fabric capabilities
+            FluidStorage.SIDED.apiClass();
+            ItemStorage.SIDED.apiClass();
 
-        BlockEntityEntityCapabilityProxyFabric.BLOCK_TO_ENTITY_CAPABILITIES = Maps.newIdentityHashMap();
-        for (Map.Entry<ResourceLocation, BlockApiLookup<?, ?>> entry : blockCapabilities.entrySet()) {
-            registerCapability(blockEntityType, entry.getValue());
+            Map<ResourceLocation, EntityApiLookup<?, ?>> entityCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<EntityApiLookup<?, ?>>) (Class) EntityApiLookupImpl.class);
+            Map<ResourceLocation, BlockApiLookup<?, ?>> blockCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<BlockApiLookup<?, ?>>) (Class) BlockApiLookupImpl.class);
 
-            // Heuristically try to match block caps with entity caps
-            EntityApiLookup<?, ?> entityCapability = entityCapabilities.get(entry.getKey());
-            if (entityCapability != null) {
-                BlockEntityEntityCapabilityProxyFabric.BLOCK_TO_ENTITY_CAPABILITIES.put(entry.getValue(), entityCapability);
+            BlockEntityEntityCapabilityProxyFabric.BLOCK_TO_ENTITY_CAPABILITIES = Maps.newIdentityHashMap();
+            for (Map.Entry<ResourceLocation, BlockApiLookup<?, ?>> entry : blockCapabilities.entrySet()) {
+                registerCapability(blockEntityType, entry.getValue());
+
+                // Heuristically try to match block caps with entity caps
+                EntityApiLookup<?, ?> entityCapability = entityCapabilities.get(entry.getKey());
+                if (entityCapability != null) {
+                    BlockEntityEntityCapabilityProxyFabric.BLOCK_TO_ENTITY_CAPABILITIES.put(entry.getValue(), entityCapability);
+                }
             }
         }
     }

@@ -18,14 +18,14 @@ public class BlockApiRegistrar {
     public void initializeCapabilityRegistrationsIfNeeded(BlockEntityType<? extends BlockEntityCapabilityProxyFabric> blockEntityType) {
         if (!initialized) {
             initialized = true;
-        }
 
-        // The following force-loads the default Fabric capabilities
-        FluidStorage.SIDED.apiClass();
-        ItemStorage.SIDED.apiClass();
+            // The following force-loads the default Fabric capabilities
+            FluidStorage.SIDED.apiClass();
+            ItemStorage.SIDED.apiClass();
 
-        for (BlockApiLookup<?, ?> capability : TypedApiHelpers.getTypedApiLookups((Class<BlockApiLookup<?, ?>>) (Class) BlockApiLookupImpl.class)) {
-            registerCapability(blockEntityType, capability);
+            for (BlockApiLookup<?, ?> capability : TypedApiHelpers.getTypedApiLookups((Class<BlockApiLookup<?, ?>>) (Class) BlockApiLookupImpl.class)) {
+                registerCapability(blockEntityType, capability);
+            }
         }
     }
 
