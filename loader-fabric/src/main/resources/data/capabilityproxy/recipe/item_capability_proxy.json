@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "capabilityproxy:capability_proxy"
+    },
+    {
+      "tag": "c:chests"
+    },
+    {
+      "tag": "c:ingots/gold"
+    }
+  ],
+  "result": {
+    "id": "capabilityproxy:item_capability_proxy"
+  }
+}
