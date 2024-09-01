@@ -21,6 +21,10 @@ dependencies {
     }
 
     modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${fabric_forgeconfigapiport_version}"
+
+    if (secrets.flopper_version_local) {
+        runtimeOnly "org.cyclops.flopper:flopper-${project.minecraft_version}-fabric:${secrets.flopper_version_local}:deobf"
+    }
 }
 
 task publishCurseForge(type: TaskPublishCurseForge) {

@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 /**
- * A helper class to register delegating block apis for the given block entity
+ * A helper class to register delegating entity apis for the given block entity
  * @author rubensworks
  */
 public class EntityApiRegistrar {
