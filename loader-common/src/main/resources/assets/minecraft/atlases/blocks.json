@@ -31,15 +31,7 @@
         },
         {
             "type": "minecraft:single",
-            "resource": "capabilityproxy:blocks/entity_capability_proxy_down_active"
-        },
-        {
-            "type": "minecraft:single",
             "resource": "capabilityproxy:blocks/entity_capability_proxy_side"
-        },
-        {
-            "type": "minecraft:single",
-            "resource": "capabilityproxy:blocks/entity_capability_proxy_side_active"
         },
         {
             "type": "minecraft:single",
@@ -81,23 +73,11 @@
         },
         {
             "type": "minecraft:single",
-            "resource": "capabilityproxy:blocks/ranged_capability_proxy_down_active"
-        },
-        {
-            "type": "minecraft:single",
             "resource": "capabilityproxy:blocks/ranged_capability_proxy_side"
         },
         {
             "type": "minecraft:single",
-            "resource": "capabilityproxy:blocks/ranged_capability_proxy_side_active"
-        },
-        {
-            "type": "minecraft:single",
             "resource": "capabilityproxy:blocks/ranged_capability_proxy_top"
-        },
-        {
-            "type": "minecraft:single",
-            "resource": "capabilityproxy:blocks/ranged_capability_proxy_top_active"
         }
     ]
 }
