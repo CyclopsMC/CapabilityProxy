@@ -1,6 +1,8 @@
 package org.cyclops.capabilityproxy;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.lookup.v1.entity.EntityApiLookup;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
@@ -21,6 +23,8 @@ import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
 import org.cyclops.cyclopscore.init.ModBaseFabric;
 import org.cyclops.cyclopscore.proxy.IClientProxyCommon;
 import org.cyclops.cyclopscore.proxy.ICommonProxyCommon;
+import org.jetbrains.annotations.Nullable;
+import team.reborn.energy.api.EnergyStorage;
 
 /**
  * The main mod class of CapabilityProxy.
@@ -32,6 +36,9 @@ public class CapabilityProxyFabric extends ModBaseFabric<CapabilityProxyFabric> 
      * The unique instance of this mod.
      */
     public static CapabilityProxyFabric _instance;
+
+    public static EntityApiLookup<EnergyStorage, @Nullable Void> ENERGY_STORAGE_ENTITY =
+            EntityApiLookup.get(ResourceLocation.fromNamespaceAndPath("teamreborn", "energy"), EnergyStorage.class, Void.class);
 
     public CapabilityProxyFabric() {
         super(Reference.MOD_ID, (instance) -> _instance = instance);

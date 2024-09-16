@@ -8,6 +8,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.cyclops.capabilityproxy.CapabilityProxyFabric;
+import team.reborn.energy.api.EnergyStorage;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -46,6 +48,10 @@ public class BlockEntityEntityCapabilityProxyFabric extends BlockEntityEntityCap
 
     @Nullable
     public static <T, C1, C2> EntityApiLookup<T, C2> blockCapabilityToEntityApiLookup(BlockApiLookup<T, C1> capability) {
+        // Custom override for energy storage
+        if (capability == EnergyStorage.SIDED) {
+            return (EntityApiLookup<T, C2>) CapabilityProxyFabric.ENERGY_STORAGE_ENTITY;
+        }
         return (EntityApiLookup<T, C2>) BLOCK_TO_ENTITY_CAPABILITIES.get(capability);
     }
 }

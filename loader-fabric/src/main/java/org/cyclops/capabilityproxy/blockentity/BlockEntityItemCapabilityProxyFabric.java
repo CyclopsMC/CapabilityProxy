@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import team.reborn.energy.api.EnergyStorage;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -58,6 +59,10 @@ public class BlockEntityItemCapabilityProxyFabric extends BlockEntityItemCapabil
         // Custom override for fluid storage
         if (capability == FluidStorage.SIDED) {
             return (ItemApiLookup<T, C2>) FluidStorage.ITEM;
+        }
+        // Custom override for energy storage
+        if (capability == EnergyStorage.SIDED) {
+            return (ItemApiLookup<T, C2>) EnergyStorage.ITEM;
         }
         return (ItemApiLookup<T, C2>) BLOCK_TO_ITEM_CAPABILITIES.get(capability);
     }
