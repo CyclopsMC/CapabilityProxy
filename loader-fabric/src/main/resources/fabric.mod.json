@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "org.cyclops.capabilityproxy.CapabilityProxyFabric"
+    ],
+    "fabric-gametest": [
+      "org.cyclops.capabilityproxy.gametest.GameTestsCommon"
     ]
   },
   "accessWidener" : "capabilityproxy.accesswidener",
