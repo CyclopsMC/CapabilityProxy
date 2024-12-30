@@ -15,11 +15,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyCommon;
-import org.cyclops.cyclopscore.block.BlockWithEntityCommon;
-import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntityCommon;
+import org.cyclops.cyclopscore.block.BlockWithEntity;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -29,16 +30,16 @@ import java.util.function.BiFunction;
  * This block will forward capabilities from the target side to all sides.
  * @author rubensworks
  */
-public class BlockCapabilityProxy extends BlockWithEntityCommon {
+public class BlockCapabilityProxy extends BlockWithEntity {
 
     public final MapCodec<BlockCapabilityProxy> codec;
 
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     public static final BooleanProperty INACTIVE = BooleanProperty.create("inactive");
 
     private Set<BlockPos> activatingBlockChain = null;
 
-    public BlockCapabilityProxy(Block.Properties properties, BiFunction<BlockPos, BlockState, ? extends CyclopsBlockEntityCommon> blockEntitySupplier) {
+    public BlockCapabilityProxy(Block.Properties properties, BiFunction<BlockPos, BlockState, ? extends CyclopsBlockEntity> blockEntitySupplier) {
         super(properties, blockEntitySupplier);
 
         this.codec = BlockBehaviour.simpleCodec(p -> new BlockCapabilityProxy(p, blockEntitySupplier));
@@ -90,16 +91,14 @@ public class BlockCapabilityProxy extends BlockWithEntityCommon {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        super.neighborChanged(state, world, pos, blockIn, fromPos, isMoving);
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block neighbourBlock, @Nullable Orientation orientation, boolean isMoving) {
+        super.neighborChanged(state, world, pos, neighbourBlock, orientation, isMoving);
         if (!world.isClientSide) {
             Direction facing = state.getValue(BlockCapabilityProxy.FACING);
-            if (pos.relative(facing).equals(fromPos)) {
-                boolean inactive = state.getValue(BlockCapabilityProxy.INACTIVE);
-                if (inactive != (world.getBlockEntity(pos.relative(facing)) == null)) {
-                    world.setBlockAndUpdate(pos, world.getBlockState(pos).setValue(INACTIVE, !inactive));
-                    world.updateNeighborsAtExceptFromFacing(pos, this, facing);
-                }
+            boolean inactive = state.getValue(BlockCapabilityProxy.INACTIVE);
+            if (inactive != (world.getBlockEntity(pos.relative(facing)) == null)) {
+                world.setBlockAndUpdate(pos, world.getBlockState(pos).setValue(INACTIVE, !inactive));
+                world.updateNeighborsAtExceptFromFacing(pos, this, facing, null);
             }
         }
     }

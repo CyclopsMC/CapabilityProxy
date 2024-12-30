@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "capabilityproxy:item/entity_capability_proxy"
+  }
+}

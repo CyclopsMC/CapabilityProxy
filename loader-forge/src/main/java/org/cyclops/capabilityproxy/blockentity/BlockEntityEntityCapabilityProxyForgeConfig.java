@@ -18,7 +18,7 @@ public class BlockEntityEntityCapabilityProxyForgeConfig extends BlockEntityConf
                 CapabilityProxyForge._instance,
                 "entity_capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityEntityCapabilityProxyForge::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_ENTITY_CAPABILITY_PROXY.value()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_ENTITY_CAPABILITY_PROXY.value()))
         );
     }
 

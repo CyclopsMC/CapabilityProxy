@@ -6,14 +6,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
-import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntityCommon;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 import org.cyclops.cyclopscore.helper.IModHelpers;
 
 /**
  * A capability proxy.
  * @author rubensworks
  */
-public class BlockEntityCapabilityProxyCommon extends CyclopsBlockEntityCommon {
+public class BlockEntityCapabilityProxyCommon extends CyclopsBlockEntity {
 
     // A flag that is set when this tile is checking for a target's capability, to avoid infinite loops.
     protected boolean handling = false;

@@ -14,9 +14,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
-import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntityCommon;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 import org.cyclops.cyclopscore.helper.IModHelpers;
-import org.cyclops.cyclopscore.inventory.SimpleInventoryCommon;
+import org.cyclops.cyclopscore.inventory.SimpleInventory;
 
 import javax.annotation.Nullable;
 
@@ -24,13 +24,13 @@ import javax.annotation.Nullable;
  * An item capability proxy.
  * @author rubensworks
  */
-public class BlockEntityItemCapabilityProxyCommon extends CyclopsBlockEntityCommon implements MenuProvider {
+public class BlockEntityItemCapabilityProxyCommon extends CyclopsBlockEntity implements MenuProvider {
 
-    private final SimpleInventoryCommon inventory;
+    private final SimpleInventory inventory;
 
     public BlockEntityItemCapabilityProxyCommon(BlockPos blockPos, BlockState blockState) {
         super(RegistryEntries.TILE_ENTITY_ITEM_CAPABILITY_PROXY.value(), blockPos, blockState);
-        this.inventory = new SimpleInventoryCommon(1, 1) {
+        this.inventory = new SimpleInventory(1, 1) {
             @Override
             public void setItem(int slotId, ItemStack itemstack) {
                 boolean wasEmpty = getItem(slotId).isEmpty();
@@ -64,7 +64,7 @@ public class BlockEntityItemCapabilityProxyCommon extends CyclopsBlockEntityComm
         this.inventory.write(provider, tag);
     }
 
-    public SimpleInventoryCommon getInventory() {
+    public SimpleInventory getInventory() {
         return inventory;
     }
 

@@ -54,11 +54,11 @@ public class GameTestsCommon {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_CAPABILITY_PROXY.value());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
-        helper.placeAt(player, itemStack, POS, Direction.NORTH);
+        helper.placeAt(player, itemStack, POS.south(), Direction.NORTH);
 
         helper.succeedIf(() -> {
-            helper.assertBlockPresent(RegistryEntries.BLOCK_CAPABILITY_PROXY.value(), POS.north());
-            helper.assertBlockProperty(POS.north(), BlockCapabilityProxy.FACING, Direction.SOUTH);
+            helper.assertBlockPresent(RegistryEntries.BLOCK_CAPABILITY_PROXY.value(), POS);
+            helper.assertBlockProperty(POS, BlockCapabilityProxy.FACING, Direction.SOUTH);
         });
     }
 
@@ -194,7 +194,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 3));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 3).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 3)), false));
-            helper.assertTrue(result.equals(InteractionResult.CONSUME), "Interaction failed");
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
         });
     }
 
@@ -234,7 +234,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(3, 5, 5));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(3, 5, 5).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(3, 5, 5)), false));
-            helper.assertTrue(result.equals(InteractionResult.CONSUME), "Interaction failed");
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
         });
     }
 
@@ -282,11 +282,11 @@ public class GameTestsCommon {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY.value());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
-        helper.placeAt(player, itemStack, POS, Direction.NORTH);
+        helper.placeAt(player, itemStack, POS.south(), Direction.NORTH);
 
         helper.succeedIf(() -> {
-            helper.assertBlockPresent(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value(), POS.north());
-            helper.assertBlockProperty(POS.north(), BlockRangedCapabilityProxy.FACING, Direction.SOUTH);
+            helper.assertBlockPresent(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value(), POS);
+            helper.assertBlockProperty(POS, BlockRangedCapabilityProxy.FACING, Direction.SOUTH);
         });
     }
 
@@ -391,7 +391,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 4));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 4).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 4)), false));
-            helper.assertTrue(result.equals(InteractionResult.CONSUME), "Interaction failed");
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
         });
     }
 
@@ -431,7 +431,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(3, 5, 6));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(3, 5, 6).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(3, 5, 6)), false));
-            helper.assertTrue(result.equals(InteractionResult.CONSUME), "Interaction failed");
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
         });
     }
 
@@ -515,11 +515,11 @@ public class GameTestsCommon {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ITEM_CAPABILITY_PROXY.value());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
-        helper.placeAt(player, itemStack, POS, Direction.NORTH);
+        helper.placeAt(player, itemStack, POS.south(), Direction.NORTH);
 
         helper.succeedIf(() -> {
-            helper.assertBlockPresent(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY.value(), POS.north());
-            helper.assertBlockProperty(POS.north(), BlockItemCapabilityProxy.FACING, Direction.SOUTH);
+            helper.assertBlockPresent(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY.value(), POS);
+            helper.assertBlockProperty(POS, BlockItemCapabilityProxy.FACING, Direction.SOUTH);
         });
     }
 
@@ -608,11 +608,11 @@ public class GameTestsCommon {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENTITY_CAPABILITY_PROXY.value());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
-        helper.placeAt(player, itemStack, POS, Direction.NORTH);
+        helper.placeAt(player, itemStack, POS.south(), Direction.NORTH);
 
         helper.succeedIf(() -> {
-            helper.assertBlockPresent(RegistryEntries.BLOCK_ENTITY_CAPABILITY_PROXY.value(), POS.north());
-            helper.assertBlockProperty(POS.north(), BlockEntityCapabilityProxy.FACING, Direction.SOUTH);
+            helper.assertBlockPresent(RegistryEntries.BLOCK_ENTITY_CAPABILITY_PROXY.value(), POS);
+            helper.assertBlockProperty(POS, BlockEntityCapabilityProxy.FACING, Direction.SOUTH);
         });
     }
 

@@ -8,7 +8,7 @@ import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.RegistryEntries;
-import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfigCommon;
 
 import java.util.Map;
 
@@ -17,14 +17,14 @@ import java.util.Map;
  * @author rubensworks
  *
  */
-public class BlockEntityItemCapabilityProxyNeoForgeConfig extends BlockEntityConfig<BlockEntityItemCapabilityProxyNeoForge> {
+public class BlockEntityItemCapabilityProxyNeoForgeConfig extends BlockEntityConfigCommon<BlockEntityItemCapabilityProxyNeoForge, CapabilityProxyNeoForge> {
 
     public BlockEntityItemCapabilityProxyNeoForgeConfig() {
         super(
                 CapabilityProxyNeoForge._instance,
                 "item_capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityItemCapabilityProxyNeoForge::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY.value()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY.value()))
         );
         CapabilityProxyNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
     }

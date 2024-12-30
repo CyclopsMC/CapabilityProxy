@@ -4,14 +4,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.cyclops.capabilityproxy.RegistryEntries;
-import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntityCommon;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 import org.cyclops.cyclopscore.helper.IModHelpers;
 
 /**
  * An entity capability proxy.
  * @author josephcsible
  */
-public class BlockEntityEntityCapabilityProxyCommon extends CyclopsBlockEntityCommon {
+public class BlockEntityEntityCapabilityProxyCommon extends CyclopsBlockEntity {
 
     public BlockEntityEntityCapabilityProxyCommon(BlockPos blockPos, BlockState blockState) {
         super(RegistryEntries.TILE_ENTITY_ENTITY_CAPABILITY_PROXY.value(), blockPos, blockState);

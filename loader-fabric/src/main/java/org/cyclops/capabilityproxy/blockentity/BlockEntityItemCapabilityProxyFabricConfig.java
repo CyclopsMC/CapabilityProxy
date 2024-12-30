@@ -21,7 +21,7 @@ public class BlockEntityItemCapabilityProxyFabricConfig extends BlockEntityConfi
                 CapabilityProxyFabric._instance,
                 "item_capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityItemCapabilityProxyFabric::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY.value()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_ITEM_CAPABILITY_PROXY.value()))
         );
         itemApiRegistrar = new ItemApiRegistrar();
     }

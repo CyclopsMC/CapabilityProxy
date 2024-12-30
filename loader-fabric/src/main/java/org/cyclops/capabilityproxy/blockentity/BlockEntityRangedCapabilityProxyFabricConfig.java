@@ -21,7 +21,7 @@ public class BlockEntityRangedCapabilityProxyFabricConfig extends BlockEntityCon
                 CapabilityProxyFabric._instance,
                 "ranged_capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityRangedCapabilityProxyFabric::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value()))
         );
         blockApiRegistrar = new BlockApiRegistrar();
     }

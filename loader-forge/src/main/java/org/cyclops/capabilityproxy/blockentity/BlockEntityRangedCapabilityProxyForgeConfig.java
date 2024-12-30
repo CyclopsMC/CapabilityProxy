@@ -21,7 +21,7 @@ public class BlockEntityRangedCapabilityProxyForgeConfig extends BlockEntityConf
                 CapabilityProxyForge._instance,
                 "ranged_capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityRangedCapabilityProxyForge::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value()))
         );
     }
 

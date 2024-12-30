@@ -10,19 +10,12 @@ import org.apache.logging.log4j.Level;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForge;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyNeoForgeConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyNeoForge;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyNeoForgeConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyNeoForge;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyNeoForgeConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyNeoForge;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyNeoForgeConfig;
+import org.cyclops.capabilityproxy.blockentity.*;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxy;
 import org.cyclops.capabilityproxy.proxy.CommonProxy;
 import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
-import org.cyclops.cyclopscore.init.ModBaseVersionable;
+import org.cyclops.cyclopscore.init.ModBaseNeoForge;
 import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
 
@@ -32,7 +25,7 @@ import org.cyclops.cyclopscore.proxy.ICommonProxy;
  *
  */
 @Mod(Reference.MOD_ID)
-public class CapabilityProxyNeoForge extends ModBaseVersionable<CapabilityProxyNeoForge> {
+public class CapabilityProxyNeoForge extends ModBaseNeoForge<CapabilityProxyNeoForge> {
 
     /**
      * The unique instance of this mod.

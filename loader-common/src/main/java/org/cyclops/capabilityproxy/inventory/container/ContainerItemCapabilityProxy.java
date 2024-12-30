@@ -4,17 +4,17 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import org.cyclops.capabilityproxy.RegistryEntries;
-import org.cyclops.cyclopscore.inventory.SimpleInventoryCommon;
-import org.cyclops.cyclopscore.inventory.container.InventoryContainerCommon;
+import org.cyclops.cyclopscore.inventory.SimpleInventory;
+import org.cyclops.cyclopscore.inventory.container.InventoryContainer;
 
 /**
  * Container for the item capability proxy.
  * @author rubensworks
  */
-public class ContainerItemCapabilityProxy extends InventoryContainerCommon {
+public class ContainerItemCapabilityProxy extends InventoryContainer {
 
     public ContainerItemCapabilityProxy(int id, Inventory playerInventory) {
-        this(id, playerInventory, new SimpleInventoryCommon(1, 1));
+        this(id, playerInventory, new SimpleInventory(1, 1));
     }
 
     public ContainerItemCapabilityProxy(int id, Inventory playerInventory, Container inventory) {

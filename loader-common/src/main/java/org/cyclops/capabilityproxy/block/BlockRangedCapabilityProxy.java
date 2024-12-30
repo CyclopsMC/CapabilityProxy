@@ -13,11 +13,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.cyclops.cyclopscore.block.BlockWithEntityCommon;
-import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntityCommon;
+import org.cyclops.cyclopscore.block.BlockWithEntity;
+import org.cyclops.cyclopscore.blockentity.CyclopsBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -28,13 +28,13 @@ import java.util.function.BiFunction;
  * This block will forward capabilities from the target's (at a range) side to all sides.
  * @author rubensworks
  */
-public class BlockRangedCapabilityProxy extends BlockWithEntityCommon {
+public class BlockRangedCapabilityProxy extends BlockWithEntity {
 
     public final MapCodec<BlockRangedCapabilityProxy> codec;
 
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
-    public BlockRangedCapabilityProxy(Block.Properties properties, BiFunction<BlockPos, BlockState, ? extends CyclopsBlockEntityCommon> blockEntitySupplier) {
+    public BlockRangedCapabilityProxy(Block.Properties properties, BiFunction<BlockPos, BlockState, ? extends CyclopsBlockEntity> blockEntitySupplier) {
         super(properties, blockEntitySupplier);
         codec = BlockBehaviour.simpleCodec(p -> new BlockRangedCapabilityProxy(p, blockEntitySupplier));
     }

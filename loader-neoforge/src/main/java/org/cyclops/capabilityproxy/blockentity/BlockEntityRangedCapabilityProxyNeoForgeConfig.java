@@ -9,22 +9,21 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxyNeoForge;
-import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
-import org.cyclops.cyclopscore.helper.MinecraftHelpers;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfigCommon;
 
 /**
  * Config for the {@link BlockEntityRangedCapabilityProxyNeoForge}.
  * @author rubensworks
  *
  */
-public class BlockEntityRangedCapabilityProxyNeoForgeConfig extends BlockEntityConfig<BlockEntityRangedCapabilityProxyNeoForge> {
+public class BlockEntityRangedCapabilityProxyNeoForgeConfig extends BlockEntityConfigCommon<BlockEntityRangedCapabilityProxyNeoForge, CapabilityProxyNeoForge> {
 
     public BlockEntityRangedCapabilityProxyNeoForgeConfig() {
         super(
                 CapabilityProxyNeoForge._instance,
                 "ranged_capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityRangedCapabilityProxyNeoForge::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_RANGED_CAPABILITY_PROXY.value()))
         );
         CapabilityProxyNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
     }
@@ -41,7 +40,7 @@ public class BlockEntityRangedCapabilityProxyNeoForgeConfig extends BlockEntityC
     @Override
     public void onRegistered() {
         super.onRegistered();
-        if(MinecraftHelpers.isClientSide()) {
+        if (getMod().getModHelpers().getMinecraftHelpers().isClientSide()) {
             registerClientSide();
         }
     }

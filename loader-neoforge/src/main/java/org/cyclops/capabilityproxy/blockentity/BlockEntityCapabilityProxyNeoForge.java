@@ -12,7 +12,7 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.ICapabilityInvalidationListener;
 import org.apache.commons.lang3.tuple.Pair;
 import org.cyclops.capabilityproxy.RegistryEntries;
-import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
+import org.cyclops.cyclopscore.helper.IModHelpersNeoForge;
 
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +40,7 @@ public class BlockEntityCapabilityProxyNeoForge extends BlockEntityCapabilityPro
 
     protected <T, C> T getTarget(BlockCapability<T, C> capability, Level targetWorld, BlockPos targetPos, C targetContext, Level originWorld, BlockPos originPos) {
         return getCapabilityCached(cachedCapabilities, capability, targetPos, targetWorld, targetPos, originWorld, originPos,
-                () -> BlockEntityHelpers.getCapability(targetWorld, targetPos, targetContext, capability));
+                () -> IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(targetWorld, targetPos, targetContext, capability));
     }
 
     public <T, C> T getCapability(BlockCapability<T, C> capability, C context) {

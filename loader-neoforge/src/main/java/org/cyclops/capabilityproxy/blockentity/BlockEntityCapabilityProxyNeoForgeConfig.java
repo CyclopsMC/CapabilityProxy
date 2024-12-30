@@ -6,21 +6,21 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.RegistryEntries;
-import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfig;
+import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfigCommon;
 
 /**
  * Config for the {@link BlockEntityCapabilityProxyNeoForge}.
  * @author rubensworks
  *
  */
-public class BlockEntityCapabilityProxyNeoForgeConfig extends BlockEntityConfig<BlockEntityCapabilityProxyNeoForge> {
+public class BlockEntityCapabilityProxyNeoForgeConfig extends BlockEntityConfigCommon<BlockEntityCapabilityProxyNeoForge, CapabilityProxyNeoForge> {
 
     public BlockEntityCapabilityProxyNeoForgeConfig() {
         super(
                 CapabilityProxyNeoForge._instance,
                 "capability_proxy",
                 (eConfig) -> new BlockEntityType<>(BlockEntityCapabilityProxyNeoForge::new,
-                        Sets.newHashSet(RegistryEntries.BLOCK_CAPABILITY_PROXY.value()), null)
+                        Sets.newHashSet(RegistryEntries.BLOCK_CAPABILITY_PROXY.value()))
         );
         CapabilityProxyNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
     }
