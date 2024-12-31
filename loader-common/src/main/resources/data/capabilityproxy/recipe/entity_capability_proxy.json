@@ -7,15 +7,9 @@
     "ECE"
   ],
   "key": {
-    "E": {
-      "item": "minecraft:ender_eye"
-    },
-    "C": {
-      "item": "minecraft:popped_chorus_fruit"
-    },
-    "P": {
-      "item": "capabilityproxy:capability_proxy"
-    }
+    "E": "minecraft:ender_eye",
+    "C": "minecraft:popped_chorus_fruit",
+    "P": "capabilityproxy:capability_proxy"
   },
   "result": {
     "id": "capabilityproxy:entity_capability_proxy"

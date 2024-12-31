@@ -7,12 +7,8 @@
     " E "
   ],
   "key": {
-    "E": {
-      "tag": "c:ender_pearls"
-    },
-    "P": {
-      "item": "capabilityproxy:capability_proxy"
-    }
+    "E": "#c:ender_pearls",
+    "P": "capabilityproxy:capability_proxy"
   },
   "result": {
     "id": "capabilityproxy:ranged_capability_proxy"

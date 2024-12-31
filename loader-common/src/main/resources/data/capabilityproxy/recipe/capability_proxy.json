@@ -7,15 +7,9 @@
     "IOI"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "O": {
-      "tag": "c:obsidians"
-    },
-    "N": {
-      "item": "minecraft:nether_wart"
-    }
+    "I": "#c:ingots/iron",
+    "O": "#c:obsidians",
+    "N": "minecraft:nether_wart"
   },
   "result": {
     "id": "capabilityproxy:capability_proxy"
