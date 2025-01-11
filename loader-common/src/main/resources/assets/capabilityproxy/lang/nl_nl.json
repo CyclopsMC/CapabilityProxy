@@ -2,11 +2,11 @@
     "_comment": "Blokken",
     "itemGroup.capabilityproxy": "Capability Proxy",
     "block.capabilityproxy.capability_proxy": "Mogelijkhedenproxy",
-    "block.capabilityproxy.capability_proxy.info": "Verschaf toegang tot de mogelijkheden van het doelblok met dit blok. Het doelblok moet een rechtstreeks aangrenzend blok zijn",
+    "block.capabilityproxy.capability_proxy.info": "Verstrek toegang tot de mogelijkheden van het doelblok met dit blok. Het doelblok moet een rechtstreeks aangrenzend blok zijn",
     "block.capabilityproxy.entity_capability_proxy": "Entiteitmogelijkhedenproxy",
-    "block.capabilityproxy.entity_capability_proxy.info": "Verschaf toegang tot de mogelijkheden van het entiteitdoelwit met dit blok. Het entiteitdoelwit moet zich in de rechtstreeks aangrendende blokruimte bevinden",
+    "block.capabilityproxy.entity_capability_proxy.info": "Verstrek toegang tot de mogelijkheden van het entiteitdoelwit met dit blok. Het entiteitdoelwit moet zich in de rechtstreeks aangrendende blokruimte bevinden",
     "block.capabilityproxy.item_capability_proxy": "Voorwerpmogelijkhedenproxy",
     "block.capabilityproxy.item_capability_proxy.info": "Verstrek toegang tot de mogelijkheden van het opgeslagen voorwerp met dit blok. Alleen de doelzijde is toegankelijk voor het overbrengen van het opgeslagen voorwerp.",
     "block.capabilityproxy.ranged_capability_proxy": "Afstandsmogelijkhedenproxy",
-    "block.capabilityproxy.ranged_capability_proxy.info": "Verschaf toegang tot de mogelijkheden van het doelblok met dit blok. Het doelblok is het dichtsbijzijnde toepasbare blok binnen een afstand van 16 blokken."
+    "block.capabilityproxy.ranged_capability_proxy.info": "Verstrek toegang tot de mogelijkheden van het doelblok met dit blok. Het doelblok is het dichtsbijzijnde toepasbare blok binnen een afstand van 16 blokken."
 }
