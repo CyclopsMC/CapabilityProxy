@@ -12,6 +12,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * An entity capability proxy.
@@ -39,7 +40,7 @@ public class BlockEntityEntityCapabilityProxyForge extends BlockEntityEntityCapa
         }
         Entity entity = entities.get(0);
         return BlockEntityCapabilityProxyForge.getCapabilityCached(cachedCapabilities, capability, entity.getId(),
-                () -> entity.getCapability(capability, getFacing().getOpposite()));
+                (Supplier<LazyOptional<T>>) () -> entity.getCapability(capability, getFacing().getOpposite())); // Cast is necessary to make it compile on Forge
     }
 
     @Override

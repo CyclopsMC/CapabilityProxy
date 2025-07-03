@@ -8,14 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyFabric;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyFabricConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyFabric;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyFabricConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyFabric;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyFabricConfig;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyFabric;
-import org.cyclops.capabilityproxy.blockentity.BlockEntityRangedCapabilityProxyFabricConfig;
+import org.cyclops.capabilityproxy.blockentity.*;
+import org.cyclops.capabilityproxy.gametest.GameTestsCommon;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxyFabric;
 import org.cyclops.capabilityproxy.proxy.CommonProxyFabric;
@@ -82,5 +76,10 @@ public class CapabilityProxyFabric extends ModBaseFabric<CapabilityProxyFabric> 
         configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyFabricConfig());
 
         configHandler.addConfigurable(new ContainerItemCapabilityProxyConfig<>(this));
+    }
+
+    @Override
+    public Class<?>[] getGameTestClasses() {
+        return new Class[]{ GameTestsCommon.class };
     }
 }

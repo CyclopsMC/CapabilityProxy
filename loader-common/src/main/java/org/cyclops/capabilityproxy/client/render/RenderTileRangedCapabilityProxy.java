@@ -1,11 +1,10 @@
 package org.cyclops.capabilityproxy.client.render;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -13,6 +12,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import org.cyclops.capabilityproxy.Reference;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
@@ -27,12 +27,12 @@ import java.util.OptionalDouble;
 public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<BlockEntityCapabilityProxyCommon> {
 
     public static final RenderType RENDER_TYPE_LINE = RenderType.create(Reference.MOD_ID + "line",
-            DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.DEBUG_LINES, 128, false, false, RenderType.CompositeState.builder()
-                    .setShaderState(RenderType.RENDERTYPE_LINES_SHADER)
-                    .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(1)))
+            128,
+            RenderPipelines.SECONDARY_BLOCK_OUTLINE,
+            RenderType.CompositeState.builder()
+                    .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(2)))
                     .setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING)
-                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-                    .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(true, false))
+                    .setOutputState(RenderStateShard.ITEM_ENTITY_TARGET)
                     .createCompositeState(false));
 
     public RenderTileRangedCapabilityProxy(BlockEntityRendererProvider.Context context) {
@@ -40,7 +40,7 @@ public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<Bloc
     }
 
     @Override
-    public void render(BlockEntityCapabilityProxyCommon tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+    public void render(BlockEntityCapabilityProxyCommon tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay, Vec3 cameraPos) {
         Player player = Minecraft.getInstance().player;
         if (player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY.value()
                 || player.getItemInHand(InteractionHand.OFF_HAND).getItem() == RegistryEntries.ITEM_RANGED_CAPABILITY_PROXY.value()) {
@@ -62,13 +62,13 @@ public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<Bloc
             float maxZ = z + target.getZ();
 
             VertexConsumer vb = buffer.getBuffer(RENDER_TYPE_LINE);
-            vb.addVertex(matrixStack.last().pose(), minX, minY, minZ).setColor(r, g, b, a);
-            vb.addVertex(matrixStack.last().pose(), maxX, maxY, maxZ).setColor(r, g, b, a);
+            vb.addVertex(matrixStack.last().pose(), minX, minY, minZ).setColor(r, g, b, a).setNormal(0.0F, 0.0F, 0.0F);
+            vb.addVertex(matrixStack.last().pose(), maxX, maxY, maxZ).setColor(r, g, b, a).setNormal(0.0F, 0.0F, 0.0F);;
         }
     }
 
     @Override
-    public boolean shouldRenderOffScreen(BlockEntityCapabilityProxyCommon te) {
+    public boolean shouldRenderOffScreen() {
         return true;
     }
 }

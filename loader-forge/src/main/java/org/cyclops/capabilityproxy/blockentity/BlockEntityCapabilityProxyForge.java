@@ -43,7 +43,7 @@ public class BlockEntityCapabilityProxyForge extends BlockEntityCapabilityProxyC
 
     protected <T> LazyOptional<T> getTarget(Capability<T> capability, BlockGetter world, BlockPos pos, Direction facing) {
         return getCapabilityCached(cachedCapabilities, capability, pos,
-                () -> CapabilityProxyForge._instance.getModHelpers().getCapabilityHelpers().getCapability(world, pos, facing, capability));
+                (Supplier<LazyOptional<T>>) () -> CapabilityProxyForge._instance.getModHelpers().getCapabilityHelpers().getCapability(world, pos, facing, capability)); // Cast is necessary to make it compile on Forge
     }
 
     @Override

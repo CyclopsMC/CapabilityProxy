@@ -11,6 +11,7 @@ import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.*;
+import org.cyclops.capabilityproxy.gametest.GameTestsCommon;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxy;
 import org.cyclops.capabilityproxy.proxy.CommonProxy;
@@ -71,6 +72,11 @@ public class CapabilityProxyNeoForge extends ModBaseNeoForge<CapabilityProxyNeoF
         configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyNeoForgeConfig());
 
         configHandler.addConfigurable(new ContainerItemCapabilityProxyConfig<>(this));
+    }
+
+    @Override
+    public Class<?>[] getGameTestClasses() {
+        return new Class[]{ GameTestsCommon.class };
     }
 
     /**

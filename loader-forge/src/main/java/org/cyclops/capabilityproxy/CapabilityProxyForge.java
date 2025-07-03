@@ -8,6 +8,7 @@ import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.*;
+import org.cyclops.capabilityproxy.gametest.GameTestsCommon;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.proxy.ClientProxyForge;
 import org.cyclops.capabilityproxy.proxy.CommonProxyForge;
@@ -71,5 +72,10 @@ public class CapabilityProxyForge extends ModBaseForge<CapabilityProxyForge> {
         configHandler.addConfigurable(new BlockEntityRangedCapabilityProxyForgeConfig());
 
         configHandler.addConfigurable(new ContainerItemCapabilityProxyConfig<>(this));
+    }
+
+    @Override
+    public Class<?>[] getGameTestClasses() {
+        return new Class[]{ GameTestsCommon.class };
     }
 }

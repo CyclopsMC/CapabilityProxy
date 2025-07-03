@@ -3,9 +3,9 @@ package org.cyclops.capabilityproxy.gametest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -27,6 +27,7 @@ import org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxy;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxy;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyCommon;
+import org.cyclops.cyclopscore.gametest.GameTest;
 
 /**
  * @author rubensworks
@@ -194,7 +195,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 3));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 3).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 3)), false));
-            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
 
@@ -234,7 +235,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(3, 5, 5));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(3, 5, 5).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(3, 5, 5)), false));
-            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
 
@@ -260,7 +261,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 2));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 2).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 2)), false));
-            helper.assertTrue(result.equals(InteractionResult.FAIL), "Interaction did not fail");
+            helper.assertTrue(result.equals(InteractionResult.FAIL), Component.literal("Interaction did not fail"));
         });
     }
 
@@ -391,7 +392,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 4));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 4).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 4)), false));
-            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
 
@@ -431,7 +432,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(3, 5, 6));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(3, 5, 6).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(3, 5, 6)), false));
-            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
 
@@ -457,7 +458,7 @@ public class GameTestsCommon {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 2));
             InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 2).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 2)), false));
-            helper.assertTrue(result.equals(InteractionResult.PASS) || result.equals(InteractionResult.FAIL), "Interaction did not pass");
+            helper.assertTrue(result.equals(InteractionResult.PASS) || result.equals(InteractionResult.FAIL), Component.literal("Interaction did not pass"));
         });
     }
 
@@ -546,7 +547,7 @@ public class GameTestsCommon {
         helper.placeAt(player, itemStack, POS.offset(2, 2, 2), Direction.SOUTH);
 
         // Place shulker box in proxy inventory
-        BlockEntityItemCapabilityProxyCommon blockEntity = helper.getBlockEntity(POS.offset(2, 2, 3));
+        BlockEntityItemCapabilityProxyCommon blockEntity = helper.getBlockEntity(POS.offset(2, 2, 3), BlockEntityItemCapabilityProxyCommon.class);
         blockEntity.getInventory().setItem(0, new ItemStack(Items.WATER_BUCKET));
 
         helper.succeedIf(() -> {
@@ -570,7 +571,7 @@ public class GameTestsCommon {
         helper.placeAt(player, itemStack, POS.offset(2, 2, 2), Direction.SOUTH);
 
         // Place shulker box in proxy inventory
-        BlockEntityItemCapabilityProxyCommon blockEntity = helper.getBlockEntity(POS.offset(2, 2, 3));
+        BlockEntityItemCapabilityProxyCommon blockEntity = helper.getBlockEntity(POS.offset(2, 2, 3), BlockEntityItemCapabilityProxyCommon.class);
         blockEntity.getInventory().setItem(0, new ItemStack(Items.SHULKER_BOX));
 
         // Make hopper target proxy
@@ -585,7 +586,7 @@ public class GameTestsCommon {
             ItemStack itemStackFilled = blockEntity.getInventory().getItem(0);
             ItemContainerContents container = itemStackFilled.get(DataComponents.CONTAINER);
             if (!container.stream().anyMatch(i -> i.getItem() == Items.APPLE)) {
-                throw new GameTestAssertException("Shulker box in item proxy contains no apple");
+                throw new GameTestAssertException((Component) Component.literal("Shulker box in item proxy contains no apple"), (int) helper.getTick());
             }
         });
     }
@@ -644,13 +645,13 @@ public class GameTestsCommon {
 
         helper.succeedWhen(() -> {
             if (minecart.getItem(0).getItem() != Items.APPLE) {
-                throw new GameTestAssertException("Chest minecart targeted by entity proxy contains no apple");
+                throw new GameTestAssertException((Component) Component.literal("Chest minecart targeted by entity proxy contains no apple"), (int) helper.getTick());
             }
         });
     }
 
     protected void assertChestContains(GameTestHelper helper, BlockPos pos, ItemStack itemStack) {
-        helper.assertBlockEntityData(pos, (ChestBlockEntity chest) -> ItemStack.isSameItemSameComponents(chest.getItem(0), itemStack), () -> "Chest is not empty");
+        helper.assertBlockEntityData(pos, ChestBlockEntity.class, (ChestBlockEntity chest) -> ItemStack.isSameItemSameComponents(chest.getItem(0), itemStack), () -> Component.literal("Chest is not empty"));
     }
 
     protected boolean isNeoForge() {
