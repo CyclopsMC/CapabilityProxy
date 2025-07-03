@@ -1,10 +1,10 @@
 package org.cyclops.capabilityproxy.inventory.container;
 
 import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.inventory.MenuType;
 import org.cyclops.cyclopscore.config.extendedconfig.GuiConfigCommon;
 import org.cyclops.cyclopscore.config.extendedconfig.GuiConfigScreenFactoryProvider;
 import org.cyclops.cyclopscore.init.IModBase;
+import org.cyclops.cyclopscore.inventory.container.ContainerTypeDataCommon;
 
 /**
  * Config for {@link ContainerItemCapabilityProxy}.
@@ -15,7 +15,7 @@ public class ContainerItemCapabilityProxyConfig<M extends IModBase> extends GuiC
     public ContainerItemCapabilityProxyConfig(M mod) {
         super(mod,
                 "item_capability_proxy",
-                eConfig -> new MenuType<>(ContainerItemCapabilityProxy::new, FeatureFlags.VANILLA_SET));
+                eConfig -> new ContainerTypeDataCommon<>(ContainerItemCapabilityProxy::new, FeatureFlags.VANILLA_SET));
     }
 
     @Override

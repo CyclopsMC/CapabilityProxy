@@ -1,5 +1,6 @@
 package org.cyclops.capabilityproxy.inventory.container;
 
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
@@ -13,7 +14,7 @@ import org.cyclops.cyclopscore.inventory.container.InventoryContainerCommon;
  */
 public class ContainerItemCapabilityProxy extends InventoryContainerCommon {
 
-    public ContainerItemCapabilityProxy(int id, Inventory playerInventory) {
+    public ContainerItemCapabilityProxy(int id, Inventory playerInventory, FriendlyByteBuf buf) {
         this(id, playerInventory, new SimpleInventoryCommon(1, 1));
     }
 
