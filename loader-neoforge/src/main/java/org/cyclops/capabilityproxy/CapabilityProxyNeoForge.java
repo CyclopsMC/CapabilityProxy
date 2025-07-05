@@ -6,6 +6,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.BlockCapability;
 import org.apache.logging.log4j.Level;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxyConfig;
@@ -19,6 +20,8 @@ import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
 import org.cyclops.cyclopscore.init.ModBaseNeoForge;
 import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
+
+import java.util.List;
 
 /**
  * The main mod class of this mod.
@@ -94,6 +97,16 @@ public class CapabilityProxyNeoForge extends ModBaseNeoForge<CapabilityProxyNeoF
      */
     public static void clog(Level level, String message) {
         CapabilityProxyNeoForge._instance.getLoggerHelper().log(level, message);
+    }
+
+    /**
+     * Capabilities must only be proxied if they are marked as such or forced through the config.
+     * @param blockCapability A capability.
+     * @param capabilitiesForceProxable Forced capabilities.
+     * @return If the capability is proxyable.
+     */
+    public static boolean shouldRegisterCapability(BlockCapability<?, ?> blockCapability, List<String> capabilitiesForceProxable) {
+        return blockCapability.isProxyable() || capabilitiesForceProxable.contains(blockCapability.name().toString());
     }
 
 }

@@ -1,5 +1,6 @@
 package org.cyclops.capabilityproxy.blockentity;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -8,8 +9,11 @@ import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
 import org.cyclops.capabilityproxy.RegistryEntries;
+import org.cyclops.cyclopscore.config.ConfigurablePropertyCommon;
+import org.cyclops.cyclopscore.config.ModConfigLocation;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfigCommon;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,6 +22,9 @@ import java.util.Map;
  *
  */
 public class BlockEntityItemCapabilityProxyNeoForgeConfig extends BlockEntityConfigCommon<BlockEntityItemCapabilityProxyNeoForge, CapabilityProxyNeoForge> {
+
+    @ConfigurablePropertyCommon(category = "machine", comment = "Names of capabilities that are not marked as proxyable, but must be proxied nonetheless.", requiresMcRestart = true, configLocation = ModConfigLocation.SERVER)
+    public static List<String> capabilitiesForceProxable = Lists.newArrayList();
 
     public BlockEntityItemCapabilityProxyNeoForgeConfig() {
         super(
@@ -40,15 +47,17 @@ public class BlockEntityItemCapabilityProxyNeoForgeConfig extends BlockEntityCon
         }
 
         for (BlockCapability<?, ?> blockCapability : BlockCapability.getAll()) {
-            event.registerBlockEntity(
-                    (BlockCapability) blockCapability, getInstance(),
-                    (object, context) -> object.getCapability((BlockCapability) blockCapability, context)
-            );
+            if (CapabilityProxyNeoForge.shouldRegisterCapability(blockCapability, capabilitiesForceProxable)) {
+                event.registerBlockEntity(
+                        (BlockCapability) blockCapability, getInstance(),
+                        (object, context) -> object.getCapability((BlockCapability) blockCapability, context)
+                );
 
-            // Heuristically try to match block caps with item caps
-            ItemCapability itemCapability = namedItemCapabilities.get(blockCapability.name().toString());
-            if (itemCapability != null) {
-                BlockEntityItemCapabilityProxyNeoForge.BLOCK_TO_ITEM_CAPABILITIES.put(blockCapability, itemCapability);
+                // Heuristically try to match block caps with item caps
+                ItemCapability itemCapability = namedItemCapabilities.get(blockCapability.name().toString());
+                if (itemCapability != null) {
+                    BlockEntityItemCapabilityProxyNeoForge.BLOCK_TO_ITEM_CAPABILITIES.put(blockCapability, itemCapability);
+                }
             }
         }
     }
