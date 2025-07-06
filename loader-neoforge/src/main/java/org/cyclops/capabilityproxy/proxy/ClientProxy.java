@@ -1,6 +1,8 @@
 package org.cyclops.capabilityproxy.proxy;
 
 import org.cyclops.capabilityproxy.CapabilityProxyNeoForge;
+import org.cyclops.capabilityproxy.RegistryEntries;
+import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxyNeoForge;
 import org.cyclops.cyclopscore.init.ModBaseNeoForge;
 import org.cyclops.cyclopscore.proxy.ClientProxyComponent;
 
@@ -21,4 +23,9 @@ public class ClientProxy extends ClientProxyComponent {
         return CapabilityProxyNeoForge._instance;
     }
 
+    @Override
+    public void registerRenderers() {
+        this.registerRenderer(RegistryEntries.TILE_ENTITY_RANGED_CAPABILITY_PROXY.value(), RenderTileRangedCapabilityProxyNeoForge::new);
+        super.registerRenderers();
+    }
 }

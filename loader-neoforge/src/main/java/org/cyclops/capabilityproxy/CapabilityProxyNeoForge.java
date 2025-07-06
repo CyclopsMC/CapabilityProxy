@@ -2,8 +2,6 @@ package org.cyclops.capabilityproxy;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.capabilities.BlockCapability;
@@ -41,13 +39,11 @@ public class CapabilityProxyNeoForge extends ModBaseNeoForge<CapabilityProxyNeoF
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     protected IClientProxy constructClientProxy() {
         return new ClientProxy();
     }
 
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
     protected ICommonProxy constructCommonProxy() {
         return new CommonProxy();
     }
