@@ -1,0 +1,9 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 1.25.2 or higher.
+
+Additions:
+* Add translations through Crowdin (#46)
+
+Fixes:
+* Fix item capability proxy gui not opening
+* Fix some spelling and grammar typos in lang (#50)
