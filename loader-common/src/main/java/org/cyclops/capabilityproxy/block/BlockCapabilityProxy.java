@@ -93,7 +93,7 @@ public class BlockCapabilityProxy extends BlockWithEntity {
     @Override
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block neighbourBlock, @Nullable Orientation orientation, boolean isMoving) {
         super.neighborChanged(state, world, pos, neighbourBlock, orientation, isMoving);
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             Direction facing = state.getValue(BlockCapabilityProxy.FACING);
             boolean inactive = state.getValue(BlockCapabilityProxy.INACTIVE);
             if (inactive != (world.getBlockEntity(pos.relative(facing)) == null)) {
