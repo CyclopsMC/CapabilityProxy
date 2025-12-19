@@ -2,7 +2,7 @@ package org.cyclops.capabilityproxy.client.gui;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import org.cyclops.capabilityproxy.Reference;
 import org.cyclops.capabilityproxy.inventory.container.ContainerItemCapabilityProxy;
@@ -19,8 +19,8 @@ public class ContainerScreenItemCapabilityProxy extends ContainerScreenExtended<
     }
 
     @Override
-    protected ResourceLocation constructGuiTexture() {
-        return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/item_capability_proxy.png");
+    protected Identifier constructGuiTexture() {
+        return Identifier.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/item_capability_proxy.png");
     }
 
     @Override

@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.impl.lookup.block.BlockApiLookupImpl;
 import net.fabricmc.fabric.impl.lookup.entity.EntityApiLookupImpl;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyFabricConfig;
@@ -39,15 +39,15 @@ public class EntityApiRegistrar {
             // Register storage for players if enabled
             if (BlockEntityCapabilityProxyFabricConfig.registerPlayerItemStorage) {
                 EntityApiLookup<Storage<ItemVariant>, @Nullable Direction> SIDED =
-                        EntityApiLookup.get(ResourceLocation.fromNamespaceAndPath("fabric", "sided_item_storage"), Storage.asClass(), Direction.class);
+                        EntityApiLookup.get(Identifier.fromNamespaceAndPath("fabric", "sided_item_storage"), Storage.asClass(), Direction.class);
                 SIDED.registerForType((entity, context) -> InventoryStorage.of(entity.getInventory(), context), EntityType.PLAYER);
             }
 
-            Map<ResourceLocation, EntityApiLookup<?, ?>> entityCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<EntityApiLookup<?, ?>>) (Class) EntityApiLookupImpl.class);
-            Map<ResourceLocation, BlockApiLookup<?, ?>> blockCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<BlockApiLookup<?, ?>>) (Class) BlockApiLookupImpl.class);
+            Map<Identifier, EntityApiLookup<?, ?>> entityCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<EntityApiLookup<?, ?>>) (Class) EntityApiLookupImpl.class);
+            Map<Identifier, BlockApiLookup<?, ?>> blockCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<BlockApiLookup<?, ?>>) (Class) BlockApiLookupImpl.class);
 
             BlockEntityEntityCapabilityProxyFabric.BLOCK_TO_ENTITY_CAPABILITIES = Maps.newIdentityHashMap();
-            for (Map.Entry<ResourceLocation, BlockApiLookup<?, ?>> entry : blockCapabilities.entrySet()) {
+            for (Map.Entry<Identifier, BlockApiLookup<?, ?>> entry : blockCapabilities.entrySet()) {
                 registerCapability(blockEntityType, entry.getValue());
 
                 // Heuristically try to match block caps with entity caps

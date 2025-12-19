@@ -2,42 +2,28 @@ package org.cyclops.capabilityproxy.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import org.cyclops.capabilityproxy.Reference;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxyConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyCommon;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.OptionalDouble;
 
 /**
  * Renders an overlay showing the target of ranged proxies when a ranged proxy is held in hand.
  * @author rubensworks
  */
 public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<BlockEntityCapabilityProxyCommon, RenderTileRangedCapabilityProxy.RenderState> {
-
-    public static final RenderType RENDER_TYPE_LINE = RenderType.create(Reference.MOD_ID + "line",
-            128,
-            RenderPipelines.SECONDARY_BLOCK_OUTLINE,
-            RenderType.CompositeState.builder()
-                    .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(2)))
-                    .setLayeringState(RenderStateShard.VIEW_OFFSET_Z_LAYERING)
-                    .setOutputState(RenderStateShard.ITEM_ENTITY_TARGET)
-                    .createCompositeState(false));
 
     public RenderTileRangedCapabilityProxy(BlockEntityRendererProvider.Context context) {
 
@@ -76,9 +62,9 @@ public class RenderTileRangedCapabilityProxy implements BlockEntityRenderer<Bloc
             float maxY = y + target.getY();
             float maxZ = z + target.getZ();
 
-            submitNodeCollector.submitCustomGeometry(poseStack, RENDER_TYPE_LINE, (pose, vertexConsumer) -> {
-                vertexConsumer.addVertex(pose, minX, minY, minZ).setColor(r, g, b, a).setNormal(0.0F, 0.0F, 0.0F);
-                vertexConsumer.addVertex(pose, maxX, maxY, maxZ).setColor(r, g, b, a).setNormal(0.0F, 0.0F, 0.0F);;
+            submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.SECONDARY_BLOCK_OUTLINE, (pose, vertexConsumer) -> {
+                vertexConsumer.addVertex(pose, minX, minY, minZ).setLineWidth(2).setColor(r, g, b, a).setNormal(0.0F, 0.0F, 0.0F);
+                vertexConsumer.addVertex(pose, maxX, maxY, maxZ).setLineWidth(2).setColor(r, g, b, a).setNormal(0.0F, 0.0F, 0.0F);;
             });
         }
     }

@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.impl.lookup.block.BlockApiLookupImpl;
 import net.fabricmc.fabric.impl.lookup.item.ItemApiLookupImpl;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyFabric;
 
@@ -29,11 +29,11 @@ public class ItemApiRegistrar {
             FluidStorage.SIDED.apiClass();
             ItemStorage.SIDED.apiClass();
 
-            Map<ResourceLocation, ItemApiLookup<?, ?>> itemCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<ItemApiLookup<?, ?>>) (Class) ItemApiLookupImpl.class);
-            Map<ResourceLocation, BlockApiLookup<?, ?>> blockCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<BlockApiLookup<?, ?>>) (Class) BlockApiLookupImpl.class);
+            Map<Identifier, ItemApiLookup<?, ?>> itemCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<ItemApiLookup<?, ?>>) (Class) ItemApiLookupImpl.class);
+            Map<Identifier, BlockApiLookup<?, ?>> blockCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<BlockApiLookup<?, ?>>) (Class) BlockApiLookupImpl.class);
 
             BlockEntityItemCapabilityProxyFabric.BLOCK_TO_ITEM_CAPABILITIES = Maps.newIdentityHashMap();
-            for (Map.Entry<ResourceLocation, BlockApiLookup<?, ?>> entry : blockCapabilities.entrySet()) {
+            for (Map.Entry<Identifier, BlockApiLookup<?, ?>> entry : blockCapabilities.entrySet()) {
                 registerCapability(blockEntityType, entry.getValue());
 
                 // Heuristically try to match block caps with entity caps

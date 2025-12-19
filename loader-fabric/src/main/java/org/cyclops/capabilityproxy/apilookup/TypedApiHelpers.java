@@ -3,7 +3,7 @@ package org.cyclops.capabilityproxy.apilookup;
 import com.google.common.collect.Maps;
 import net.fabricmc.fabric.api.lookup.v1.custom.ApiLookupMap;
 import net.fabricmc.fabric.impl.lookup.custom.ApiLookupMapImpl;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -24,20 +24,20 @@ public class TypedApiHelpers {
         }
     }
 
-    public static <L> Map<ResourceLocation, Object> getApiLookupMap(ApiLookupMapImpl lookupMap) {
+    public static <L> Map<Identifier, Object> getApiLookupMap(ApiLookupMapImpl lookupMap) {
         try {
             Field lookupsField = ApiLookupMapImpl.class.getDeclaredField("lookups");
             lookupsField.setAccessible(true);
-            return (Map<ResourceLocation, Object>) lookupsField.get(lookupMap);
+            return (Map<Identifier, Object>) lookupsField.get(lookupMap);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static <T> Map<ResourceLocation, T> getTypedApiLookupsKeyed(Class<T> clazz) {
-        Map<ResourceLocation, T> lookups = Maps.newHashMap();
-        Map<ResourceLocation, Object> map = getApiLookupMap((ApiLookupMapImpl) getTypedApiLookupsMap(clazz));
-        for (ResourceLocation id : map.keySet()) {
+    public static <T> Map<Identifier, T> getTypedApiLookupsKeyed(Class<T> clazz) {
+        Map<Identifier, T> lookups = Maps.newHashMap();
+        Map<Identifier, Object> map = getApiLookupMap((ApiLookupMapImpl) getTypedApiLookupsMap(clazz));
+        for (Identifier id : map.keySet()) {
             Object lookupHolder = map.get(id);
             try {
                 Field lookupField = lookupHolder.getClass().getDeclaredField("lookup");

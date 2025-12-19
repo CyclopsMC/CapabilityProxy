@@ -27,7 +27,7 @@ dependencies {
         runtimeOnly "org.cyclops.flopper:flopper-${project.minecraft_version}-fabric:${secrets.flopper_version_local}:deobf"
     }
     // This is only for testing
-    modRuntimeOnly "TechReborn:${fabric_techreborn_version}"
+//    modRuntimeOnly "TechReborn:${fabric_techreborn_version}"
 }
 
 task publishCurseForge(type: TaskPublishCurseForge) {
