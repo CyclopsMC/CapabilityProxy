@@ -64,10 +64,7 @@ public class BlockEntityCapabilityProxy extends BlockWithEntity {
         BlockPos targetPos = pos.relative(facing);
         List<Entity> entities = worldIn.getEntitiesOfClass(Entity.class, new AABB(targetPos));
         for(Entity entity : entities) {
-            InteractionResult result = entity.interactAt(player, new Vec3(targetPos.getX() + 0.5 - entity.getX(), targetPos.getY() + 0.5 - entity.getY(), targetPos.getZ() + 0.5 - entity.getZ()), player.getUsedItemHand());
-            if(result != InteractionResult.PASS)
-                return result;
-            result = player.interactOn(entity, player.getUsedItemHand());
+            InteractionResult result = player.interactOn(entity, player.getUsedItemHand(), new Vec3(targetPos.getX() + 0.5 - entity.getX(), targetPos.getY() + 0.5 - entity.getY(), targetPos.getZ() + 0.5 - entity.getZ()));
             if(result != InteractionResult.PASS)
                 return result;
         }

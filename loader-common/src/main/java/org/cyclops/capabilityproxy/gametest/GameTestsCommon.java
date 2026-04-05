@@ -585,7 +585,7 @@ public class GameTestsCommon {
         helper.succeedWhen(() -> {
             ItemStack itemStackFilled = blockEntity.getInventory().getItem(0);
             ItemContainerContents container = itemStackFilled.get(DataComponents.CONTAINER);
-            if (!container.stream().anyMatch(i -> i.getItem() == Items.APPLE)) {
+            if (!container.nonEmptyItemCopyStream().anyMatch(i -> i.getItem() == Items.APPLE)) {
                 throw new GameTestAssertException((Component) Component.literal("Shulker box in item proxy contains no apple"), (int) helper.getTick());
             }
         });

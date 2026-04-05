@@ -2,11 +2,8 @@ package org.cyclops.capabilityproxy.blockentity;
 
 import com.google.common.collect.Sets;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.cyclops.capabilityproxy.CapabilityProxyForge;
 import org.cyclops.capabilityproxy.RegistryEntries;
-import org.cyclops.capabilityproxy.client.render.RenderTileRangedCapabilityProxy;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockEntityConfigCommon;
 
 /**
@@ -25,17 +22,5 @@ public class BlockEntityRangedCapabilityProxyForgeConfig extends BlockEntityConf
         );
     }
 
-    @Override
-    public void onRegistered() {
-        super.onRegistered();
-        if(getMod().getModHelpers().getMinecraftHelpers().isClientSide()) {
-            registerClientSide();
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void registerClientSide() {
-        CapabilityProxyForge._instance.getProxy().registerRenderer(getInstance(), RenderTileRangedCapabilityProxy::new);
-    }
 
 }

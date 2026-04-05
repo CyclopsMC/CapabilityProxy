@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.lookup.v1.entity.EntityApiLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -40,7 +40,7 @@ public class EntityApiRegistrar {
             if (BlockEntityCapabilityProxyFabricConfig.registerPlayerItemStorage) {
                 EntityApiLookup<Storage<ItemVariant>, @Nullable Direction> SIDED =
                         EntityApiLookup.get(Identifier.fromNamespaceAndPath("fabric", "sided_item_storage"), Storage.asClass(), Direction.class);
-                SIDED.registerForType((entity, context) -> InventoryStorage.of(entity.getInventory(), context), EntityType.PLAYER);
+                SIDED.registerForType((entity, context) -> ContainerStorage.of(entity.getInventory(), context), EntityType.PLAYER);
             }
 
             Map<Identifier, EntityApiLookup<?, ?>> entityCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<EntityApiLookup<?, ?>>) (Class) EntityApiLookupImpl.class);

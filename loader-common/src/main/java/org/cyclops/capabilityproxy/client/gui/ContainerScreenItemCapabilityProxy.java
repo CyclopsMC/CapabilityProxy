@@ -1,6 +1,6 @@
 package org.cyclops.capabilityproxy.client.gui;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,7 +24,7 @@ public class ContainerScreenItemCapabilityProxy extends ContainerScreenExtended<
     }
 
     @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
+    protected void extractLabels(GuiGraphicsExtractor guiGraphics, int x, int y) {
+        guiGraphics.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
     }
 }

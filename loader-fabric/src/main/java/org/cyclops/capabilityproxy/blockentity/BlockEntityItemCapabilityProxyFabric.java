@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,7 +31,7 @@ public class BlockEntityItemCapabilityProxyFabric extends BlockEntityItemCapabil
 
     public <T, C1, C2> T getCapability(BlockApiLookup<T, C1> blockCapability, C1 context) {
         if (context instanceof Direction && context == getFacing() && blockCapability == ItemStorage.SIDED) {
-            return (T) InventoryStorage.of(getInventory(), (Direction) context);
+            return (T) ContainerStorage.of(getInventory(), (Direction) context);
         }
 
         // Convert block cap to item cap
@@ -47,7 +47,7 @@ public class BlockEntityItemCapabilityProxyFabric extends BlockEntityItemCapabil
             itemContext = (C2) getFacing().getOpposite();
         }
         if (itemCapability.contextClass() == ContainerItemContext.class) {
-            itemContext = (C2) ContainerItemContext.ofSingleSlot(InventoryStorage.of(getInventory(), (Direction) context).getSlot(0));
+            itemContext = (C2) ContainerItemContext.ofSingleSlot(ContainerStorage.of(getInventory(), (Direction) context).getSlot(0));
         }
 
         // Retrieve cap
