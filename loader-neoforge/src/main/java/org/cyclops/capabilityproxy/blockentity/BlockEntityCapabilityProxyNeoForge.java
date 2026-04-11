@@ -79,11 +79,12 @@ public class BlockEntityCapabilityProxyNeoForge extends BlockEntityCapabilityPro
 
         // Retrieve the actual capability
         Optional<T> innerCapability = capabilitySupplier.get();
+        T outerCapability;
         if (!innerCapability.isPresent()) {
-            return null;
+            outerCapability = null;
+        } else {
+            outerCapability = innerCapability.get();
         }
-
-        T outerCapability = innerCapability.get();
 
         if (targetWorld instanceof ServerLevel targetWorldServer) {
             // Wrap the capability, cache it, and add invalidation listener
