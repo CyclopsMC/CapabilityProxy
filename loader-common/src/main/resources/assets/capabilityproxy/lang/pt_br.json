@@ -1,1 +1,10 @@
-{}
+{
+    "_comment": "Blocks",
+    "itemGroup.capabilityproxy": "Proxy de Capacidade",
+    "block.capabilityproxy.capability_proxy": "Proxy de Capacidade",
+    "block.capabilityproxy.entity_capability_proxy": "Proxy de Capacidade de Entidade",
+    "block.capabilityproxy.item_capability_proxy": "Proxy de Capacidade de Item",
+    "block.capabilityproxy.item_capability_proxy.info": "Exponha as capacidades do item armazenado através deste bloco. Apenas o lado alvo é acessível para o transporte do item contido.",
+    "block.capabilityproxy.ranged_capability_proxy": "Proxy de Capacidade de Alcance",
+    "block.capabilityproxy.ranged_capability_proxy.info": "Acesse as capacidades do bloco alvo a partir deste bloco. O bloco alvo é o bloco aplicável mais próximo dentro de 16 blocos."
+}
