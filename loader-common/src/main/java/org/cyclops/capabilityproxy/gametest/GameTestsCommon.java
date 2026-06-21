@@ -8,7 +8,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.minecart.MinecartChest;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.HopperBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.cyclops.capabilityproxy.Reference;
 import org.cyclops.capabilityproxy.RegistryEntries;
 import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
@@ -194,7 +195,7 @@ public class GameTestsCommon {
         helper.succeedIf(() -> {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 3));
-            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 3).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 3)), false));
+            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(Vec3.atBottomCenterOf(POS.offset(2, 2, 3)), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 3)), false));
             helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
@@ -234,7 +235,7 @@ public class GameTestsCommon {
         helper.succeedWhen(() -> {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(3, 5, 5));
-            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(3, 5, 5).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(3, 5, 5)), false));
+            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(Vec3.atBottomCenterOf(POS.offset(3, 5, 5)), Direction.NORTH, helper.absolutePos(POS.offset(3, 5, 5)), false));
             helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
@@ -260,7 +261,7 @@ public class GameTestsCommon {
         helper.succeedWhen(() -> {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 2));
-            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 2).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 2)), false));
+            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(Vec3.atBottomCenterOf(POS.offset(2, 2, 2)), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 2)), false));
             helper.assertTrue(result.equals(InteractionResult.FAIL), Component.literal("Interaction did not fail"));
         });
     }
@@ -391,7 +392,7 @@ public class GameTestsCommon {
         helper.succeedIf(() -> {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 4));
-            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 4).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 4)), false));
+            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(Vec3.atBottomCenterOf(POS.offset(2, 2, 4)), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 4)), false));
             helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
@@ -431,7 +432,7 @@ public class GameTestsCommon {
         helper.succeedWhen(() -> {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(3, 5, 6));
-            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(3, 5, 6).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(3, 5, 6)), false));
+            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(Vec3.atBottomCenterOf(POS.offset(3, 5, 6)), Direction.NORTH, helper.absolutePos(POS.offset(3, 5, 6)), false));
             helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
@@ -457,7 +458,7 @@ public class GameTestsCommon {
         helper.succeedWhen(() -> {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 2));
-            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 2).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 2)), false));
+            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(Vec3.atBottomCenterOf(POS.offset(2, 2, 2)), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 2)), false));
             helper.assertTrue(result.equals(InteractionResult.PASS) || result.equals(InteractionResult.FAIL), Component.literal("Interaction did not pass"));
         });
     }
@@ -633,7 +634,7 @@ public class GameTestsCommon {
 
         // Place chest minecart at target
         helper.setBlock(POS.offset(2, 0, 2), Blocks.RAIL.defaultBlockState());
-        MinecartChest minecart = helper.spawn(EntityType.CHEST_MINECART, POS.offset(2, 0, 2));
+        MinecartChest minecart = helper.spawn(EntityTypes.CHEST_MINECART, POS.offset(2, 0, 2));
 
         // Make hopper target proxy
         helper.setBlock(POS.offset(2, 0, 4), Blocks.HOPPER

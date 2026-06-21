@@ -12,7 +12,7 @@ import net.fabricmc.fabric.impl.lookup.block.BlockApiLookupImpl;
 import net.fabricmc.fabric.impl.lookup.entity.EntityApiLookupImpl;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityCapabilityProxyFabricConfig;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityEntityCapabilityProxyFabric;
@@ -40,7 +40,7 @@ public class EntityApiRegistrar {
             if (BlockEntityCapabilityProxyFabricConfig.registerPlayerItemStorage) {
                 EntityApiLookup<Storage<ItemVariant>, @Nullable Direction> SIDED =
                         EntityApiLookup.get(Identifier.fromNamespaceAndPath("fabric", "sided_item_storage"), Storage.asClass(), Direction.class);
-                SIDED.registerForType((entity, context) -> ContainerStorage.of(entity.getInventory(), context), EntityType.PLAYER);
+                SIDED.registerForType((entity, context) -> ContainerStorage.of(entity.getInventory(), context), EntityTypes.PLAYER);
             }
 
             Map<Identifier, EntityApiLookup<?, ?>> entityCapabilities = TypedApiHelpers.getTypedApiLookupsKeyed((Class<EntityApiLookup<?, ?>>) (Class) EntityApiLookupImpl.class);

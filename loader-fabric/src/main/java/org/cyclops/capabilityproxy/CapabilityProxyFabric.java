@@ -56,7 +56,7 @@ public class CapabilityProxyFabric extends ModBaseFabric<CapabilityProxyFabric> 
     @Override
     protected CreativeModeTab.Builder constructDefaultCreativeModeTab(CreativeModeTab.Builder builder) {
         return super.constructDefaultCreativeModeTab(builder)
-                .icon(() -> new ItemStack(RegistryEntries.ITEM_CAPABILITY_PROXY));
+                .icon(() -> new ItemStack(RegistryEntries.ITEM_CAPABILITY_PROXY.getHolder()));
     }
 
     @Override
