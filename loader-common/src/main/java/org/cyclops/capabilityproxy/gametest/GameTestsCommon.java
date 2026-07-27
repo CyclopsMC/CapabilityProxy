@@ -654,7 +654,7 @@ public class GameTestsCommon {
         helper.assertBlockEntityData(pos, ChestBlockEntity.class, (ChestBlockEntity chest) -> ItemStack.isSameItemSameComponents(chest.getItem(0), itemStack), () -> Component.literal("Chest is not empty"));
     }
 
-    protected boolean isNeoForge() {
+    protected boolean isNeoForge() { // TODO: try to rm in next major
         try {
             Class.forName("net.neoforged.neoforge.common.NeoForge");
             return true;
@@ -663,7 +663,7 @@ public class GameTestsCommon {
         }
     }
 
-    protected boolean isForge() {
+    protected boolean isForge() { // TODO: try to rm in next major
         try {
             Class.forName("net.minecraftforge.common.MinecraftForge");
             return true;
