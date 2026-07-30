@@ -22,10 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.cyclops.capabilityproxy.Reference;
 import org.cyclops.capabilityproxy.RegistryEntries;
-import org.cyclops.capabilityproxy.block.BlockCapabilityProxy;
-import org.cyclops.capabilityproxy.block.BlockEntityCapabilityProxy;
-import org.cyclops.capabilityproxy.block.BlockItemCapabilityProxy;
-import org.cyclops.capabilityproxy.block.BlockRangedCapabilityProxy;
+import org.cyclops.capabilityproxy.block.*;
 import org.cyclops.capabilityproxy.blockentity.BlockEntityItemCapabilityProxyCommon;
 import org.cyclops.cyclopscore.gametest.GameTest;
 
@@ -436,7 +433,7 @@ public class GameTestsCommon {
         });
     }
 
-    @GameTest(template = TEMPLATE_EMPTY)
+    @GameTest(template = TEMPLATE_EMPTY, environment = "capabilityproxy:rangedcycle")
     public void testBlockProxyRangedCycleGui(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 
@@ -457,8 +454,11 @@ public class GameTestsCommon {
         helper.succeedWhen(() -> {
             // Open screen of target
             BlockState blockState = helper.getBlockState(POS.offset(2, 2, 2));
-            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(POS.offset(2, 2, 2).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 2)), false));
-            helper.assertTrue(result.equals(InteractionResult.PASS) || result.equals(InteractionResult.FAIL), Component.literal("Interaction did not pass"));
+            int oldRange = BlockRangedCapabilityProxyConfig.range; // Temporarily lower range to avoid interference from other tests
+            BlockRangedCapabilityProxyConfig.range = 2;
+            InteractionResult result = blockState.useWithoutItem(helper.getLevel(), player, new BlockHitResult(helper.absolutePos(POS.offset(2, 2, 2)).getBottomCenter(), Direction.NORTH, helper.absolutePos(POS.offset(2, 2, 2)), false));
+            BlockRangedCapabilityProxyConfig.range = oldRange;
+            helper.assertTrue(result.equals(InteractionResult.PASS), "Interaction did not pass, was " + result);
         });
     }
 
