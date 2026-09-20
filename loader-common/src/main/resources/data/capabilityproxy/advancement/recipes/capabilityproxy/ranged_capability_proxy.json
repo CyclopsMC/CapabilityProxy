@@ -33,7 +33,9 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "capabilityproxy:ranged_capability_proxy"
+        "recipes": [
+          "capabilityproxy:ranged_capability_proxy"
+        ]
       }
     }
   },
