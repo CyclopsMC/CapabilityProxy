@@ -45,7 +45,9 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "capabilityproxy:entity_capability_proxy"
+        "recipes": [
+          "capabilityproxy:entity_capability_proxy"
+        ]
       }
     }
   },
